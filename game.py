@@ -1,3 +1,4 @@
+from combinations import Combinations
 from player import Player
 from table import Table
 
@@ -20,16 +21,14 @@ class Game:
 
     def highest_combination(self, player):
         cards = self.table.cards + player.hand
+        combinations = Combinations(cards)
+        return combinations.highest_combination()
 
 
-game = Game(2)
-game.start_game()
+for i in range(100):
+    game = Game(2)
+    game.start_game()
 
-print('p2', game.players[1].hand)
-print('p1', game.players[0].hand)
-print('table', game.table.cards)
-print('burned', game.table.burned)
-print('deck', len(game.table.deck.set))
-print(game.combinations[0])
+    print(game.players[0].hand + game.table.cards)
+    print(game.highest_combination(game.players[0]))
 
-print(game.highest_combination(game.players[0]))

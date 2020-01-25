@@ -1,5 +1,4 @@
 from random import shuffle
-from enum import Enum
 
 
 # class needed to determine highest card
