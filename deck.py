@@ -37,7 +37,3 @@ class Deck:
         card = self.set[0]
         del self.set[0]
         return card
-
-    # delete first card from deck
-    def burn_card(self):
-        del self.set[0]
