@@ -25,6 +25,12 @@ class Game:
         self.last_raise = 0
         self.biggest_bid = self.bids.b_blind_val
 
+        self.all_played = False
+        self.game_over = False
+        self.round_ended = False
+        self.played = 0
+
+    # next game init
     def next_game(self):
         self.last_raise = 0
         self.biggest_bid = self.bids.b_blind_val
@@ -32,6 +38,17 @@ class Game:
         [player.next_game() for player in self.players]
         self.bids.s_blind_turn += 1 if self.bids.s_blind_turn < len(self.players) else 0
         self.bids.b_blind_turn += 1 if self.bids.b_blind_turn < len(self.players) else 0
+        self.all_played = False
+        self.round_ended = False
+        self.played = 0
+
+    # next round init
+    def next_round(self):
+        self.last_raise = 0
+        self.biggest_bid = self.bids.b_blind_val
+        self.all_played = False
+        self.round_ended = False
+        self.played = 0
 
     # bid small and big blind, change blind turns
     def blinds(self):
@@ -65,6 +82,7 @@ class Game:
     # next player's turn
     def next_player(self):
         self.current_player += 1 if self.current_player < len(self.players) else 0
+        self.played += 1
 
     # true if player's round_bid >= every others round_bid
     def can_check(self):
@@ -133,23 +151,46 @@ class Game:
     # init players turn, before he can do action
     def player_turn(self):
         self.allowed_actions()
-        self.players[self.current_player] = self.highest_combination()
+        self.players[self.current_player].highest_combination = self.highest_combination()
+
+    def can_next_round(self):
+        bid = self.players[self.current_player].round_bid
+        for player in self.players:
+            if player.round_bid != bid and player.can_act():
+                return False
+
+    def can_next_game(self):
+        self.round_ended = True if len(self.table.cards) > 4 else False
+        self.all_played = True if self.played >= len(self.players) else False
+        return True if self.round_ended and self.all_played else False
+
+    def get_all_played(self):
+        self.all_played = True if self.played >= len(self.players) else False
 
 
 if __name__ == '__main__':
     # init game, only once
-    game = Game(2, 5, 500)
+    game = Game(3, 5, 500)
     game.start_game()
 
-    playing = True
     # cycle this till game ends
-    while playing:
-        game_ended = False
-        while not game_ended:
+    while not game.game_over:
+        while not game.round_ended:
             # if player still playing this game
-            if not game.players[game.current_player].is_folded and not game.players[game.current_player].is_all_in:
+            if game.players[game.current_player].can_act():
                 game.player_turn()  # get player allowed actions and highest combination before he can do action
+                print('test input action: 1 - check, 2 - call 3 - call 4 - all_in')
+                test_action = input()
+                print('test input raise value if raise')
+                test_raize = input()
                 game.do_action(1)  # do action (call, check, etc)
                 game.next_player()  # change current player to next and repeat
-        game.next_game()  # init next game and repeat
+                print(game.players[game.current_player].id)
+                print(game.players[game.current_player])
+
+                if game.can_next_round():
+                    game.next_round()
+
+        if game.can_next_game():
+            game.next_game()  # init next game and repeat
 

@@ -1,4 +1,8 @@
 class Player:
+    def __repr__(self):
+        return '(hand: %s\nchips: %s\npot: %s\nround_bid: %s\ncan_act: %s)' % (self.hand, self.chips, self.pot,
+                                                                               self.round_bid, self.can_act())
+
     def __init__(self, player_id, chips):
         self.id = player_id
         self.hand = []
@@ -22,6 +26,9 @@ class Player:
         self.actions = Actions()
         self.is_folded = False
         self.is_all_in = False
+
+    def can_act(self):
+        return False if self.is_folded or self.is_all_in else True
 
 
 class Actions:
