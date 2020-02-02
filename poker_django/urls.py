@@ -20,5 +20,6 @@ from poker_app import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.index, name='homepage')
+    path('', views.index, name='homepage'),
+    path('game/<int:game_id>/', views.game, name='game')
 ]

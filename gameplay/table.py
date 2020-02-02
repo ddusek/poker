@@ -1,4 +1,4 @@
-from deck import Deck
+from gameplay.deck import Deck
 
 
 class Table:

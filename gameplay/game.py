@@ -1,6 +1,6 @@
-from combinations import Combinations
-from player import Player
-from table import Table
+from gameplay.combinations import Combinations
+from gameplay.player import Player
+from gameplay.table import Table
 
 
 # blinds, min bid
