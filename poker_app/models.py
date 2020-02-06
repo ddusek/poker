@@ -10,6 +10,7 @@ class GameModel(models.Model):
     game_over = models.BooleanField()
     round_ended = models.BooleanField()
 
+
 class PlayerModel(models.Model):
     id = models.IntegerField(primary_key=True)
     # game = models.ForeignKey(Game, on_delete=models.CASCADE)
