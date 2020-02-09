@@ -1,30 +1,21 @@
 # Poker
 
 ## TODO
-- [ ] gui
-    - [ ] cards in hand
-    - [ ] deck on board
-    - [ ] cards on board
-    - [ ] other players cards and indicate their position
-    - [ ] score about chips
-    - [ ] console to write whats happening
+https://simpleisbetterthancomplex.com/tutorial/2018/01/18/how-to-implement-multiple-user-types-with-django.html  
+check this tutorial, if player joins, he will see his own hand, chips etc  
+- [ ] idea - if someone joins game url, automatically create for that player record in database (player, user?)
 - [ ] gameplay
-    - [x] small, big blinds
-    - [x] give out cards
     - [ ] wait for player on his turn
     - [ ] play a game
     - [ ] recalculate chips
     - [ ] remove all cards
-- [ ] cards
-    - [x] shuffle cards
-    - [x] burn cards
-    - [x] give cards to players
-- [ ] django
-    - [x] learn a bit about django
-    - [ ] do some basic frontend
-    - [ ] show backend on frontend
+- [ ] api
+    - [ ] make fully working api
+- [ ] gui
 - [ ] bot
     - [ ] make bots
     
 ## Installation
 - django
+- pygments
+- restframework

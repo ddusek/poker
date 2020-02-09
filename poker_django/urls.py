@@ -16,21 +16,26 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
-from rest_framework.urlpatterns import format_suffix_patterns
-
+from django.conf.urls import include
 from poker_app import views
 
-# router = routers.DefaultRouter()
-# router.register(r'api_info', views.GameViewSet, basename='api_info')
+router = routers.DefaultRouter()
+router.register(r'games', views.GameViewSet, basename='games')
+router.register(r'players', views.PlayerViewSet, basename='players')
+router.register(r'users', views.UserViewSet, basename='users')
+
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path(r'api/game/', views.GameViewSet.as_view()),
-    path(r'api/game/<int:pk>/', views.GameViewDetail.as_view()),
+    path('admin', admin.site.urls),
+    path(r'api/', include(router.urls)),
+    # path(r'api/game/', views.GameViewList.as_view()),
+    # path(r'api/game/<int:pk>/', views.GameViewDetail.as_view()),
     # path('api', include('rest_framework.urls', namespace='rest_framework'))
 
     # path('', views.index, name='homepage'),
     # path('game/<int:game_id>/', views.game, name='game'),
 ]
 
-urlpatterns = format_suffix_patterns(urlpatterns)
+urlpatterns += [
+    path('api-auth/', include('rest_framework.urls')),
+]
