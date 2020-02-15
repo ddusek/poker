@@ -1,8 +1,4 @@
 from django.db import models
-from pygments.lexers import get_lexer_by_name
-from pygments.formatters.html import HtmlFormatter
-from pygments import highlight
-import gameplay
 
 
 class PlayerManager(models.Manager):
@@ -62,21 +58,7 @@ class Player(models.Model):
     is_folded = models.BooleanField(default=False)
     is_all_in = models.BooleanField(default=False)
     owner = models.ForeignKey('auth.User', related_name='players', on_delete=models.CASCADE, default=None)
-    # highlighted = models.TextField()
-    objects = PlayerManager()
-
-    def save(self, *args, **kwargs):
-        """
-        Use the `pygments` library to create a highlighted HTML
-        representation of the code snippet.
-        """
-        # lexer = get_lexer_by_name(self.language)
-        # linenos = 'table' if self.linenos else False
-        # options = {'title': self.title} if self.title else {}
-        # formatter = HtmlFormatter(style=self.style, linenos=linenos,
-        #                           full=True, **options)
-        # self.highlighted = highlight(self.code, lexer, formatter)
-        super(Player, self).save(*args, **kwargs)
+    # objects = PlayerManager()
 
 
 class Game(models.Model):
@@ -88,5 +70,5 @@ class Game(models.Model):
     round_ended = models.BooleanField(default=False)
     table = models.OneToOneField(Table, on_delete=models.CASCADE, default=0)
     players = models.ForeignKey(Player, on_delete=models.CASCADE, default=0)
-    objects = GameManager()
+    # objects = GameManager()
 

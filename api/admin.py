@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Game, Player, Action, BurnedCards, Deck, Card, Hand, Table, TableCards
+from .models import *
 
 # Register your models here.
 admin.site.register(Game)

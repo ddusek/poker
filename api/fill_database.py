@@ -1,5 +1,4 @@
-from gameplay import game
-from poker_app import models
+from api import models
 
 
 class FillDatabase:
