@@ -2,7 +2,8 @@ from django.urls import path, include
 from rest_framework import routers
 from api.views import *
 
-
+# TODO change endopoints, example:  api/games/<int:pk>/tables/<int:pk>/tablecards
+#  every endpoint will start with games/id
 router = routers.DefaultRouter()
 router.register(r'games', GameViewSet, basename='games')
 router.register(r'players', PlayerViewSet, basename='players')

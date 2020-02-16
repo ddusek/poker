@@ -19,6 +19,9 @@ class Card(models.Model):
     suit = models.CharField(max_length=10)
     rank = models.CharField(max_length=2)
 
+    def __str__(self):
+        return '{} - {}'.format(self.suit, self.rank)
+
 
 class Deck(models.Model):
     card = models.ForeignKey(Card, on_delete=models.CASCADE, default=0)
@@ -68,7 +71,7 @@ class Game(models.Model):
     all_played = models.BooleanField(default=False)
     game_over = models.BooleanField(default=False)
     round_ended = models.BooleanField(default=False)
-    table = models.OneToOneField(Table, on_delete=models.CASCADE, default=0)
-    players = models.ForeignKey(Player, on_delete=models.CASCADE, default=0)
+    table = models.OneToOneField(Table, on_delete=models.CASCADE, default=1)
+    players = models.ForeignKey(Player, on_delete=models.CASCADE, default=1)
     # objects = GameManager()
 
