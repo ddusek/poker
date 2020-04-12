@@ -64,3 +64,10 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = '__all__'
+
+
+class PlayerDetailSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Player
+        fields = ['id', 'chips', 'actions', 'is_folded', 'is_all_in', 'highest_combination', 'hand', 'pot', 'round_bid']

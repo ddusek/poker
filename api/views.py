@@ -1,5 +1,8 @@
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
 from api.serializers import *
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets, permissions, generics
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -54,3 +57,15 @@ class DeckViewSet(viewsets.ModelViewSet):
 class CardViewSet(viewsets.ModelViewSet):
     queryset = Card.objects.all()
     serializer_class = CardSerializer
+
+
+class PlayerDetailView(APIView):
+    def get(self, request, format=None, **kwargs):
+        p = Player.objects.get(id=self.kwargs['pk'])
+        g = Game.objects.get(id=self.kwargs['gameid'])
+        player_serializer = PlayerDetailSerializer(p)
+        game_serializer = GameSerializer()
+        return Response({
+            'game': game_serializer.data,
+            'player': player_serializer.data,
+        })
