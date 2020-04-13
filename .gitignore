@@ -1,3 +1,8 @@
 venv
 .idea
 __pycache__
+frontend/node_modules/
+frontend/static/main.js
+frontend/package-lock.json
+npm-debug.log
+frontend/webpack-stats.json

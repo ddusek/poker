@@ -1,9 +1,0 @@
-{% if latest_question_list %}
-    <ul>
-    {% for card in player.hand %}
-        <li><a href="/polls/{{ question.id }}/">{{ question.question_text }}</a></li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>No polls are available.</p>
-{% endif %}
