@@ -5,7 +5,7 @@ import MenuForm from './components/MenuForm'
 function App() {
     return (
         <div>
-            <MenuForm />
+            <MenuForm handleSubmit='asd' />
             <Home />
         </div>
     );
