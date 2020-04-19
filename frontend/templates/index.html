@@ -1,15 +1,17 @@
+{% load render_bundle from webpack_loader %}
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>react app qwe</title>
+  <title>react app aasd</title>
 
 </head>
 <body>
-<div id="app"></div>
-{% load static %}
-<script src="{% static "main.js" %}"></script>  
+<div id="app">
+</div>
 </body>
+{% load static %}
+{% render_bundle 'main' %}
 </html>

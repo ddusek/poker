@@ -23,6 +23,3 @@ urlpatterns = [
     path(r'', include('api.urls')),
 ]
 
-urlpatterns += [
-    path('api-auth/', include('rest_framework.urls')),
-]
