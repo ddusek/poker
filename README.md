@@ -9,6 +9,8 @@ check this tutorial, if player joins, he will see his own hand, chips etc
 ```
 $ pip install django
 $ pip install djangorestframework
+$ pip install django-webpack-loader
+$ pip install dajngo-cors-headers
 ```
 
 **Frontend**

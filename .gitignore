@@ -6,3 +6,4 @@ frontend/static/main.js
 frontend/package-lock.json
 npm-debug.log
 frontend/webpack-stats.json
+db.sqlite3

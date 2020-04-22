@@ -1,3 +1,4 @@
+from rest_framework.generics import CreateAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -69,3 +70,10 @@ class PlayerDetailView(APIView):
             'game': game_serializer.data,
             'player': player_serializer.data,
         })
+
+
+class GameCreateView(APIView):
+    def post(self, request, format=None):
+        serializer = GameSerializer(data=request.data)
+        players = request.query_params['players']
+        chips = request.query_params['chips']

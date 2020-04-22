@@ -3,12 +3,13 @@ from api.views import *
 
 
 urlpatterns = [
-    path('api/game/<int:gameid>/player/<int:pk>/', PlayerDetailView.as_view(), name='player-detail'),
+    path('get/game/<int:gameid>/player/<int:pk>/', PlayerDetailView.as_view(), name='player-detail'),
+    path('post/game/', GameCreateView.as_view(), name='game-create'),
+
 ]
 
 
-# TODO change endopoints, example:  api/games/<int:pk>/tables/<int:pk>/tablecards
-#  every endpoint will start with games/id
+# TODO useful endpoints from this
 # router = routers.DefaultRouter()
 # router.register(r'games', GameViewSet, basename='games')
 # router.register(r'players', PlayerViewSet, basename='players')
