@@ -51,27 +51,26 @@ class Action(models.Model):
     can_call = models.BooleanField(default=False)
 
 
-class Player(models.Model):
-    hand = models.OneToOneField(Hand, on_delete=models.CASCADE, default=0)
-    chips = models.IntegerField()
-    highest_combination = models.IntegerField(default=10)
-    pot = models.IntegerField(default=0)
-    round_bid = models.IntegerField(default=0)
-    actions = models.OneToOneField(Action, on_delete=models.CASCADE, default=0)
-    is_folded = models.BooleanField(default=False)
-    is_all_in = models.BooleanField(default=False)
-    owner = models.ForeignKey('auth.User', related_name='players', on_delete=models.CASCADE, default=None)
-    # objects = PlayerManager()
-
-
 class Game(models.Model):
-    current_player = models.IntegerField(default=0)
-    last_raise = models.IntegerField(default=0)
-    biggest_bid = models.IntegerField(default=0)
-    all_played = models.BooleanField(default=False)
-    game_over = models.BooleanField(default=False)
-    round_ended = models.BooleanField(default=False)
-    table = models.OneToOneField(Table, on_delete=models.CASCADE, default=1)
-    players = models.ForeignKey(Player, on_delete=models.CASCADE, default=1)
+    current_player = models.IntegerField(default=None)
+    last_raise = models.IntegerField(default=None)
+    biggest_bid = models.IntegerField(default=None)
+    all_played = models.BooleanField(default=None)
+    game_over = models.BooleanField(default=None)
+    round_ended = models.BooleanField(default=None)
+    table = models.OneToOneField(Table, on_delete=models.CASCADE, default=None)
     # objects = GameManager()
 
+
+class Player(models.Model):
+    hand = models.OneToOneField(Hand, on_delete=models.CASCADE, default=None)
+    chips = models.IntegerField()
+    highest_combination = models.IntegerField(default=None)
+    pot = models.IntegerField(default=None)
+    round_bid = models.IntegerField(default=None)
+    actions = models.OneToOneField(Action, on_delete=models.CASCADE, default=None)
+    is_folded = models.BooleanField(default=None)
+    is_all_in = models.BooleanField(default=None)
+    table = models.ForeignKey(Game, on_delete=models.CASCADE, default=None)
+    # owner = models.ForeignKey('auth.User', related_name='players', on_delete=models.CASCADE, default=None)
+    objects = PlayerManager()
