@@ -1,10 +1,8 @@
-import pdb
-
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from api import *
-from api.serializers import *
 from rest_framework import viewsets, permissions, generics, status
+from api.serializers import *
+from gameplay.deck import Deck
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -44,27 +42,21 @@ class PlayerDetailView(APIView):
 
 
 class GameCreateView(APIView):
+    # init db game objects
     def post(self, request, format=None):
-        players = request.query_params['players']
-        chips = request.query_params['chips']
+        players = int(request.query_params['players'])
+        chips = int(request.query_params['chips'])
 
         # create game
         game = Game.objects.create()
-        pdb.set_trace()
-        game_id = 1  # get real id from game, needed for players
-        serializer = GameSerializer(data=game)
-        if serializer.is_valid():
-            serializer.save()
-        # abort if any serializer is invalid
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         # create players
         for i in range(players):
-            player = Player.objects.create(chips)
-            player_serializer = PlayerSerializer(data=player)
-            if player_serializer.is_valid():
-                player_serializer.save()
-            else:
-                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            Player.objects.create(game=game, chips=chips)
 
+        # create cards
+        deck = Deck()
+        for card in deck.set:
+            Card.objects.create(game=game, suit=card.suit, rank=card.rank)
+
+        return Response('success', status=status.HTTP_200_OK)
