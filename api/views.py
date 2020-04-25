@@ -1,3 +1,5 @@
+import pdb
+
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from api import *
@@ -24,36 +26,6 @@ class PlayerViewSet(viewsets.ModelViewSet):
     serializer_class = PlayerSerializer
 
 
-class ActionViewSet(viewsets.ModelViewSet):
-    queryset = Action.objects.all()
-    serializer_class = ActionSerializer
-
-
-class HandViewSet(viewsets.ModelViewSet):
-    queryset = Hand.objects.all()
-    serializer_class = HandSerializer
-
-
-class TableViewSet(viewsets.ModelViewSet):
-    queryset = Table.objects.all()
-    serializer_class = TableSerializer
-
-
-class BurnedCardsViewSet(viewsets.ModelViewSet):
-    queryset = BurnedCards.objects.all()
-    serializer_class = BurnedCardsSerializer
-
-
-class TableCardsViewSet(viewsets.ModelViewSet):
-    queryset = TableCards.objects.all()
-    serializer_class = TableCardsSerializer
-
-
-class DeckViewSet(viewsets.ModelViewSet):
-    queryset = Deck.objects.all()
-    serializer_class = DeckSerializer
-
-
 class CardViewSet(viewsets.ModelViewSet):
     queryset = Card.objects.all()
     serializer_class = CardSerializer
@@ -78,6 +50,7 @@ class GameCreateView(APIView):
 
         # create game
         game = Game.objects.create()
+        pdb.set_trace()
         game_id = 1  # get real id from game, needed for players
         serializer = GameSerializer(data=game)
         if serializer.is_valid():

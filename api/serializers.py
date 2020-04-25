@@ -16,42 +16,6 @@ class PlayerSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class ActionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Action
-        fields = '__all__'
-
-
-class HandSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Hand
-        fields = '__all__'
-
-
-class TableSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Table
-        fields = '__all__'
-
-
-class BurnedCardsSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = BurnedCards
-        fields = '__all__'
-
-
-class TableCardsSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TableCards
-        fields = '__all__'
-
-
-class DeckSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Deck
-        fields = '__all__'
-
-
 class CardSerializer(serializers.ModelSerializer):
     class Meta:
         model = Card
