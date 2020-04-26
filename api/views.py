@@ -1,6 +1,6 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework import viewsets, permissions, generics, status
+from rest_framework import viewsets, permissions, status
 from api.serializers import *
 from gameplay.deck import Deck
 
@@ -44,8 +44,8 @@ class PlayerDetailView(APIView):
 class GameCreateView(APIView):
     # init db game objects
     def post(self, request, format=None):
-        players = int(request.query_params['players'])
-        chips = int(request.query_params['chips'])
+        players = int(request.data['players'])
+        chips = int(request.data['chips'])
 
         # create game
         game = Game.objects.create()
@@ -59,4 +59,4 @@ class GameCreateView(APIView):
         for card in deck.set:
             Card.objects.create(game=game, suit=card.suit, rank=card.rank)
 
-        return Response('success', status=status.HTTP_200_OK)
+        return Response('200 success', status=status.HTTP_200_OK)

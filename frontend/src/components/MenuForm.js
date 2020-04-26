@@ -1,37 +1,36 @@
 import React from 'react'
 import { useForm } from "react-hook-form";
 import styled from 'styled-components';
+import Cookies from 'js-cookie';
+
 
 const Form = styled.form`
-    width: 33%;
+    width: 500px;
     background-color: rgb(25, 25, 35);
-    text-align: center;
-    margin: auto;
-    position: absolute; left: 50%; top: 50%;
-    transform: translate(-50%, -50%);
     border: 2.3px outset rgb(152,152,152);
     border-radius: 0.8em;
-
-    @media (max-width: 800px){
-        width: 80%;
-    }
 `;
 
-const DivInput = styled.div`
-    margin-bottom: 0.6em;
-
+const Container = styled.div`
+    margin: 0.6em;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 70px;
 `;
 
 const Label = styled.label`
     color: white;
-    display: block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 `;
 
 const Input = styled.input`
-    width: 50%;
     border-radius: 0.6em;
     outline: none;
-    padding-left: 0.2em;
+    padding-left: 6px;
 
     ::-webkit-outer-spin-button,
     ::-webkit-inner-spin-button{
@@ -45,14 +44,11 @@ const Input = styled.input`
 `;
 
 const Button = styled.button`
-    width: 50%;
-    margin-top: 1em;
-    margin-bottom: 0.6em;
+    width: 200px;
     background-color: rgb(107, 107, 107);
-    //border: 0.5em;
     border-radius: 0.6em;
     color: white;
-    padding: 12px 32px;
+    padding: 4px;
     
     :focus{
         outline: none;
@@ -65,50 +61,58 @@ const Button = styled.button`
 `;
 
 const MenuForm = () => {
+    var csrftoken = Cookies.get('csrftoken');
     const { handleSubmit, register, errors } = useForm();
     const onSubmit = values => {
         console.log(values);
+        fetch('http://localhost:8000/api/post/game/', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json, text/plain',
+                'Content-Type': 'application/json;charset=UTF-8',
+                'X-CSRFToken': csrftoken
+            },
+            body: JSON.stringify(values),
+        })
     };
     return(
-            <Form onSubmit={handleSubmit(onSubmit)}>
-                <DivInput>
-                    <Label>
-                        players
-                    </Label>
-                    <Input name='players'
-                    className='testClass'
-                    type='number'
-                    ref={register({
-                        required: 'Required',
-                        pattern: {
-                            value: /^[0-9]$/i,
-                            message: "invalid data input"
-                        }
-                    })}
-                    />
-                </DivInput>
-                {errors.players && errors.players.message}
-                <DivInput>
-                    <Label>
-                        chips
-                    </Label>
-                    <Input name='chips'
-                    className='testClass'
-                    type='number'
-                    ref={register({
-                        required: 'Required',
-                        pattern: {
-                            value: /^[0-9]+@[0-9]{2,4}$/i,
-                            message: "invalid data input"
-                        }
-                    })}
-                    />
-                </DivInput>
-                {errors.chips && errors.chips.message}
-                <DivInput>
-                    <Button type='submit'>Start</Button>
-                </DivInput>
-            </Form>
+        <Form onSubmit={handleSubmit(onSubmit)}>
+            <Container>
+                <Label>
+                    players
+                </Label>
+                <Input name='players'
+                type='number'
+                ref={register({
+                    required: 'Required',
+                    pattern: {
+                        value: /[2-8]/i,
+                        message: "invalid data input"
+                    }
+                })}
+                />
+            </Container>
+            {errors.players && errors.players.message}
+            <Container>
+                <Label>
+                    chips
+                </Label>
+                <Input name='chips'
+                type='number'
+                ref={register({
+                    required: 'Required',
+                    pattern: {
+                        value: /[0-9]{2,7}/i,
+                        message: "invalid data input"
+                    }
+                })}
+                />
+            </Container>
+            {errors.chips && errors.chips.message}
+            <Container>
+                <Button type='submit'>Start</Button>
+            </Container>
+        </Form>
     );
   }
 

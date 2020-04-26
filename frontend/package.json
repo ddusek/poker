@@ -28,6 +28,7 @@
     "babel-plugin-transform-class-properties": "^6.24.1",
     "bootstrap": "^4.4.1",
     "css-loader": "^3.5.2",
+    "js-cookie": "^2.2.1",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
     "react-bootstrap": "^1.0.0",
