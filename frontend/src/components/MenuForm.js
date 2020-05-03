@@ -2,6 +2,8 @@ import React from 'react'
 import { useForm } from "react-hook-form";
 import styled from 'styled-components';
 import Cookies from 'js-cookie';
+import { Redirect, useHistory } from 'react-router-dom';
+import history from '../App';
 
 
 const Form = styled.form`
@@ -60,23 +62,12 @@ const Button = styled.button`
     }
 `;
 
-const MenuForm = () => {
-    var csrftoken = Cookies.get('csrftoken');
+const MenuForm = (props) => {
     const { handleSubmit, register, errors } = useForm();
-    const onSubmit = values => {
-        console.log(values);
-        fetch('http://localhost:8000/api/post/game/', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json, text/plain',
-                'Content-Type': 'application/json;charset=UTF-8',
-                'X-CSRFToken': csrftoken
-            },
-            body: JSON.stringify(values),
-        })
-    };
+
+
     return(
-        <Form onSubmit={handleSubmit(onSubmit)}>
+        <Form onSubmit={handleSubmit(props.onSubmit)}>
             <Container>
                 <Label>
                     players
@@ -101,6 +92,8 @@ const MenuForm = () => {
                 type='number'
                 ref={register({
                     required: 'Required',
+                    min: 50,
+                    max: 1000000,
                     pattern: {
                         value: /[0-9]{2,7}/i,
                         message: "invalid data input"

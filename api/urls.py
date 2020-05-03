@@ -5,7 +5,6 @@ from api.views import *
 urlpatterns = [
     path('get/game/<int:gameid>/player/<int:pk>/', PlayerDetailView.as_view(), name='player-detail'),
     path('post/game/', GameCreateView.as_view(), name='game-create'),
-
 ]
 
 

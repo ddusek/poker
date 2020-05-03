@@ -1,3 +1,5 @@
+import pdb
+
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import viewsets, permissions, status
@@ -44,6 +46,9 @@ class PlayerDetailView(APIView):
 class GameCreateView(APIView):
     # init db game objects
     def post(self, request, format=None):
+        if 'players' not in request.data or 'chips' not in request.data:
+            res = {'status': 400, 'msg': 'didnt receive data'}
+            return Response(res, status=status.HTTP_400_BAD_REQUEST)
         players = int(request.data['players'])
         chips = int(request.data['chips'])
 
@@ -59,4 +64,5 @@ class GameCreateView(APIView):
         for card in deck.set:
             Card.objects.create(game=game, suit=card.suit, rank=card.rank)
 
-        return Response('200 success', status=status.HTTP_200_OK)
+        res = {'status': 200, 'msg': 'success'}
+        return Response(res, status=status.HTTP_200_OK)
