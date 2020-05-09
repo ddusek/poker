@@ -1,5 +1,7 @@
 import React from 'react';
 import Game from './Game';
+import Login from './Login';
+import Register from './Register';
 import MenuForm from './components/MenuForm';
 import styled from 'styled-components';
 import { hot } from 'react-hot-loader/root';
@@ -27,6 +29,12 @@ function App() {
                     </Route>
                     <Route exact path='/game'>
                         <Game />
+                    </Route>
+                    <Route exact path='/login'>
+                        <Login />
+                    </Route>
+                    <Route exact path='/register'>
+                        <Register />
                     </Route>
                 </Switch>
             </Router>

@@ -7,7 +7,7 @@ import axios from 'axios';
 
 
 const Form = styled.form`
-    width: 500px;
+    width: 620px;
     background-color: rgb(25, 25, 35);
     border: 2.3px outset rgb(152,152,152);
     border-radius: 0.8em;
@@ -24,16 +24,14 @@ const Container = styled.div`
 
 const Label = styled.label`
     color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 `;
 
 const Input = styled.input`
     border-radius: 0.6em;
     outline: none;
     padding-left: 6px;
-
+    size: 5;
+    width: 300px;
     ::-webkit-outer-spin-button,
     ::-webkit-inner-spin-button{
         -webkit-appearance: none;
@@ -46,7 +44,7 @@ const Input = styled.input`
 `;
 
 const Button = styled.button`
-    width: 200px;
+    width: 300px;
     background-color: rgb(107, 107, 107);
     border-radius: 0.6em;
     color: white;
@@ -77,15 +75,19 @@ const Header = styled.div`
     }
 `
 
-const MenuForm = () => {
+const RegisterForm = () => {
     axios.defaults.xsrfCookieName = 'csrftoken';
     axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
     const { handleSubmit, register, errors } = useForm();
     const history = useHistory();
-    const redirectUrl = '/game';
-    const postUrl = 'http://localhost:8000/api/post/game/'
+    const redirectUrl = '/';
+    const postUrl = 'http://localhost:8000/user/register/'
     const onSubmit = values => {
-        console.log(values);
+        // TODO vypsat error normalne
+        if (values.password != values.password_repeat){
+            console.log('error: passwords dont match');
+            return;
+        }
         axios.post(postUrl, {
             method: 'POST',
             headers: {
@@ -94,54 +96,93 @@ const MenuForm = () => {
             },
             body: (values)
         })
-        history.push(redirectUrl);
+        .then((response) => {
+            if (response.status == 201){
+                console.log('cool', response);
+            }
+            else{
+                console.log('not cool', response);
+            }
+        }, (error) => {
+            console.log('error', error);
+        })
+        // fetch(postUrl, {
+        //     method: 'POST',
+        //     headers: {
+        //         'Accept': 'application/json, text/plain',
+        //         'Content-Type': 'application/json;charset=UTF-8',
+        //         'X-CSRFToken': csrftoken
+        //     },
+        //     body: JSON.stringify(values)
+        // })
+        // .then((response) => response.json())
+        // .then((data) => {
+        //     if (data.status == 201){
+        //         console.log(data)
+        //     }
+        //   })
+        // .catch((error) => {
+        // console.log(error);
+        // });
+        //history.push(redirectUrl);
     };
 
     return(
         <Form onSubmit={handleSubmit(onSubmit)}>
             <Header>
-                <h2>Create game</h2>
+                <h2>Registration</h2>
                 <hr />
             </Header>
             <Container>
                 <Label>
-                    players
+                    username
                 </Label>
-                <Input name='players'
-                type='number'
+                <Input name='username'
+                type='text'
                 ref={register({
                     required: 'Required',
                     pattern: {
-                        value: /[2-8]/i,
                         message: "invalid data input"
                     }
                 })}
                 />
             </Container>
-            {errors.players && errors.players.message}
+            {errors.username && errors.username.message}
             <Container>
                 <Label>
-                    chips
+                    password
                 </Label>
-                <Input name='chips'
-                type='number'
+                <Input name='password'
+                type='password'
                 ref={register({
                     required: 'Required',
-                    min: 50,
-                    max: 1000000,
                     pattern: {
-                        value: /[0-9]{2,7}/i,
                         message: "invalid data input"
                     }
                 })}
                 />
             </Container>
-            {errors.chips && errors.chips.message}
+            {errors.password && errors.password.message}
             <Container>
-                <Button type='submit'>Start</Button>
+                <Label>
+                    repeat password
+                </Label>
+                <Input name='password_repeat'
+                type='password'
+                ref={register({
+                    required: 'Required',
+                    pattern: {
+                        message: "invalid data input"
+                    }
+                })}
+                />
+            </Container>
+            {errors.password && errors.password.message}
+            <Container>
+                <Button type='submit'>Register</Button>
             </Container>
         </Form>
     );
   }
 
-  export default MenuForm;
+  export default RegisterForm;

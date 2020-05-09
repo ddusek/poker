@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import history from './App'
 
 const GameStyle = styled.div`
     color: white;

@@ -77,16 +77,15 @@ const Header = styled.div`
     }
 `
 
-const MenuForm = () => {
+const LoginForm = () => {
     axios.defaults.xsrfCookieName = 'csrftoken';
     axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
     const { handleSubmit, register, errors } = useForm();
     const history = useHistory();
-    const redirectUrl = '/game';
-    const postUrl = 'http://localhost:8000/api/post/game/'
+    const redirectUrl = '/';
+    const getUrl = 'http://localhost:8000/login/'
     const onSubmit = values => {
-        console.log(values);
-        axios.post(postUrl, {
+        axios.post(getUrl, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json, text/plain',
@@ -94,25 +93,24 @@ const MenuForm = () => {
             },
             body: (values)
         })
-        history.push(redirectUrl);
+        //history.push(redirectUrl);
     };
 
     return(
         <Form onSubmit={handleSubmit(onSubmit)}>
             <Header>
-                <h2>Create game</h2>
+                <h2>Login</h2>
                 <hr />
             </Header>
             <Container>
                 <Label>
-                    players
+                    username
                 </Label>
-                <Input name='players'
-                type='number'
+                <Input name='username'
+                type='text'
                 ref={register({
                     required: 'Required',
                     pattern: {
-                        value: /[2-8]/i,
                         message: "invalid data input"
                     }
                 })}
@@ -121,16 +119,13 @@ const MenuForm = () => {
             {errors.players && errors.players.message}
             <Container>
                 <Label>
-                    chips
+                    password
                 </Label>
-                <Input name='chips'
-                type='number'
+                <Input name='password'
+                type='password'
                 ref={register({
                     required: 'Required',
-                    min: 50,
-                    max: 1000000,
                     pattern: {
-                        value: /[0-9]{2,7}/i,
                         message: "invalid data input"
                     }
                 })}
@@ -138,10 +133,10 @@ const MenuForm = () => {
             </Container>
             {errors.chips && errors.chips.message}
             <Container>
-                <Button type='submit'>Start</Button>
+                <Button type='submit'>Login</Button>
             </Container>
         </Form>
     );
   }
 
-  export default MenuForm;
+  export default LoginForm;
