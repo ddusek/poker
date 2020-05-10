@@ -1,15 +1,18 @@
 import React from 'react';
 import styled from 'styled-components';
+import Register from './Register';
+import Login from './Login';
 
 const Container = styled.div`
-
+    display: flex;
+    align-items: center;
 `
 
 const Home = () => {
     const loggedIn = false;
-    const content = () => {
+    const Content = () => {
         if (!loggedIn){
-            return <p>need to log in</p>;
+            return <Login />
         }
         else {
             return <p>logged in nice</p>;
@@ -17,7 +20,7 @@ const Home = () => {
     }
     return (
         <Container>
-            {content}
+            <Content />
         </Container>
     );
 }

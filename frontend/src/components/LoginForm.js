@@ -70,11 +70,12 @@ const Header = styled.div`
         letter-spacing: 3px;
         font-size: 32px;
     }
-    hr{
-        border: 0;
-        height: 1px;
-        background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(152, 152, 152, 0.75), rgba(0, 0, 0, 0));
-    }
+`
+
+const Hr = styled.hr`
+    border: 0;
+    height: 1px;
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(152, 152, 152, 0.75), rgba(0, 0, 0, 0));
 `
 
 const LoginForm = () => {
@@ -82,6 +83,10 @@ const LoginForm = () => {
     axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
     const { handleSubmit, register, errors } = useForm();
     const history = useHistory();
+    const toRegister = () => {
+        history.push('/register');
+    }
+
     const redirectUrl = '/';
     const getUrl = 'http://localhost:8000/login/'
     const onSubmit = values => {
@@ -100,7 +105,7 @@ const LoginForm = () => {
         <Form onSubmit={handleSubmit(onSubmit)}>
             <Header>
                 <h2>Login</h2>
-                <hr />
+                <Hr />
             </Header>
             <Container>
                 <Label>
@@ -134,6 +139,10 @@ const LoginForm = () => {
             {errors.chips && errors.chips.message}
             <Container>
                 <Button type='submit'>Login</Button>
+            </Container>
+            <Hr />
+            <Container>
+                <Button type='button' onClick={toRegister}>Register here</Button>
             </Container>
         </Form>
     );

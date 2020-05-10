@@ -11,6 +11,7 @@ $ pip install django
 $ pip install djangorestframework
 $ pip install django-webpack-loader
 $ pip install django-cors-headers
+$ pip install bcrypt
 ```
 
 **Frontend**
