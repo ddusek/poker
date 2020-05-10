@@ -1,7 +1,9 @@
 import React from 'react';
 import Game from './Game';
+import Home from './Home';
 import Login from './Login';
 import Register from './Register';
+import MainNavbar from './components/Navbar';
 import MenuForm from './components/MenuForm';
 import styled from 'styled-components';
 import { hot } from 'react-hot-loader/root';
@@ -9,36 +11,50 @@ import {BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
 
 
 const Layout = styled.div`
-    width: 100%;
     height: 100%;
-    text-align: center;
     background-color: rgb(25, 25, 25);
     color: rgb(255,255,255);
+    overflow: auto;
+`;
+
+const Menu = styled.div`
+    height: 6%;
+`;
+
+const Container = styled.div`
+    color: white;
+    height: 94%;
     display: flex;
     justify-content: center;
     align-items: center;
-`;
+    text-align: center;
+`
     
 function App() {
     return (
-        <Layout>
-            <Router>
+        <Router>
+            <Layout>
+                <Menu>
+                    <MainNavbar />
+                </Menu>
                 <Switch>
-                    <Route exact path='/'>
-                        <MenuForm />
-                    </Route>
-                    <Route exact path='/game'>
-                        <Game />
-                    </Route>
-                    <Route exact path='/login'>
-                        <Login />
-                    </Route>
-                    <Route exact path='/register'>
-                        <Register />
-                    </Route>
+                    <Container>
+                        <Route exact path='/'>
+                            <Home />
+                        </Route>
+                        <Route exact path='/game'>
+                            <Game />
+                        </Route>
+                        <Route exact path='/login'>
+                            <Login />
+                        </Route>
+                        <Route exact path='/register'>
+                            <Register />
+                        </Route>
+                    </Container>
                 </Switch>
-            </Router>
-        </Layout>
+            </Layout>
+        </Router>
     );
 }
 

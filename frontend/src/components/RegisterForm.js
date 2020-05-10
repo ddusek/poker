@@ -61,7 +61,7 @@ const Button = styled.button`
 `;
 
 const Header = styled.div`
-    margin: 0.6em;
+    padding: 0.6em;
     h2{
         color: rgb(200, 200, 200);
         font-weight: 340;
@@ -106,25 +106,7 @@ const RegisterForm = () => {
         }, (error) => {
             console.log('error', error);
         })
-        // fetch(postUrl, {
-        //     method: 'POST',
-        //     headers: {
-        //         'Accept': 'application/json, text/plain',
-        //         'Content-Type': 'application/json;charset=UTF-8',
-        //         'X-CSRFToken': csrftoken
-        //     },
-        //     body: JSON.stringify(values)
-        // })
-        // .then((response) => response.json())
-        // .then((data) => {
-        //     if (data.status == 201){
-        //         console.log(data)
-        //     }
-        //   })
-        // .catch((error) => {
-        // console.log(error);
-        // });
-        //history.push(redirectUrl);
+        history.push(redirectUrl);
     };
 
     return(
