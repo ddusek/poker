@@ -88,16 +88,26 @@ const LoginForm = () => {
     }
 
     const redirectUrl = '/';
-    const getUrl = 'http://localhost:8000/login/'
+    const postUrl = 'http://localhost:8000/user/login/'
+    
     const onSubmit = values => {
-        axios.post(getUrl, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json, text/plain',
-                'Content-Type': 'application/json;charset=UTF-8',
-            },
-            body: (values)
-        })
+        axios
+            .post(postUrl, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json, text/plain',
+                    'Content-Type': 'application/json;charset=UTF-8',
+                },
+                body: (values)
+            })
+            .then((response) => {
+                if (response.status == 200){
+                    console.log(response);
+                }
+            }, (error) => {
+                console.log('bad login', error);
+            })
+        
         //history.push(redirectUrl);
     };
 

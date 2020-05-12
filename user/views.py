@@ -5,18 +5,14 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from user.models import User
-from user.serializers import UserSerializer
+from user.serializers import UserSerializer, UserSerializerChecker
 
 
 def hash_pw(password, salt=bcrypt.gensalt(12)):
     password = password.encode('utf-8')
-    return {'pw': bcrypt.hashpw(password, salt), 'salt': salt}
-
-
-def is_authorized(user_hash, input_hash):
-    if user_hash == input_hash:
-        return True
-    return False
+    if type(salt) == str:
+        salt = bytes(salt, encoding='utf-8')
+    return {'pw': bcrypt.hashpw(password, salt).decode('utf-8'), 'salt': salt.decode('utf-8')}
 
 
 class CreateUserView(APIView):
@@ -36,22 +32,25 @@ class CreateUserView(APIView):
 
 
 class LoginUserView(APIView):
-    def get(self, request, format=None):
+    def post(self, request, format=None):
         if 'username' not in request.data['body'] or 'password' not in request.data['body']:
             res = {'status': 401, 'msg': 'didnt receive username or password'}
             return Response(res, status=status.HTTP_401_UNAUTHORIZED)
 
         username = request.data['body']['username']
-        user = User.objects.get(username=username)
+        user = User.objects.filter(username=username).first()
         if not user:
             res = {'status': 401, 'msg': 'didnt receive username or password'}
             return Response(res, status=status.HTTP_401_UNAUTHORIZED)
 
-        input_hashed = hash_pw(request.data['body']['password'], salt=user.salt)['pw']
-        # if password match, login
-        if is_authorized(user.pw_hash, input_hashed):
-            res = {'status': 200, 'msg': 'login successfully'}
-            return Response(res, status=status.HTTP_401_UNAUTHORIZED)
+        user_serializer = UserSerializerChecker(user)
 
-        res = {'status': 401, 'msg': 'wrong username or password', 'user': user.id}
+        # if password match, login
+        if bcrypt.checkpw(request.data['body']['password'].encode('utf-8'),
+                          user_serializer.data['pw_hash'].encode('utf-8')):
+            user_response = UserSerializer(user)
+            res = {'status': 200, 'msg': 'login successfully', 'user': user_response.data}
+            return Response(res, status=status.HTTP_200_OK)
+
+        res = {'status': 401, 'msg': 'wrong username or password'}
         return Response(res, status=status.HTTP_401_UNAUTHORIZED)
