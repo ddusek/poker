@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { useForm } from "react-hook-form";
 import styled from 'styled-components';
 import Cookies from 'js-cookie';
@@ -76,10 +76,21 @@ const Hr = styled.hr`
     background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(152, 152, 152, 0.75), rgba(0, 0, 0, 0));
 `
 
+const Error = styled.div`
+    color: rgba(255, 60, 60, 0.6);
+    background-color: rgba(222,55,55, 0.2);
+    padding: 7px;
+    margin-left: 50px;
+    margin-right: 50px;
+    border-radius: 8px;
+`;
+
 const RegisterForm = () => {
     axios.defaults.xsrfCookieName = 'csrftoken';
     axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
     const { handleSubmit, register, errors } = useForm();
+    const [error, setError] = useState(false);
+    const [ErrorMessage, setErrorMessage] = useState('');
     const history = useHistory();
     const toLogin = () => {
         history.push('/login');
@@ -90,7 +101,8 @@ const RegisterForm = () => {
     const onSubmit = values => {
         // TODO vypsat error normalne
         if (values.password != values.password_repeat){
-            console.log('error: passwords dont match');
+            setError(true);
+            setErrorMessage('password does not match');
             return;
         }
         axios.post(postUrl, {
@@ -103,13 +115,14 @@ const RegisterForm = () => {
         })
         .then((response) => {
             if (response.status == 201){
-                console.log('cool', response);
+                console.log('cool');
             }
             else{
-                console.log('not cool', response);
+                console.log('not cool');
             }
         }, (error) => {
-            console.log('error', error);
+            setError(true);
+            setErrorMessage('there was some error');
         })
         history.push(redirectUrl);
     };
@@ -118,8 +131,8 @@ const RegisterForm = () => {
         <Form onSubmit={handleSubmit(onSubmit)}>
             <Header>
                 <h2>Registration</h2>
-                <Hr />
             </Header>
+            <Hr />
             <Container>
                 <Label>
                     username
@@ -168,6 +181,7 @@ const RegisterForm = () => {
             <Container>
                 <Button type='submit'>Register</Button>
             </Container>
+            {error && <Error>{ErrorMessage}</Error>}
             <Hr />
             <Container>
                 <Button type='button' onClick={toLogin}>Already registered? Log in</Button>

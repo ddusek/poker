@@ -1,8 +1,8 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { useForm } from "react-hook-form";
 import styled from 'styled-components';
 import Cookies from 'js-cookie';
-import { useHistory } from 'react-router-dom';
+import {useHistory} from 'react-router-dom';
 import axios from 'axios';
 
 
@@ -70,18 +70,31 @@ const Header = styled.div`
         letter-spacing: 3px;
         font-size: 32px;
     }
-`
+`;
 
 const Hr = styled.hr`
     border: 0;
     height: 1px;
     background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(152, 152, 152, 0.75), rgba(0, 0, 0, 0));
-`
+`;
+
+const Error = styled.div`
+    color: rgba(255, 60, 60, 0.6);
+    background-color: rgba(222,55,55, 0.2);
+    padding: 7px;
+    margin-left: 50px;
+    margin-right: 50px;
+    border-radius: 8px;
+`;
+
 
 const LoginForm = () => {
     axios.defaults.xsrfCookieName = 'csrftoken';
     axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
     const { handleSubmit, register, errors } = useForm();
+    const [error, setError] = useState(false);
+    const [ErrorMessage, setErrorMessage] = useState('');
+    
     const history = useHistory();
     const toRegister = () => {
         history.push('/register');
@@ -102,10 +115,11 @@ const LoginForm = () => {
             })
             .then((response) => {
                 if (response.status == 200){
-                    console.log(response);
+                    console.log('login successfully');
                 }
             }, (error) => {
-                console.log('bad login', error);
+                setError(true);
+                setErrorMessage('wrong username or password');
             })
         
         //history.push(redirectUrl);
@@ -115,8 +129,8 @@ const LoginForm = () => {
         <Form onSubmit={handleSubmit(onSubmit)}>
             <Header>
                 <h2>Login</h2>
-                <Hr />
             </Header>
+            <Hr />
             <Container>
                 <Label>
                     username
@@ -150,6 +164,7 @@ const LoginForm = () => {
             <Container>
                 <Button type='submit'>Login</Button>
             </Container>
+            {error && <Error>{ErrorMessage}</Error>}
             <Hr />
             <Container>
                 <Button type='button' onClick={toRegister}>Register here</Button>
