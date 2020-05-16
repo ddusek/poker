@@ -85,15 +85,35 @@ const Error = styled.div`
     border-radius: 8px;
 `;
 
+const Info = styled.div`
+    color: rgba(60, 255, 60, 0.6);
+    background-color: rgba(55,222,55, 0.2);
+    padding: 7px;
+    margin-left: 50px;
+    margin-right: 50px;
+    border-radius: 8px;
+`;
+
 const RegisterForm = () => {
     axios.defaults.xsrfCookieName = 'csrftoken';
     axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
     const { handleSubmit, register, errors } = useForm();
     const [error, setError] = useState(false);
     const [ErrorMessage, setErrorMessage] = useState('');
+    const [info, setInfo] = useState(false);
+    const [InfoMessage, setInfoMessage] = useState('');
     const history = useHistory();
     const toLogin = () => {
         history.push('/login');
+    }
+
+    const GetError = (errorMessage) => {
+        if (errorMessage === 'Request failed with status code 409'){
+            return 'username already exists';
+        }
+        else {
+            return errorMessage;
+        }
     }
 
     const redirectUrl = '/';
@@ -101,6 +121,7 @@ const RegisterForm = () => {
     const onSubmit = values => {
         // TODO vypsat error normalne
         if (values.password != values.password_repeat){
+            setInfo(false);
             setError(true);
             setErrorMessage('password does not match');
             return;
@@ -115,16 +136,22 @@ const RegisterForm = () => {
         })
         .then((response) => {
             if (response.status == 201){
+                setError(false);
+                setInfo(true);
+                setInfoMessage('user created successfully')
                 console.log('cool');
             }
             else{
+                setInfo(false);
+                setError(true);
                 console.log('not cool');
             }
         }, (error) => {
+            setInfo(false);
             setError(true);
-            setErrorMessage('there was some error');
+            setErrorMessage(GetError(error.message));
         })
-        history.push(redirectUrl);
+        //history.push(redirectUrl);
     };
 
     return(
@@ -182,6 +209,7 @@ const RegisterForm = () => {
                 <Button type='submit'>Register</Button>
             </Container>
             {error && <Error>{ErrorMessage}</Error>}
+            {info && <Info>{InfoMessage}</Info>}
             <Hr />
             <Container>
                 <Button type='button' onClick={toLogin}>Already registered? Log in</Button>
