@@ -101,7 +101,7 @@ const LoginForm = () => {
     }
 
     const redirectUrl = '/';
-    const postUrl = 'http://localhost:8000/user/login/'
+    const postUrl = 'http://localhost:8000/user/login/';
     
     const onSubmit = values => {
         axios
@@ -116,13 +116,14 @@ const LoginForm = () => {
             .then((response) => {
                 if (response.status == 200){
                     console.log('login successfully');
+                    console.log()
                 }
             }, (error) => {
                 setError(true);
                 setErrorMessage('wrong username or password');
             })
         
-        //history.push(redirectUrl);
+        history.push(redirectUrl);
     };
 
     return(

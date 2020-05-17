@@ -1,7 +1,8 @@
-import React from 'react';
+import React, {useState} from 'react';
 import styled from 'styled-components';
 import Register from './Register';
 import Login from './Login';
+import axios from 'axios';
 
 const Container = styled.div`
     display: flex;
@@ -9,14 +10,32 @@ const Container = styled.div`
 `
 
 const Home = () => {
-    const loggedIn = false;
+    const [loggedIn, setLoggedIn] = useState(false);
+    const getUrl = 'http://localhost:8000/user/isloggedin/';
     const Content = () => {
-        if (!loggedIn){
-            return <Login />
-        }
-        else {
-            return <p>logged in nice</p>;
-        }
+        axios
+            .get(getUrl, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json, text/plain',
+                    'Content-Type': 'application/json;charset=UTF-8',
+                }
+            })
+            .then((response) => {
+                if (response.status == 200){
+                    setLoggedIn(true);
+                }
+                else {
+                    setLoggedIn(false);
+                }
+            }, (error) => {
+                setError(true);
+                setErrorMessage('wrong username or password');
+            })
+            if (!loggedIn){
+               return <Login /> 
+            }
+            return <p>logged in nice</p>
     }
     return (
         <Container>
