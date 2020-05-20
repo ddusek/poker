@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import styled from 'styled-components';
-import Register from './Register';
-import Login from './Login';
+import Register from './components/Register';
+import Login from './components/Login';
 import axios from 'axios';
 
 const Container = styled.div`
@@ -24,6 +24,7 @@ const Home = () => {
             .then((response) => {
                 if (response.status == 200){
                     setLoggedIn(true);
+                    return <p>logged in nice</p>
                 }
                 else {
                     setLoggedIn(false);

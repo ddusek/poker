@@ -77,7 +77,7 @@ const Header = styled.div`
     }
 `
 
-const MenuForm = () => {
+const GameForm = () => {
     axios.defaults.xsrfCookieName = 'csrftoken';
     axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
     const { handleSubmit, register, errors } = useForm();
@@ -121,7 +121,7 @@ const MenuForm = () => {
             {errors.players && errors.players.message}
             <Container>
                 <Label>
-                    chips
+                    starting chips
                 </Label>
                 <Input name='chips'
                 type='number'
@@ -144,4 +144,4 @@ const MenuForm = () => {
     );
   }
 
-  export default MenuForm;
+  export default GameForm;

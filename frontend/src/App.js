@@ -1,10 +1,11 @@
 import React from 'react';
 import Game from './Game';
 import Home from './Home';
-import Login from './Login';
-import Register from './Register';
+import Login from './components/Login';
+import Register from './components/Register';
 import MainNavbar from './components/Navbar';
-import MenuForm from './components/MenuForm';
+import GameForm from './components/forms/GameForm';
+import NewGame from './NewGame';
 import styled from 'styled-components';
 import { hot } from 'react-hot-loader/root';
 import {BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
@@ -41,6 +42,9 @@ function App() {
                     <Container>
                         <Route exact path='/'>
                             <Home />
+                        </Route>
+                        <Route exact path='/newgame'>
+                            <NewGame />
                         </Route>
                         <Route exact path='/game'>
                             <Game />

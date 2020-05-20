@@ -2,12 +2,12 @@ import React, {useState} from 'react'
 import { useForm } from "react-hook-form";
 import styled from 'styled-components';
 import Cookies from 'js-cookie';
-import {useHistory} from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 
 
 const Form = styled.form`
-    width: 500px;
+    width: 620px;
     background-color: rgb(25, 25, 35);
     border: 2.3px outset rgb(152,152,152);
     border-radius: 0.8em;
@@ -24,16 +24,14 @@ const Container = styled.div`
 
 const Label = styled.label`
     color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 `;
 
 const Input = styled.input`
     border-radius: 0.6em;
     outline: none;
     padding-left: 6px;
-
+    size: 5;
+    width: 300px;
     ::-webkit-outer-spin-button,
     ::-webkit-inner-spin-button{
         -webkit-appearance: none;
@@ -46,7 +44,7 @@ const Input = styled.input`
 `;
 
 const Button = styled.button`
-    width: 200px;
+    width: 300px;
     background-color: rgb(107, 107, 107);
     border-radius: 0.6em;
     color: white;
@@ -63,20 +61,20 @@ const Button = styled.button`
 `;
 
 const Header = styled.div`
-    margin: 0.6em;
+    padding: 0.6em;
     h2{
         color: rgb(200, 200, 200);
         font-weight: 340;
         letter-spacing: 3px;
         font-size: 32px;
     }
-`;
+`
 
 const Hr = styled.hr`
     border: 0;
     height: 1px;
     background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(152, 152, 152, 0.75), rgba(0, 0, 0, 0));
-`;
+`
 
 const Error = styled.div`
     color: rgba(255, 60, 60, 0.6);
@@ -87,49 +85,53 @@ const Error = styled.div`
     border-radius: 8px;
 `;
 
-
-const LoginForm = () => {
+const RegisterForm = () => {
     axios.defaults.xsrfCookieName = 'csrftoken';
     axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
     const { handleSubmit, register, errors } = useForm();
     const [error, setError] = useState(false);
     const [ErrorMessage, setErrorMessage] = useState('');
-    
     const history = useHistory();
-    const toRegister = () => {
-        history.push('/register');
+    const toLogin = () => {
+        history.push('/login');
     }
 
     const redirectUrl = '/';
-    const postUrl = 'http://localhost:8000/user/login/';
-    
+    const postUrl = 'http://localhost:8000/user/register/'
     const onSubmit = values => {
-        axios
-            .post(postUrl, {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json, text/plain',
-                    'Content-Type': 'application/json;charset=UTF-8',
-                },
-                body: (values)
-            })
-            .then((response) => {
-                if (response.status == 200){
-                    console.log('login successfully');
-                    console.log()
-                }
-            }, (error) => {
-                setError(true);
-                setErrorMessage('wrong username or password');
-            })
-        
-        history.push(redirectUrl);
+        // TODO vypsat error normalne
+        if (values.password != values.password_repeat){
+            setError(true);
+            setErrorMessage('password does not match');
+            return;
+        }
+        axios.post(postUrl, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json, text/plain',
+                'Content-Type': 'application/json;charset=UTF-8',
+            },
+            body: (values)
+        })
+        .then((response) => {
+            console.log(respponse)
+            if (response.status == 201){
+                console.log('cool');
+                history.push(redirectUrl);
+            }
+            else{
+                console.log('not cool');
+            }
+        }, (error) => {
+            setError(true);
+            setErrorMessage('username already exists');
+        })
     };
 
     return(
         <Form onSubmit={handleSubmit(onSubmit)}>
             <Header>
-                <h2>Login</h2>
+                <h2>Registration</h2>
             </Header>
             <Hr />
             <Container>
@@ -146,7 +148,7 @@ const LoginForm = () => {
                 })}
                 />
             </Container>
-            {errors.players && errors.players.message}
+            {errors.username && errors.username.message}
             <Container>
                 <Label>
                     password
@@ -161,17 +163,32 @@ const LoginForm = () => {
                 })}
                 />
             </Container>
-            {errors.chips && errors.chips.message}
+            {errors.password && errors.password.message}
             <Container>
-                <Button type='submit'>Login</Button>
+                <Label>
+                    repeat password
+                </Label>
+                <Input name='password_repeat'
+                type='password'
+                ref={register({
+                    required: 'Required',
+                    pattern: {
+                        message: "invalid data input"
+                    }
+                })}
+                />
+            </Container>
+            {errors.password && errors.password.message}
+            <Container>
+                <Button type='submit'>Register</Button>
             </Container>
             {error && <Error>{ErrorMessage}</Error>}
             <Hr />
             <Container>
-                <Button type='button' onClick={toRegister}>Register here</Button>
+                <Button type='button' onClick={toLogin}>Already registered? Log in</Button>
             </Container>
         </Form>
     );
   }
 
-  export default LoginForm;
+  export default RegisterForm;

@@ -47,14 +47,14 @@ const MainNavbar = () => {
         <MyNavbar.Toggle aria-controls="basic-navbar-nav" />
         <MyNavbar.Collapse id="basic-navbar-nav">
             <MyNav className="mr-auto">
-            <MyNav.Link href="#home">Home</MyNav.Link>
-            <MyNav.Link href="#newgame">New game</MyNav.Link>
-            <MyNav.Link href="#joingame">Join game</MyNav.Link>
+            <MyNav.Link href="/">Home</MyNav.Link>
+            <MyNav.Link href="/newgame">New game</MyNav.Link>
+            <MyNav.Link href="/joingame">Join game</MyNav.Link>
             <MyNavDropdown bg='dark' title="Profile" id="basic-nav-dropdown">
-                <MyNavDropdown.Item href="#settings">Settings</MyNavDropdown.Item>
-                <MyNavDropdown.Item href="#stats">Statistics</MyNavDropdown.Item>
+                <MyNavDropdown.Item href="/settings">Settings</MyNavDropdown.Item>
+                <MyNavDropdown.Item href="/stats">Statistics</MyNavDropdown.Item>
                 <MyNavDropdown.Divider />
-                <MyNavDropdown.Item href="#logout">Log out</MyNavDropdown.Item>
+                <MyNavDropdown.Item href="/logout">Log out</MyNavDropdown.Item>
             </MyNavDropdown>
             </MyNav>
         </MyNavbar.Collapse>
