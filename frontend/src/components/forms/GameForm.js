@@ -1,7 +1,6 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { useForm } from "react-hook-form";
 import styled from 'styled-components';
-import Cookies from 'js-cookie';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 
@@ -77,16 +76,27 @@ const Header = styled.div`
     }
 `
 
+const Error = styled.div`
+    color: rgba(255, 60, 60, 0.6);
+    background-color: rgba(222,55,55, 0.2);
+    padding: 7px;
+    margin-left: 50px;
+    margin-right: 50px;
+    border-radius: 8px;
+`;
+
 const GameForm = () => {
     axios.defaults.xsrfCookieName = 'csrftoken';
     axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
+    const [error, setError] = useState(false);
+    const [ErrorMessage, setErrorMessage] = useState('');
     const { handleSubmit, register, errors } = useForm();
     const history = useHistory();
-    const redirectUrl = '/game';
     const postUrl = 'http://localhost:8000/api/post/game/'
     const onSubmit = values => {
         console.log(values);
-        axios.post(postUrl, {
+        axios
+        .post(postUrl, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json, text/plain',
@@ -94,7 +104,15 @@ const GameForm = () => {
             },
             body: (values)
         })
-        history.push(redirectUrl);
+        .then((response) => {
+            if (response.status == 200){
+                console.log('game created');
+                history.push(response.data.path);
+            }
+        }, (error) => {
+            setError(true);
+            setErrorMessage('there was some error creating game');
+        })
     };
 
     return(

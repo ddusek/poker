@@ -1,7 +1,10 @@
+import pdb
+
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import viewsets, permissions, status
 from api.serializers import *
+from api.utils import make_path
 from gameplay.deck import Deck
 
 
@@ -44,14 +47,15 @@ class PlayerDetailView(APIView):
 class GameCreateView(APIView):
     # init db game objects
     def post(self, request, format=None):
-        if 'players' not in request.data or 'chips' not in request.data:
+        if 'players' not in request.data['body'] or 'chips' not in request.data['body']:
             res = {'status': 400, 'msg': 'didnt receive data'}
             return Response(res, status=status.HTTP_400_BAD_REQUEST)
-        players = int(request.data['players'])
-        chips = int(request.data['chips'])
+        path = make_path('/game/', Game)
+        players = int(request.data['body']['players'])
+        chips = int(request.data['body']['chips'])
 
         # create game
-        game = Game.objects.create()
+        game = Game.objects.create(path=path)
 
         # create players
         for i in range(players):
@@ -62,5 +66,5 @@ class GameCreateView(APIView):
         for card in deck.set:
             Card.objects.create(game=game, suit=card.suit, rank=card.rank)
 
-        res = {'status': 200, 'msg': 'success'}
+        res = {'status': 200, 'msg': 'success', 'path': path}
         return Response(res, status=status.HTTP_200_OK)

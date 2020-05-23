@@ -65,7 +65,9 @@ const InfoBox = (props) => {
             {props.header && 
                 <Container>
                     <Header>
+                        <h2>
                         {props.header}
+                        </h2>
                     </Header>
                 </Container>
             }

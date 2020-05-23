@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import InfoBox from './components/forms/InfoBox';
 
 const GameStyle = styled.div`
     color: white;
@@ -8,7 +9,12 @@ const GameStyle = styled.div`
 const Game = () => {
     return (
         <GameStyle>
-            <p>text iks de</p>
+            <InfoBox 
+            header='waiting for players'
+            text='at least 2 players are needed to start the game'
+            buttonText='start now'
+             />
+            
         </GameStyle>
     );
 }

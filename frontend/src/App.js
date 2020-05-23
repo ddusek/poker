@@ -46,7 +46,7 @@ function App() {
                         <Route exact path='/newgame'>
                             <NewGame />
                         </Route>
-                        <Route exact path='/game'>
+                        <Route exact path='/game/:slug'>
                             <Game />
                         </Route>
                         <Route exact path='/login'>

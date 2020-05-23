@@ -8,6 +8,7 @@ class Game(models.Model):
     all_played = models.BooleanField(default=False)
     game_over = models.BooleanField(default=False)
     round_ended = models.BooleanField(default=False)
+    path = models.SlugField(max_length=20)
 
 
 class Player(models.Model):
