@@ -1,9 +1,7 @@
 # Poker
 
-## TODO
-https://simpleisbetterthancomplex.com/tutorial/2018/01/18/how-to-implement-multiple-user-types-with-django.html  
-check this tutorial, if player joins, he will see his own hand, chips etc  
-
+## About
+Poker web app made with Django, REST API and React.
 ## How to run
 **Python libraries**
 ```
