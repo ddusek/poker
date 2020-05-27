@@ -24,7 +24,7 @@ SECRET_KEY = '@)@8pdeit+1m#jr!n)&1ib+uo(@*fbzj89ks!3z50ff@zp^dn2'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -38,10 +38,12 @@ INSTALLED_APPS = [
     'rest_framework',
     'webpack_loader',
     'corsheaders',
+    'channels',
 
     'api',
     'frontend',
     'user',
+    'gameplay',
 ]
 
 MIDDLEWARE = [
@@ -73,6 +75,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'poker_app.wsgi.application'
+ASGI_APPLICATION = 'poker_app.routing.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases

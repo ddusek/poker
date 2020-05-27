@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 from rest_framework import viewsets, permissions, status
 from api.serializers import *
 from api.utils import make_path
-from gameplay.deck import Deck
+from gameplay_utils.deck import Deck
 
 
 class UserViewSet(viewsets.ModelViewSet):

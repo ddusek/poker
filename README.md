@@ -10,6 +10,7 @@ $ pip install djangorestframework
 $ pip install django-webpack-loader
 $ pip install django-cors-headers
 $ pip install bcrypt
+$ pip install channels
 ```
 
 **Frontend**
