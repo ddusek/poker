@@ -2,17 +2,14 @@ from channels.auth import AuthMiddlewareStack
 from channels.routing import ProtocolTypeRouter, URLRouter
 from channels.security.websocket import AllowedHostsOriginValidator
 from django.conf.urls import url
-
-from api.models import *
+import gameplay.routing
 
 application = ProtocolTypeRouter({
-    # Empty for now (http->django views is added by default)
-    'websocket': AllowedHostsOriginValidator(
+    # http->django views is added by default
+    'websocket': AuthMiddlewareStack(
         AuthMiddlewareStack(
             URLRouter(
-                [
-                    url('game/<str:gameid>', Game)
-                ]
+                gameplay.routing.websocket_urlpatterns
             )
         )
     )
