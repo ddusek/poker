@@ -1,0 +1,7 @@
+django
+djangorestframework
+django-webpack-loader
+django-cors-headers
+bcrypt
+channels
+channels_redis
