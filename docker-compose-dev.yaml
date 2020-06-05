@@ -1,0 +1,33 @@
+# docker-compose --file docker-compose-dev.yaml up
+
+# docker exec --tty --interactive jjnt-django python manage.py createsuperuser
+# docker exec poker python manage.py makemigrations
+# docker exec poker python manage.py migrate
+# docker exec poker python manage.py clean-db
+
+
+version: '3'
+
+services:
+    django:
+        build:
+            context: ./
+            dockerfile: Django.Dockerfile
+        image: poker-django
+        container_name: poker-django
+        volumes:
+            - ./:/poker/
+        ports:
+            - 8000:8000
+    react:
+        build:
+            context: ./
+            dockerfile: React.Dockerfile
+        image: poker-react
+        container_name: poker-react
+        volumes:
+            - ./:/poker/
+        ports:
+            - 3000:3000
+        depends_on:
+            - django
