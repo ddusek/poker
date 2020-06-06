@@ -143,7 +143,7 @@ STATIC_URL = '/frontend/'
 WEBPACK_LOADER = {
     'DEFAULT': {
         'BUNDLE_DIR_NAME': '',
-        'STATS_FILE': os.path.join(str(BASE_DIR) + '\\frontend\\', 'webpack-stats.json')
+        'STATS_FILE': os.path.join(str(BASE_DIR), 'frontend/webpack-stats.json')
     }
 }
 
