@@ -76,11 +76,12 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'poker_app.wsgi.application'
 ASGI_APPLICATION = 'poker_app.routing.application'
+
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            'hosts': [('127.0.0.1', 6379)]
+            'hosts': [('redis', 6379)]
         }
     }
 }
@@ -133,7 +134,7 @@ USE_TZ = True
 
 CORS_ORIGIN_ALLOW_ALL = True
 
-APPEND_SLASH = False
+APPEND_SLASH = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
@@ -148,6 +149,7 @@ WEBPACK_LOADER = {
 }
 
 STATICFILES_DIRS = (
-    # We do this so that django's collectstatic copies or our bundles to the STATIC_ROOT or syncs them to whatever storage we use.
+    # We do this so that django's collectstatic copies or our bundles
+    # to the STATIC_ROOT or syncs them to whatever storage we use.
     os.path.join(BASE_DIR, 'frontend/static'),
 )

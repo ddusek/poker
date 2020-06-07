@@ -34,7 +34,7 @@ const Game = () => {
             text='at least 2 players are needed to start the game'
             buttonText='start now'
              />
-            <button id="mybutton" onClick={clicked}>asd</button>
+            <button id="mybutton" onClick={() => setClickedCount(clickedCount +1)}>asd</button>
             {clickedCount}
         </GameStyle>
     );

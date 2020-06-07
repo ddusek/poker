@@ -9,6 +9,13 @@
 version: '3'
 
 services:
+    redis:
+        container_name: poker-redis
+        image: redis:latest
+        # command: redis-server --requirepass redispass
+        command: redis-server
+        ports:
+            - 6379:6379
     django:
         build:
             context: ./
@@ -19,6 +26,8 @@ services:
             - ./:/poker/
         ports:
             - 8000:8000
+        depends_on:
+          - redis
     react:
         build:
             context: ./
