@@ -107,7 +107,7 @@ const GameForm = () => {
         .then((response) => {
             if (response.status == 200){
                 console.log('game created');
-                history.push(response.data.path);
+                history.push(response.data.path + '/');
             }
         }, (error) => {
             setError(true);

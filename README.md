@@ -19,6 +19,10 @@ start/stop containers
 docker-compose --file docker-compose-dev.yaml start
 docker-compose --file docker-compose-dev.yaml stop
 ```
+live logging
+```
+docker-compose --file docker-compose-dev.yaml logs --tail=0 --follow
+```
 
 ### Locally
 **Requirements:**  
