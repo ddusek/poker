@@ -14,17 +14,19 @@ const Game = () => {
         ws.current = new WebSocket('ws://127.0.0.1:8000/ws' + window.location.pathname);
         ws.current.onopen = () => console.log('ws opened');
         ws.current.onclose = () => console.log('ws closed');
-    })
+    }, [])
     
-    const clicked = () => {
-        setClickedCount(clickedCount +1);
-        const message = JSON.stringify({'message': clickedCount});
+    const clicked = (e) => {
+        const message = JSON.stringify({'message': 'clickedCount', 'type': 'chat_message'});
         ws.current.send(message);
-        console.log('e', message);
     };
     
-    useEffect((message) => {
-        
+    useEffect(() => {
+        ws.current.onmessage = (e) =>{
+            const data = JSON.parse(e.data);
+            setClickedCount(clickedCount + 1);
+            console.log(clickedCount, e);
+        }
     })
 
     return (
@@ -35,7 +37,7 @@ const Game = () => {
             buttonText='start now'
              />
             <button id="mybutton" onClick={clicked}>asd</button>
-            {clickedCount}
+            <p>clicked: {clickedCount}</p>
         </GameStyle>
     );
 }

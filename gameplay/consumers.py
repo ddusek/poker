@@ -41,6 +41,7 @@ class GameConsumer(WebsocketConsumer):
 
     def receive(self, text_data):
         text_data_json = json.loads(text_data)
+        print(text_data_json)
         message = text_data_json['message']
 
         # Send message to room group
@@ -51,3 +52,12 @@ class GameConsumer(WebsocketConsumer):
                 'message': message
             }
         )
+
+    # Receive message from room group
+    def chat_message(self, event):
+        message = event['message']
+
+        # Send message to WebSocket
+        self.send(text_data=json.dumps({
+            'message': message
+        }))
