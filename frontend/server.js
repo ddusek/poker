@@ -1,6 +1,6 @@
-var webpack = require('webpack');
-var WebpackDevServer = require('webpack-dev-server');
-var config = require('./webpack.config');
+const webpack = require('webpack');
+const WebpackDevServer = require('webpack-dev-server');
+const config = require('./webpack.config');
 
 new WebpackDevServer(webpack(config), {
     publicPath: config.output.publicPath,
@@ -14,7 +14,7 @@ new WebpackDevServer(webpack(config), {
             'Content-Type, Authorization, x-id, Content-Length, X-Requested-With',
         'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
     },
-}).listen(3000, '0.0.0.0', function (err, result) {
+}).listen(3000, '0.0.0.0', (err) => {
     if (err) {
         console.log(err);
     }

@@ -1,89 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
-
-const Form = styled.form`
-    width: 500px;
-    background-color: rgb(25, 25, 35);
-    border: 2.3px outset rgb(152, 152, 152);
-    border-radius: 0.8em;
-`;
-
-const Container = styled.div`
-    margin: 0.6em;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 70px;
-`;
-
-const Label = styled.label`
-    color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-`;
-
-const Input = styled.input`
-    border-radius: 0.6em;
-    outline: none;
-    padding-left: 6px;
-
-    ::-webkit-outer-spin-button,
-    ::-webkit-inner-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
-    }
-
-    input[type='number'] {
-        -moz-appearance: textfield;
-    }
-`;
-
-const Button = styled.button`
-    width: 200px;
-    background-color: rgb(107, 107, 107);
-    border-radius: 0.6em;
-    color: white;
-    padding: 4px;
-
-    :focus {
-        outline: none;
-    }
-
-    :hover {
-        background-color: rgb(185, 185, 185);
-        color: rgb(55, 55, 55);
-    }
-`;
-
-const Header = styled.div`
-    margin: 0.6em;
-    h2 {
-        color: rgb(200, 200, 200);
-        font-weight: 340;
-        letter-spacing: 3px;
-        font-size: 32px;
-    }
-    hr {
-        border: 0;
-        height: 1px;
-        background-image: linear-gradient(
-            to right,
-            rgba(0, 0, 0, 0),
-            rgba(152, 152, 152, 0.75),
-            rgba(0, 0, 0, 0)
-        );
-    }
-`;
+import { Container, Form, Label, Button, Input, Header, Error } from './BaseForm';
 
 const GameForm = () => {
     axios.defaults.xsrfCookieName = 'csrftoken';
     axios.defaults.xsrfHeaderName = 'X-CSRFTOKEN';
     const { handleSubmit, register, errors } = useForm();
+    const [error, setError] = useState(false);
+    const [ErrorMessage, setErrorMessage] = useState('');
     const history = useHistory();
     const postUrl = 'http://localhost:8000/api/post/game/';
     const onSubmit = (values) => {
@@ -105,8 +31,8 @@ const GameForm = () => {
                     }
                 },
                 () => {
-                    // setError(true);
-                    // setErrorMessage('there was some error creating game');
+                    setError(true);
+                    setErrorMessage('there was some error creating game');
                 }
             );
     };
@@ -152,6 +78,7 @@ const GameForm = () => {
             <Container>
                 <Button type="submit">Start</Button>
             </Container>
+            {error && <Error>{ErrorMessage}</Error>}
         </Form>
     );
 };

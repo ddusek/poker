@@ -1,8 +1,7 @@
-var path = require('path');
-var webpack = require('webpack');
-var BundleTracker = require('webpack-bundle-tracker');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
-
+const path = require('path');
+const webpack = require('webpack');
+const BundleTracker = require('webpack-bundle-tracker');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
     mode: 'development',
@@ -23,7 +22,7 @@ module.exports = {
         new webpack.NoEmitOnErrorsPlugin(), // don't reload if there is an error
         new BundleTracker({ filename: './webpack-stats.json' }),
         new HtmlWebpackPlugin({
-            favicon: "./static/images/favicon.svg",
+            favicon: './static/images/favicon.svg',
         }),
     ],
 
