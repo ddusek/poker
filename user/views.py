@@ -81,5 +81,3 @@ class UserLoggedInView(APIView):
 
         res = request.session['user_id']
         return Response(res, status=status.HTTP_200_OK)
-
-

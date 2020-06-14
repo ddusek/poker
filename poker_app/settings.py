@@ -81,7 +81,7 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            'hosts': [('redis', 6379)]
+            'hosts': [('redis', 6379)]  # if in docker, address must be name of docker service
         }
     }
 }
@@ -153,3 +153,17 @@ STATICFILES_DIRS = (
     # to the STATIC_ROOT or syncs them to whatever storage we use.
     os.path.join(BASE_DIR, 'frontend/static'),
 )
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'WARNING',
+    },
+}
