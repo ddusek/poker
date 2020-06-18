@@ -67,11 +67,6 @@ class LoginUserView(APIView):
         return Response(res, status=status.HTTP_401_UNAUTHORIZED)
 
 
-# TODO test cookies in view before login view
-#  request.session.set_test_cookie()
-#  return render(request, 'foo/login_form.html')
-
-
 class UserLoggedInView(APIView):
     def get(self, request):
         if 'user_id' not in request.session:
@@ -80,4 +75,19 @@ class UserLoggedInView(APIView):
             return Response(res, status=status.HTTP_401_UNAUTHORIZED)
 
         res = request.session['user_id']
+        return Response(res, status=status.HTTP_200_OK)
+
+
+class CurrentUserIDView(APIView):
+    def get(self, request):
+        if 'user_id' not in request.session:
+            res = {
+                'success': 'false',
+                'user_id': None
+            }
+            return Response(res, status=status.HTTP_401_UNAUTHORIZED)
+        res = {
+            'success': 'true',
+            'user_id': request.session['user_id']
+        }
         return Response(res, status=status.HTTP_200_OK)
