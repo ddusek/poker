@@ -8,6 +8,4 @@ from user.serializers import UserSerializer
 def get_user(current_user_id):
     if current_user_id is None:
         return 'user not logged in'
-    user = User.objects.filter(id=current_user_id).first()
-    serializer = UserSerializer(user).data
-    return serializer
+    return UserSerializer(User.objects.filter(id=current_user_id).first()).data
