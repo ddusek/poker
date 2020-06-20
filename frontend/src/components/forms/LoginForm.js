@@ -22,25 +22,18 @@ const LoginForm = () => {
     const onSubmit = (values) => {
         axios
             .post(postUrl, {
-                method: 'POST',
-                headers: {
-                    Accept: 'application/json, text/plain',
-                    'Content-Type': 'application/json;charset=UTF-8',
-                },
                 body: values,
             })
-            .then(
-                (response) => {
-                    if (response.status === 200) {
-                        console.log('login successfully');
-                        history.push(redirectUrl);
-                    }
-                },
-                () => {
-                    setError(true);
-                    setErrorMessage('wrong username or password');
+            .then((response) => {
+                if (response.status === 200) {
+                    console.log('login successfully');
+                    history.push(redirectUrl);
                 }
-            );
+            })
+            .catch((err) => {
+                setError(true);
+                setErrorMessage(err);
+            });
     };
 
     return (

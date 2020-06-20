@@ -8,9 +8,25 @@ const Container = styled.div`
     color: white;
 `;
 
-const Login = () => {
-    const authorized = IsAuthenticated();
-    if (!authorized) {
+const Login = (props) => {
+    if ('isAuthenticated' in props) {
+        if (props.isAuthenticated === 'true') {
+            return (
+                <Container>
+                    <InfoBox
+                        text="You are already logged in. You can log out with button below."
+                        buttonText="Log out"
+                    />
+                </Container>
+            );
+        }
+        return (
+            <Container>
+                <LoginForm />
+            </Container>
+        );
+    }
+    if (!IsAuthenticated()) {
         return (
             <Container>
                 <LoginForm />

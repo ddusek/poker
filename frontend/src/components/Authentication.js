@@ -5,26 +5,18 @@ const IsAuthenticated = () => {
     const getUrl = 'http://localhost:8000/user/isloggedin/';
     const [loggedIn, setLoggedIn] = useState(false);
     axios
-        .get(getUrl, {
-            method: 'GET',
-            headers: {
-                Accept: 'application/json, text/plain',
-                'Content-Type': 'application/json;charset=UTF-8',
-            },
-        })
-        .then(
-            (response) => {
-                if (response.status === 200) {
-                    setLoggedIn(true);
-                } else {
-                    setLoggedIn(false);
-                }
-            },
-            (error) => {
-                console.log(error);
+        .get(getUrl)
+        .then((response) => {
+            if (response.status === 200) {
+                setLoggedIn(true);
+            } else {
                 setLoggedIn(false);
             }
-        );
+        })
+        .catch((err) => {
+            console.log(err);
+            setLoggedIn(false);
+        });
     return loggedIn;
 };
 

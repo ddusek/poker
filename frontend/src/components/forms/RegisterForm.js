@@ -31,7 +31,6 @@ const RegisterForm = () => {
     const redirectUrl = '/';
     const postUrl = 'http://localhost:8000/user/register/';
     const onSubmit = (values) => {
-        // TODO vypsat error normalne
         if (values.password !== values.password_repeat) {
             setError(true);
             setErrorMessage('password does not match');
@@ -39,28 +38,20 @@ const RegisterForm = () => {
         }
         axios
             .post(postUrl, {
-                method: 'POST',
-                headers: {
-                    Accept: 'application/json, text/plain',
-                    'Content-Type': 'application/json;charset=UTF-8',
-                },
                 body: values,
             })
-            .then(
-                (response) => {
-                    console.log(response);
-                    if (response.status === 201) {
-                        console.log('cool');
-                        history.push(redirectUrl);
-                    } else {
-                        console.log('not cool');
-                    }
-                },
-                () => {
-                    setError(true);
-                    setErrorMessage('username already exists');
+            .then((response) => {
+                console.log(response);
+                if (response.status === 201) {
+                    history.push(redirectUrl);
+                } else {
+                    console.log('error', response.status);
                 }
-            );
+            })
+            .catch((err) => {
+                setError(true);
+                setErrorMessage(err);
+            });
     };
 
     return (

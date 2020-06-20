@@ -14,8 +14,8 @@ const Container = styled.div`
 `;
 
 const Register = () => {
-    const authorized = IsAuthenticated();
-    if (!authorized) {
+    console.log('register');
+    if (!IsAuthenticated()) {
         return (
             <Container>
                 <RegisterForm />

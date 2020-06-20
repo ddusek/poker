@@ -4,8 +4,8 @@ import CreateGame from './components/CreateGame';
 import IsAuthenticated from './components/Authentication';
 
 const NewGame = () => {
-    const authorized = IsAuthenticated();
-    if (!authorized) {
+    console.log('new_game');
+    if (!IsAuthenticated()) {
         return <Login />;
     }
     return <CreateGame />;

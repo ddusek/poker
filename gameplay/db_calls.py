@@ -5,7 +5,7 @@ from user.serializers import UserSerializer
 
 
 @database_sync_to_async
-def get_user(current_user_id):
-    if current_user_id is None:
+def get_user(user_id):
+    if user_id is None:
         return 'user not logged in'
-    return UserSerializer(User.objects.filter(id=current_user_id).first()).data
+    return UserSerializer(User.objects.filter(id=user_id).first()).data

@@ -6,7 +6,7 @@ from gameplay.db_calls import get_user
 def get_parameter_value(parameters, key):
     found = [par for par in parameters if key in par]
     found = found[0] if len(found) > 0 else None
-    return found[found.find('=')+1:] if found is not None else None
+    return found[found.find('=') + 1:] if found is not None else None
 
 
 class GameConsumer(AsyncWebsocketConsumer):
@@ -15,7 +15,6 @@ class GameConsumer(AsyncWebsocketConsumer):
         self.game_name = self.scope['url_route']['kwargs']['game_name']
         self.game_group_name = 'game_%s' % self.game_name
         self.query_string = self.scope['query_string'].decode('utf-8').split('&')
-        print(self.query_string)
         # Join game group
         await self.channel_layer.group_add(
             self.game_group_name,
@@ -27,7 +26,7 @@ class GameConsumer(AsyncWebsocketConsumer):
             {
                 'type': 'message_connected',
                 'message': self.query_string,
-                'user': str(await get_user(get_parameter_value(self.query_string, 'users')))
+                'user': str(await get_user(get_parameter_value(self.query_string, 'user')))
             }
         )
 
@@ -53,11 +52,11 @@ class GameConsumer(AsyncWebsocketConsumer):
 
     # Receive message from room group
     async def chat_message(self, message):
-        message = message['message']
+        msg = message['message']
 
         # Send message to WebSocket
         await self.send(text_data=json.dumps({
-            'message': message
+            'message': msg
         }))
 
     # Receive message from room group
@@ -71,4 +70,3 @@ class GameConsumer(AsyncWebsocketConsumer):
             'message': msg,
             'user': user
         }))
-

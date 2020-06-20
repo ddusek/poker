@@ -16,25 +16,18 @@ const GameForm = () => {
         console.log(values);
         axios
             .post(postUrl, {
-                method: 'POST',
-                headers: {
-                    Accept: 'application/json, text/plain',
-                    'Content-Type': 'application/json;charset=UTF-8',
-                },
                 body: values,
             })
-            .then(
-                (response) => {
-                    if (response.status === 200) {
-                        console.log('game created');
-                        history.push(`${response.data.path}/`);
-                    }
-                },
-                () => {
-                    setError(true);
-                    setErrorMessage('there was some error creating game');
+            .then((response) => {
+                if (response.status === 200) {
+                    console.log('game created');
+                    history.push(`${response.data.path}/`);
                 }
-            );
+            })
+            .catch((err) => {
+                setError(true);
+                setErrorMessage(err);
+            });
     };
 
     return (
