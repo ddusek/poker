@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Login from './components/Login';
 import IsAuthenticated from './components/Authentication';
@@ -9,18 +9,15 @@ const Container = styled.div`
 `;
 
 const Home = () => {
-    const isAuthenicated = IsAuthenticated();
-    console.log('home');
-    const Content = () => {
-        if (!isAuthenicated) {
-            return <Login IsAuthenticated="false" />;
-        }
-        return <p>logged in nice</p>;
-    };
+    const [auth, setAuth] = useState(false);
+
+    useEffect(() => {
+        setAuth(IsAuthenticated());
+        console.log('home');
+    }, [auth]);
+
     return (
-        <Container>
-            <Content />
-        </Container>
+        <Container>{auth ? <Login IsAuthenticated="false" /> : <p>logged in nice</p>}</Container>
     );
 };
 
