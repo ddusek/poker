@@ -1,6 +1,6 @@
-import { useState } from 'react';
 import axios from 'axios';
 
+// check if user is logged in
 const IsAuthenticated = () => {
     const getUrl = 'http://localhost:8000/user/isloggedin/';
     axios

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Login from './components/Login';
-import IsAuthenticated from './components/Authentication';
+import IsAuthenticated from './utils/Authentication';
 
 const Container = styled.div`
     display: flex;

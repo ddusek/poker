@@ -24,12 +24,13 @@ const RegisterForm = () => {
     const [error, setError] = useState(false);
     const [ErrorMessage, setErrorMessage] = useState('');
     const history = useHistory();
+    const redirectUrl = '/';
+    const postUrl = 'http://localhost:8000/user/register/';
+
     const toLogin = () => {
         history.push('/login');
     };
 
-    const redirectUrl = '/';
-    const postUrl = 'http://localhost:8000/user/register/';
     const onSubmit = (values) => {
         if (values.password !== values.password_repeat) {
             setError(true);

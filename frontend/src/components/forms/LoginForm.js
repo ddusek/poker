@@ -10,14 +10,13 @@ const LoginForm = () => {
     const { handleSubmit, register, errors } = useForm();
     const [error, setError] = useState(false);
     const [ErrorMessage, setErrorMessage] = useState('');
-
+    const redirectUrl = '/';
+    const postUrl = 'http://localhost:8000/user/login/';
     const history = useHistory();
+
     const toRegister = () => {
         history.push('/register');
     };
-
-    const redirectUrl = '/';
-    const postUrl = 'http://localhost:8000/user/login/';
 
     const onSubmit = (values) => {
         axios

@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import RegisterForm from './forms/RegisterForm';
 import InfoBox from './forms/InfoBox';
-import IsAuthenticated from './Authentication';
+import IsAuthenticated from '../utils/Authentication';
 
 const Container = styled.div`
     color: white;
@@ -14,8 +14,12 @@ const Container = styled.div`
 `;
 
 const Register = () => {
-    console.log('register');
-    if (!IsAuthenticated()) {
+    const [auth, setAuth] = useState(false);
+    useEffect(() => {
+        console.log('register');
+        setAuth(IsAuthenticated());
+    }, []);
+    if (!auth) {
         return (
             <Container>
                 <RegisterForm />

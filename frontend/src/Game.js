@@ -13,25 +13,24 @@ const Game = () => {
     const getUrl = 'http://localhost:8000/user/currentuser/';
     const [userID, setUserID] = useState('');
     const [userSet, setUserSet] = useState(false);
-    const onConnect = () => {
-        axios
-            .get(getUrl)
-            .then((response) => {
-                if (response.status === 200) {
-                    setUserID(response.data.user_id);
-                    setUserSet(true);
-                } else {
-                    console.log('didnt get user', response.status);
-                }
-            })
-            .catch((err) => {
-                console.log(`Error: ${err}`);
-            });
-    };
 
     useEffect(() => {
+        // get current user from api
         if (!userSet) {
-            onConnect();
+            axios
+                .get(getUrl)
+                .then((response) => {
+                    if (response.status === 200) {
+                        setUserID(response.data.user_id);
+                        setUserSet(true);
+                    } else {
+                        console.log('didnt get user', response.status);
+                    }
+                })
+                .catch((err) => {
+                    console.log(`Error: ${err}`);
+                });
+            // set websocket
         } else {
             ws.current = new WebSocket(
                 `ws://127.0.0.1:8000/ws${window.location.pathname}?user=${userID}`
@@ -41,11 +40,7 @@ const Game = () => {
         }
     }, [userID, userSet]);
 
-    const clicked = (e) => {
-        const message = JSON.stringify({ message: 'clickedCount', type: 'chat_message' });
-        ws.current.send(message);
-    };
-
+    // handle websocket messages
     useEffect(() => {
         if (userSet) {
             ws.current.onmessage = (e) => {
@@ -54,7 +49,13 @@ const Game = () => {
                 console.log(clickedCount, e);
             };
         }
-    });
+    }, [clickedCount, userSet]);
+
+    // just for testing websocket printing numbers
+    const clicked = (e) => {
+        const message = JSON.stringify({ message: 'clickedCount', type: 'chat_message' });
+        ws.current.send(message);
+    };
 
     return (
         <GameStyle>
