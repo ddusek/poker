@@ -14,11 +14,9 @@ const Home = () => {
     useEffect(() => {
         setAuth(IsAuthenticated());
         console.log('home');
-    }, [auth]);
+    }, []);
 
-    return (
-        <Container>{auth ? <Login IsAuthenticated="false" /> : <p>logged in nice</p>}</Container>
-    );
+    return <Container>{auth ? <p>logged in nice</p> : <Login isAuthenticated={auth} />}</Container>;
 };
 
 export default Home;

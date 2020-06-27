@@ -10,7 +10,7 @@ const GameStyle = styled.div`
 const Game = () => {
     const [clickedCount, setClickedCount] = useState(0);
     const ws = useRef(null);
-    const getUrl = 'http://localhost:8000/user/currentuser/';
+    const getUserUrl = 'http://localhost:8000/user/currentuser/';
     const [userID, setUserID] = useState('');
     const [userSet, setUserSet] = useState(false);
 
@@ -18,7 +18,7 @@ const Game = () => {
         // get current user from api
         if (!userSet) {
             axios
-                .get(getUrl)
+                .get(getUserUrl)
                 .then((response) => {
                     if (response.status === 200) {
                         setUserID(response.data.user_id);
@@ -32,8 +32,9 @@ const Game = () => {
                 });
             // set websocket
         } else {
+            const gameSlug = window.location.pathname;
             ws.current = new WebSocket(
-                `ws://127.0.0.1:8000/ws${window.location.pathname}?user=${userID}`
+                `ws://127.0.0.1:8000/ws${window.location.pathname}?user=${userID}&game=${gameSlug}`
             );
             ws.current.onopen = () => console.log('ws opened');
             ws.current.onclose = () => console.log('ws closed');

@@ -1,6 +1,8 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
-from gameplay.db_calls import get_user
+
+from api.models import Player
+from gameplay.db_calls import get_user, get_game
 
 
 def get_parameter_value(parameters, key):
@@ -20,13 +22,15 @@ class GameConsumer(AsyncWebsocketConsumer):
             self.game_group_name,
             self.channel_name
         )
-
+        user = await get_user(get_parameter_value(self.query_string, 'user'))
+        game = await get_game(get_parameter_value(self.query_string, 'game'))
+        Player.objects.create(user=user.id, game=game.id, chips=game.starting_cips)
         await self.channel_layer.group_send(
             self.game_group_name,
             {
                 'type': 'message_connected',
                 'message': self.query_string,
-                'user': str(await get_user(get_parameter_value(self.query_string, 'user')))
+                'user': str(user)
             }
         )
 

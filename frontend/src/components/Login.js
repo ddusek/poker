@@ -12,7 +12,7 @@ const Login = (props) => {
     const [auth, setAuth] = useState(false);
     useEffect(() => {
         console.log('login');
-        if ('isAuthenticated' in props) {
+        if (props.isAuthenticated !== undefined) {
             setAuth(props.isAuthenticated);
         } else {
             setAuth(IsAuthenticated());

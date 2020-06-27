@@ -9,7 +9,7 @@ const NewGame = () => {
         console.log('new_game');
         setAuth(IsAuthenticated());
     }, []);
-    return <>{auth ? <Login /> : <CreateGame />}</>;
+    return <>{auth ? <CreateGame /> : <Login />}</>;
 };
 
 export default NewGame;

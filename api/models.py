@@ -1,7 +1,11 @@
 from django.db import models
 
+from user.models import User
+
 
 class Game(models.Model):
+    max_players = models.IntegerField(default=8)
+    starting_chips = models.IntegerField(default=200)
     current_player = models.IntegerField(default=0)
     last_raise = models.IntegerField(default=0)
     biggest_bid = models.IntegerField(default=0)
@@ -12,6 +16,7 @@ class Game(models.Model):
 
 
 class Player(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
     chips = models.IntegerField(default=0)
     highest_combination = models.IntegerField(default=0)

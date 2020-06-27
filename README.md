@@ -41,7 +41,3 @@ pip install -r requirements.txt
 $ npm i
 $ npm run dev
 ```
-
-## common error fixes
-**Docker wrong line separator**  
-Fix: set unix line separator in GIT and IDE.

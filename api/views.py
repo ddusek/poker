@@ -55,11 +55,7 @@ class GameCreateView(APIView):
         chips = int(request.data['body']['chips'])
 
         # create game
-        game = Game.objects.create(path=path)
-
-        # create players
-        for i in range(players):
-            Player.objects.create(game=game, chips=chips)
+        game = Game.objects.create(path=path, max_players=players, starting_chips=chips)
 
         # create cards
         deck = Deck()
