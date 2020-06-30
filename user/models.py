@@ -24,7 +24,6 @@ class UserManager(models.Manager):
 
 
 class User(models.Model):
-    # in future add stuff like games_played, chips won, best winning combinations, etc...
     username = models.CharField(max_length=50, unique=True)
     pw_hash = models.CharField(max_length=500)
     salt = models.CharField(max_length=100)

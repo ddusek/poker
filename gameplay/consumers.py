@@ -1,8 +1,6 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
-
-from api.models import Player
-from gameplay.db_calls import get_user, get_game
+from gameplay.db_calls import *
 
 
 def get_parameter_value(parameters, key):
@@ -14,17 +12,27 @@ def get_parameter_value(parameters, key):
 class GameConsumer(AsyncWebsocketConsumer):
     async def websocket_connect(self, event):
         await self.accept()
+
+        # make game name from url
         self.game_name = self.scope['url_route']['kwargs']['game_name']
         self.game_group_name = 'game_%s' % self.game_name
+
+        # get query string
         self.query_string = self.scope['query_string'].decode('utf-8').split('&')
+
         # Join game group
         await self.channel_layer.group_add(
             self.game_group_name,
             self.channel_name
         )
+
+        # get user and game from database by id from query strings
         user = await get_user(get_parameter_value(self.query_string, 'user'))
         game = await get_game(get_parameter_value(self.query_string, 'game'))
-        Player.objects.create(user=user.id, game=game.id, chips=game.starting_cips)
+
+        # create player from user on connect if he is not created for this specific game yet
+        await create_player(user, game)
+
         await self.channel_layer.group_send(
             self.game_group_name,
             {
