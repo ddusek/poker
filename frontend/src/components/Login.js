@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
 import LoginForm from './forms/LoginForm';
 import InfoBox from './forms/InfoBox';
-import IsAuthenticated from '../utils/Authentication';
 
 const Container = styled.div`
     color: white;
@@ -11,12 +11,19 @@ const Container = styled.div`
 const Login = (props) => {
     const [auth, setAuth] = useState(false);
     useEffect(() => {
-        console.log('login');
-        if (props.isAuthenticated !== undefined) {
-            setAuth(props.isAuthenticated);
-        } else {
-            setAuth(IsAuthenticated());
-        }
+        const isAuthenticated = async () => {
+            const getUrl = 'http://localhost:8000/user/isloggedin/';
+            axios
+                .get(getUrl)
+                .then((response) => {
+                    setAuth(response.status === 200);
+                })
+                .catch((err) => {
+                    console.log(err);
+                    setAuth(false);
+                });
+        };
+        setAuth(isAuthenticated());
     }, [props]);
 
     if (auth) {

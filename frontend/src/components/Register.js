@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
 import RegisterForm from './forms/RegisterForm';
 import InfoBox from './forms/InfoBox';
-import IsAuthenticated from '../utils/Authentication';
 
 const Container = styled.div`
     color: white;
@@ -17,7 +17,19 @@ const Register = () => {
     const [auth, setAuth] = useState(false);
     useEffect(() => {
         console.log('register');
-        setAuth(IsAuthenticated());
+        const isAuthenticated = async () => {
+            const getUrl = 'http://localhost:8000/user/isloggedin/';
+            axios
+                .get(getUrl)
+                .then((response) => {
+                    setAuth(response.status === 200);
+                })
+                .catch((err) => {
+                    console.log(err);
+                    setAuth(false);
+                });
+        };
+        setAuth(isAuthenticated());
     }, []);
     if (!auth) {
         return (

@@ -1,6 +1,6 @@
 {
     "env": {
-        "es6": true,
+        "es2020": true,
         "browser": true
     },
     "extends": [
@@ -14,7 +14,6 @@
         "ecmaFeatures": {
             "jsx": true
         },
-        "ecmaVersion": 6,
         "sourceType": "module"
     },
     "plugins": ["prettier"],

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import Login from './components/Login';
-import IsAuthenticated from './utils/Authentication';
+import axios from 'axios';
+import LoginForm from './components/forms/LoginForm';
 
 const Container = styled.div`
     display: flex;
@@ -12,11 +12,22 @@ const Home = () => {
     const [auth, setAuth] = useState(false);
 
     useEffect(() => {
-        setAuth(IsAuthenticated());
+        const isAuthenticated = async () => {
+            const getUrl = 'http://localhost:8000/user/isloggedin/';
+            axios
+                .get(getUrl)
+                .then((response) => {
+                    setAuth(response.status === 200);
+                })
+                .catch((err) => {
+                    console.log(err);
+                    setAuth(false);
+                });
+        };
+        setAuth(isAuthenticated());
         console.log('home');
     }, []);
-
-    return <Container>{auth ? <p>logged in nice</p> : <Login isAuthenticated={auth} />}</Container>;
+    return <Container>{auth ? <p>logged in nice</p> : <LoginForm />}</Container>;
 };
 
 export default Home;
