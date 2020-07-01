@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import axios from 'axios';
 import InfoBox from './components/forms/InfoBox';
 
-const GameStyle = styled.div`
+const Container = styled.div`
     color: white;
 `;
 
@@ -13,7 +13,7 @@ const Game = () => {
     const getUserUrl = 'http://localhost:8000/user/currentuser/';
     const [userID, setUserID] = useState('');
     const [userSet, setUserSet] = useState(false);
-    const [enoughPlayers, setEnoughPlayers] = useState(false);
+    const [startGame, setStartGame] = useState(false);
 
     useEffect(() => {
         // get current user from api
@@ -48,7 +48,8 @@ const Game = () => {
             ws.current.onmessage = (e) => {
                 const data = JSON.parse(e.data);
                 setClickedCount(clickedCount + 1);
-                console.log(clickedCount, e);
+                console.log(e);
+                setStartGame(data.start_game);
             };
         }
     }, [clickedCount, userSet]);
@@ -58,9 +59,11 @@ const Game = () => {
         const message = JSON.stringify({ message: 'clickedCount', type: 'chat_message' });
         ws.current.send(message);
     };
-
+    if (startGame) {
+        return <Container>game can start</Container>;
+    }
     return (
-        <GameStyle>
+        <Container>
             <InfoBox
                 header="waiting for players"
                 text="at least 2 players are needed to start the game"
@@ -70,7 +73,7 @@ const Game = () => {
                 asd
             </button>
             <p>clicked: {clickedCount}</p>
-        </GameStyle>
+        </Container>
     );
 };
 
