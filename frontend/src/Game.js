@@ -13,6 +13,7 @@ const Game = () => {
     const getUserUrl = 'http://localhost:8000/user/currentuser/';
     const [userID, setUserID] = useState('');
     const [userSet, setUserSet] = useState(false);
+    const [enoughPlayers, setEnoughPlayers] = useState(false);
 
     useEffect(() => {
         // get current user from api

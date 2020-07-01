@@ -18,6 +18,7 @@ class Game(models.Model):
 class Player(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
+    is_in_game = models.BooleanField(default=False)
     chips = models.IntegerField(default=0)
     highest_combination = models.IntegerField(default=0)
     pot = models.IntegerField(default=0)
@@ -27,7 +28,6 @@ class Player(models.Model):
     can_call = models.BooleanField(default=False)
     is_folded = models.BooleanField(default=False)
     is_all_in = models.BooleanField(default=False)
-    # owner = models.ForeignKey('auth.User', related_name='players', on_delete=models.CASCADE, default=None)
 
 
 class Card(models.Model):

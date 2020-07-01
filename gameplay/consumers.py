@@ -1,6 +1,7 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from gameplay.db_calls import *
+from user.serializers import UserSerializer
 
 
 def get_parameter_value(parameters, key):
@@ -33,12 +34,20 @@ class GameConsumer(AsyncWebsocketConsumer):
         # create player from user on connect if he is not created for this specific game yet
         await create_player(user, game)
 
+        self.data = {}
+        if await start_game(game):
+            self.data['start_game'] = True
+        else:
+            self.data['start_game'] = False
+
+        self.data['user'] = UserSerializer(user).data['id']
+        self.data['game'] = GameSerializer(game).data['id']
+        print(self.data)
         await self.channel_layer.group_send(
             self.game_group_name,
             {
                 'type': 'message_connected',
-                'message': self.query_string,
-                'user': str(user)
+                'data': self.data,
             }
         )
 
@@ -73,12 +82,10 @@ class GameConsumer(AsyncWebsocketConsumer):
 
     # Receive message from room group
     async def message_connected(self, message):
-        msg = message['message']
-        user = message['user']
-
         # Send message to WebSocket
         await self.send(text_data=json.dumps({
-            'type': 'message_connected',
-            'message': msg,
-            'user': user
+            'type': message['type'],
+            'start_game': message['data']['start_game'],
+            'user': message['data']['user'],
+            'game': message['data']['game'],
         }))
