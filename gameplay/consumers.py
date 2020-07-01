@@ -1,5 +1,5 @@
 import json
-from channels.generic.websocket import AsyncWebsocketConsumer
+from channels.generic.websocket import AsyncJsonWebsocketConsumer
 from gameplay.db_calls import *
 from user.serializers import UserSerializer
 
@@ -10,8 +10,8 @@ def get_parameter_value(parameters, key):
     return found[found.find('=') + 1:] if found is not None else None
 
 
-class GameConsumer(AsyncWebsocketConsumer):
-    async def websocket_connect(self, event):
+class GameConsumer(AsyncJsonWebsocketConsumer):
+    async def connect(self):
         await self.accept()
 
         # make game name from url
@@ -42,50 +42,25 @@ class GameConsumer(AsyncWebsocketConsumer):
 
         self.data['user'] = UserSerializer(user).data['id']
         self.data['game'] = GameSerializer(game).data['id']
-        print(self.data)
-        await self.channel_layer.group_send(
-            self.game_group_name,
-            {
-                'type': 'message_connected',
-                'data': self.data,
-            }
-        )
+        self.data['type'] = 'user_connected'
 
-    async def websocket_disconnect(self, event):
+        await self.channel_layer.group_send(self.game_group_name, self.data)
+
+    async def disconnect(self, event):
         # Leave game group
-        await self.channel_layer.group_discard(
-            self.game_group_name,
-            self.channel_name
-        )
+        await self.channel_layer.group_discard(self.game_group_name, self.channel_name)
 
-    async def websocket_receive(self, event):
-        text_data_json = json.loads(event['text'])
-        message = text_data_json['message']
+    async def receive_json(self, content, close=False):
 
         # Send message to room group
-        await self.channel_layer.group_send(
-            self.game_group_name,
-            {
-                'type': 'chat_message',
-                'message': message
-            }
-        )
+        await self.channel_layer.group_send(self.game_group_name, content)
 
     # Receive message from room group
     async def chat_message(self, message):
-        msg = message['message']
-
         # Send message to WebSocket
-        await self.send(text_data=json.dumps({
-            'message': msg
-        }))
+        await self.send_json(content=message)
 
     # Receive message from room group
-    async def message_connected(self, message):
+    async def user_connected(self, message):
         # Send message to WebSocket
-        await self.send(text_data=json.dumps({
-            'type': message['type'],
-            'start_game': message['data']['start_game'],
-            'user': message['data']['user'],
-            'game': message['data']['game'],
-        }))
+        await self.send_json(content=message)
