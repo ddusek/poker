@@ -2,9 +2,14 @@ import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import InfoBox from './components/forms/InfoBox';
+import GameWindow from './components/GameWindow';
 
 const Container = styled.div`
     color: white;
+`;
+const GameContainer = styled.div`
+    width: 100%;
+    height: 100%;
 `;
 
 const Game = () => {
@@ -60,7 +65,11 @@ const Game = () => {
         ws.current.send(message);
     };
     if (startGame) {
-        return <Container>game can start</Container>;
+        return (
+            <GameContainer>
+                <GameWindow />
+            </GameContainer>
+        );
     }
     return (
         <Container>
