@@ -35,6 +35,8 @@ class Card(models.Model):
     player = models.ForeignKey(Player, on_delete=models.CASCADE, null=True, blank=True)
     suit = models.CharField(max_length=10)
     rank = models.CharField(max_length=2)
+    value = models.IntegerField()
+    image = models.CharField(max_length=20)
     location = models.CharField(default='DECK', max_length=6)
 
     def __str__(self):

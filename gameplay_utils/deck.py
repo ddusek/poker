@@ -14,7 +14,9 @@ class Rank:
 class Card:
     def __init__(self, suit, rank):
         self.suit = suit
-        self.rank = rank
+        self.rank = rank.rank
+        self.value = rank.value
+        self.image = f'{rank.rank}{suit[0]}'.upper() + '.svg'
 
     def __repr__(self):
         return '(%s, %s)' % (self.suit, self.rank)

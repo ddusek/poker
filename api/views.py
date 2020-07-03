@@ -60,7 +60,7 @@ class GameCreateView(APIView):
         # create cards
         deck = Deck()
         for card in deck.set:
-            Card.objects.create(game=game, suit=card.suit, rank=card.rank)
+            Card.objects.create(game=game, suit=card.suit, rank=card.rank, value=card.value, image=card.image)
 
         res = {'status': 200, 'msg': 'success', 'path': path}
         return Response(res, status=status.HTTP_200_OK)
