@@ -38,10 +38,8 @@ module.exports = {
                 use: ['style-loader', 'css-loader'],
             },
             {
-                test: /\.(jpg|png|svg)$/,
-                use: {
-                    loader: 'url-loader',
-                },
+                test: /\.svg$/,
+                use: ['@svgr/webpack'],
             },
         ],
     },
