@@ -24,7 +24,7 @@ const Home = () => {
                     setAuth(false);
                 });
         };
-        setAuth(isAuthenticated());
+        isAuthenticated();
         console.log('home');
     }, []);
     return <Container>{auth ? <p>logged in nice</p> : <LoginForm />}</Container>;

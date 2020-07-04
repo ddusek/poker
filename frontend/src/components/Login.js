@@ -8,7 +8,7 @@ const Container = styled.div`
     color: white;
 `;
 
-const Login = (props) => {
+const Login = () => {
     const [auth, setAuth] = useState(false);
     useEffect(() => {
         const isAuthenticated = async () => {
@@ -23,8 +23,8 @@ const Login = (props) => {
                     setAuth(false);
                 });
         };
-        setAuth(isAuthenticated());
-    }, [props]);
+        isAuthenticated();
+    }, []);
 
     if (auth) {
         return (

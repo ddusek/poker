@@ -33,15 +33,13 @@ class CardViewSet(viewsets.ModelViewSet):
 
 
 class PlayerDetailView(APIView):
-    def get(self, request, format=None, **kwargs):
-        p = Player.objects.get(id=self.kwargs['pk'])
-        g = Game.objects.get(id=self.kwargs['gameid'])
-        player_serializer = PlayerDetailSerializer(p)
-        game_serializer = GameSerializer()
-        return Response({
-            'game': game_serializer.data,
-            'player': player_serializer.data,
-        })
+    def get(self, request):
+        if 'user_id' not in request.session:
+            res = 'user not logged in'
+            return Response(res, status=status.HTTP_401_UNAUTHORIZED)
+        player = Player.objects.filter(user=request.session['user_id']).first()
+        cards = CardSerializer(Card.objects.filter(player=player), many=True).data
+        return Response(cards, status=status.HTTP_200_OK)
 
 
 class GameCreateView(APIView):

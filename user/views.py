@@ -37,13 +37,14 @@ class CreateUserView(APIView):
 
 class LoginUserView(APIView):
     def post(self, request, format=None):
+        print(request.data)
         if 'username' not in request.data['body'] or 'password' not in request.data['body']:
             res = {'status': 401, 'msg': 'didnt receive username or password'}
             return Response(res, status=status.HTTP_401_UNAUTHORIZED)
         username = request.data['body']['username']
         user = User.objects.filter(username=username).first()
         if not user:
-            res = {'status': 401, 'msg': 'didnt receive username or password'}
+            res = {'status': 401, 'msg': 'wrong username or password'}
             return Response(res, status=status.HTTP_401_UNAUTHORIZED)
         user_serializer = UserSerializerChecker(user)
 

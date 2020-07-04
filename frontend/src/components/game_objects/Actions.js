@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
 const Container = styled.div`
-    width: 600px;
+    width: 400px;
     height: 200px;
     position: fixed;
     bottom: 0;

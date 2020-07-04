@@ -54,7 +54,7 @@ const LoginForm = () => {
                     })}
                 />
             </Container>
-            {errors.players && errors.players.message}
+            {errors.username && errors.username.message}
             <Container>
                 <Label>password</Label>
                 <Input
@@ -68,7 +68,7 @@ const LoginForm = () => {
                     })}
                 />
             </Container>
-            {errors.chips && errors.chips.message}
+            {errors.password && errors.password.message}
             <Container>
                 <Button type="submit">Login</Button>
             </Container>

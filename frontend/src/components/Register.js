@@ -29,7 +29,7 @@ const Register = () => {
                     setAuth(false);
                 });
         };
-        setAuth(isAuthenticated());
+        isAuthenticated();
     }, []);
     if (!auth) {
         return (
