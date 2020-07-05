@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
-import AC from '../../../media/cards/AC.svg';
+import SvgIcon from '../utils/svgHelper';
 
 const Container = styled.div`
     width: 250px;
@@ -39,13 +39,11 @@ const Cards = () => {
         };
         getCards();
     }, []);
-    console.log('here', cards);
     console.log('cards', cardPaths);
     return (
         <Container>
             {cardPaths}
-
-            <AC />
+            <SvgIcon name="cards/2C" fill="black" />
         </Container>
     );
 };
