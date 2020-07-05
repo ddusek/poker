@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
-import SvgIcon from '../utils/svgHelper';
+import CardIcon from '../utils/svgHelper';
 
 const Container = styled.div`
     width: 250px;
-    height: 200px;
+    height: 187.5px;
     position: fixed;
     left: 50%;
     bottom: 0px;
@@ -13,14 +13,21 @@ const Container = styled.div`
     border-style: dotted;
 `;
 
+const CardsContainer = styled.div`
+    position: fixed;
+    display: block;
+    clear: both;
+    bottom: 0px;
+    width: 100%;
+`;
+
 /**
  * Component containing player cards.
  */
 
 const Cards = () => {
-    const [cards, setCards] = useState([]);
-    const [cardPaths, setCardPaths] = useState([]);
-    const imagePath = '../../../media/cards/';
+    const [cardFiles, setCardFiles] = useState([]);
+    const imagePath = 'cards/';
     const getUrl = 'http://localhost:8000/api/get/player-detail/';
     useEffect(() => {
         const getCards = async () => {
@@ -28,12 +35,9 @@ const Cards = () => {
                 .get(getUrl)
                 .then((response) => {
                     if (response.status === 200) {
-                        setCards(response.data);
-
+                        // Get images of player cards.
                         response.data.map((item) => {
-                            setCardPaths((c) =>
-                                c.concat(<img src={imagePath + item.image} alt="card" />)
-                            );
+                            setCardFiles((c) => c.concat(imagePath + item.image));
                         });
                     }
                 })
@@ -43,11 +47,18 @@ const Cards = () => {
         };
         getCards();
     }, []);
-    console.log('cards', cardPaths);
+    console.log(cardFiles);
+    // Return cards only if list contains 2 cards.
     return (
         <Container>
-            {cardPaths}
-            <SvgIcon name="cards/2C" fill="black" />
+            {cardFiles.length === 2 ? (
+                <CardsContainer>
+                    <CardIcon name={cardFiles[0]} size="120" />
+                    <CardIcon name={cardFiles[1]} size="120" />
+                </CardsContainer>
+            ) : (
+                <p>loading cards</p>
+            )}
         </Container>
     );
 };
