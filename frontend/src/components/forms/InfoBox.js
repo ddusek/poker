@@ -1,6 +1,9 @@
 import React from 'react';
 import { Container, Label, Button, Header, Hr, Form } from './BaseForm';
 
+/**
+ * Information window component
+ */
 const InfoBox = (props) => {
     return (
         <Form>

@@ -6,6 +6,10 @@ const Container = styled.div`
     color: white;
 `;
 
+/**
+ * Component for creating a new game
+ */
+
 const CreateGame = () => {
     return (
         <Container>

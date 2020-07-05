@@ -13,6 +13,10 @@ const Container = styled.div`
     border-style: dotted;
 `;
 
+/**
+ * Component containing player cards.
+ */
+
 const Cards = () => {
     const [cards, setCards] = useState([]);
     const [cardPaths, setCardPaths] = useState([]);

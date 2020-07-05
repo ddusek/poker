@@ -8,6 +8,9 @@ const Container = styled.div`
     color: white;
 `;
 
+/**
+ * Login Component
+ */
 const Login = () => {
     const [auth, setAuth] = useState(false);
     useEffect(() => {

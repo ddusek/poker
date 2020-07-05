@@ -12,8 +12,6 @@ const SvgIcon = ({ name, ...rest }) => {
           // Import must contain some path information here, otherwise it wont work
           ImportedIconRef.current = (await import(`./../../../media/${name}.svg`)).ReactComponent;
         } catch (err) {
-          // Your own error handling logic, throwing error for the sake of
-          // simplicity
           throw err;
         } finally {
           setLoading(false);

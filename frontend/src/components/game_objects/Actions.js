@@ -10,6 +10,10 @@ const Container = styled.div`
     border-style: dotted;
 `;
 
+/**
+ * Component containing all player poker actions (call, raise, fold, etc)
+ */
+
 const Actions = () => {
     return (
         <Container>

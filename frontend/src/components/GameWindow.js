@@ -13,6 +13,10 @@ const BottomContainer = styled.div`
     height: 200px;
 `;
 
+/**
+ * Component containing all components inside gameplay window
+ * Should be used in Game Component.
+ */
 const GameWindow = () => {
     return (
         <Container>

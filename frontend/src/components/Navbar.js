@@ -39,6 +39,10 @@ const MyNavDropdown = styled(NavDropdown)`
     }
 `;
 
+/**
+ * Main navigation bar component
+ */
+
 const MainNavbar = () => {
     return (
         <MyNavbar variant="dark" expand="lg">

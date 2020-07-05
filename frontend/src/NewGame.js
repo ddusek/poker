@@ -3,6 +3,9 @@ import axios from 'axios';
 import Login from './components/Login';
 import CreateGame from './components/CreateGame';
 
+/**
+ * Page for creating a new game
+ */
 const NewGame = () => {
     const [auth, setAuth] = useState(false);
     useEffect(() => {

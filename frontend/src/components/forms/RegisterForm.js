@@ -17,6 +17,10 @@ const MyButton = styled(Button)`
     width: 300px;
 `;
 
+/**
+ * Component form for registration
+ */
+
 const RegisterForm = () => {
     axios.defaults.xsrfCookieName = 'csrftoken';
     axios.defaults.xsrfHeaderName = 'X-CSRFTOKEN';

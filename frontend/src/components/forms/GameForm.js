@@ -4,6 +4,10 @@ import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import { Container, Form, Label, Button, Input, Header, Error } from './BaseForm';
 
+/**
+ * Component form for creating a new game
+ */
+
 const GameForm = () => {
     axios.defaults.xsrfCookieName = 'csrftoken';
     axios.defaults.xsrfHeaderName = 'X-CSRFTOKEN';

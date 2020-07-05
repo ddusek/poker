@@ -13,6 +13,9 @@ const Container = styled.div`
     text-align: center;
 `;
 
+/**
+ * Page for registration
+ */
 const Register = () => {
     const [auth, setAuth] = useState(false);
     useEffect(() => {

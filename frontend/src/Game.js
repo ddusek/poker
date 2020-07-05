@@ -12,6 +12,10 @@ const GameContainer = styled.div`
     height: 100%;
 `;
 
+/**
+ * Game component containing all components needed for playing a game.
+ * This component also creates Websocket connections.
+ */
 const Game = () => {
     const [clickedCount, setClickedCount] = useState(0);
     const ws = useRef(null);

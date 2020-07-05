@@ -1,5 +1,9 @@
 import styled from 'styled-components';
 
+/**
+ * Base styles used in all forms
+ */
+
 const Form = styled.form`
     width: 500px;
     background-color: rgb(25, 25, 35);

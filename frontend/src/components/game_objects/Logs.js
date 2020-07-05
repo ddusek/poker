@@ -9,6 +9,10 @@ const Container = styled.div`
     border-style: dotted;
 `;
 
+/**
+ * Component showing logs to players (who won last round, bids, who joined, left, etc)
+ */
+
 const Logs = () => {
     return (
         <Container>

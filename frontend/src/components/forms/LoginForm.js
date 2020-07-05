@@ -4,6 +4,9 @@ import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import { Container, Form, Label, Button, Input, Header, Hr, Error } from './BaseForm';
 
+/**
+ * Component form for Login
+ */
 const LoginForm = () => {
     axios.defaults.xsrfCookieName = 'csrftoken';
     axios.defaults.xsrfHeaderName = 'X-CSRFTOKEN';

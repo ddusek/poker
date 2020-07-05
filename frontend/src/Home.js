@@ -8,6 +8,9 @@ const Container = styled.div`
     align-items: center;
 `;
 
+/**
+ * Homepage
+ */
 const Home = () => {
     const [auth, setAuth] = useState(false);
 
