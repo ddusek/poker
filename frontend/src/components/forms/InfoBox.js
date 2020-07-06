@@ -1,28 +1,39 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Container, Label, Button, Header, Hr, Form } from './BaseForm';
 
 /**
  * Information window component
  */
-const InfoBox = (props) => {
+const InfoBox = ({ header, text, buttonText }) => {
+    InfoBox.propTypes = {
+        header: PropTypes.string,
+        text: PropTypes.string,
+        buttonText: PropTypes.string,
+    };
+    InfoBox.defaultProps = {
+        header: 'null',
+        text: null,
+        buttonText: null,
+    };
     return (
         <Form>
-            {props.header && (
+            {header && (
                 <Container>
                     <Header>
-                        <h2>{props.header}</h2>
+                        <h2>{header}</h2>
                     </Header>
                 </Container>
             )}
-            {props.header && <Hr />}
-            {props.text && (
+            {header && <Hr />}
+            {text && (
                 <Container>
-                    <Label>{props.text}</Label>
+                    <Label>{text}</Label>
                 </Container>
             )}
-            {props.buttonText && (
+            {buttonText && (
                 <Container>
-                    <Button type="button">{props.buttonText}</Button>
+                    <Button type="button">{buttonText}</Button>
                 </Container>
             )}
         </Form>

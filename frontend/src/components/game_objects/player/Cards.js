@@ -36,7 +36,7 @@ const Cards = () => {
                 .then((response) => {
                     if (response.status === 200) {
                         // Get images of player cards.
-                        response.data.map((item) => {
+                        response.data.forEach((item) => {
                             setCardFiles((c) => c.concat(imagePath + item.image));
                         });
                     }

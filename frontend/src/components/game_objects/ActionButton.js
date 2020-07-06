@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 const Container = styled.button`
@@ -10,6 +11,9 @@ const Container = styled.button`
  */
 
 const Button = ({ text }) => {
+    Button.propTypes = {
+        text: PropTypes.string.isRequired,
+    };
     return <Container>{text}</Container>;
 };
 
