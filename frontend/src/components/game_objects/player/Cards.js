@@ -15,10 +15,10 @@ const Container = styled.div`
 
 const CardsContainer = styled.div`
     position: fixed;
-    display: block;
-    clear: both;
     bottom: 0px;
     width: 100%;
+    display: flex;
+    justify-content: space-between;
 `;
 
 /**
@@ -47,7 +47,6 @@ const Cards = () => {
         };
         getCards();
     }, []);
-    console.log(cardFiles);
     // Return cards only if list contains 2 cards.
     return (
         <Container>

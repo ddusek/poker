@@ -7,6 +7,7 @@ const Container = styled.div`
     position: fixed;
     bottom: 0px;
     border-style: dotted;
+    background-color: rgb(25, 25, 5);
 `;
 
 /**
