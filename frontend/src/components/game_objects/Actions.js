@@ -53,6 +53,9 @@ const RaiseInput = styled.input`
 
 const RaiseSlider = styled.input`
     width: 400px;
+    :focus {
+        outline: none;
+    }
 `;
 
 const RaiseButton = styled(Button)`
@@ -76,6 +79,9 @@ const Actions = ({ playerChips = 100, bigBlind = 5 }) => {
     const [inputNumber, setInputNumber] = useState(bigBlind * 2);
 
     const handleChange = (event) => {
+        if (event.target.type === 'number') {
+            RaiseSlider.value = event.target.value;
+        }
         setInputNumber(event.target.value);
     };
 
@@ -89,7 +95,7 @@ const Actions = ({ playerChips = 100, bigBlind = 5 }) => {
                     name="points"
                     min="0"
                     max={playerChips}
-                    defaultValue={inputNumber}
+                    value={inputNumber}
                     onChange={handleChange}
                 />
                 <RaiseButton text="Raise" color="rgb(65,185,65)" hoverColor="rgb(35,240,35)" />
