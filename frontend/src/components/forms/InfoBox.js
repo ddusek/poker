@@ -5,14 +5,14 @@ import { Container, Label, Button, Header, Hr, Form } from './BaseForm';
 /**
  * Information window component
  */
-const InfoBox = ({ header, text, buttonText }) => {
+const InfoBox = ({ header = null, text = null, buttonText = null }) => {
     InfoBox.propTypes = {
         header: PropTypes.string,
         text: PropTypes.string,
         buttonText: PropTypes.string,
     };
     InfoBox.defaultProps = {
-        header: 'null',
+        header: null,
         text: null,
         buttonText: null,
     };

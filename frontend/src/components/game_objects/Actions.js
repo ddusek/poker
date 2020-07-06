@@ -30,7 +30,25 @@ const RaiseContainer = styled.div`
 `;
 
 const RaiseInput = styled.input`
+    border-radius: 8px;
     width: 200px;
+    background-color: rgb(155, 155, 185);
+    border-style: hidden;
+    text-align: center;
+
+    ::-webkit-outer-spin-button,
+    ::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    input[type='number'] {
+        -moz-appearance: textfield;
+    }
+
+    :focus {
+        outline: none;
+    }
 `;
 
 const RaiseSlider = styled.input`
@@ -39,6 +57,11 @@ const RaiseSlider = styled.input`
 
 const RaiseButton = styled(Button)`
     width: 200px;
+`;
+
+const FoldButton = styled(Button)`
+    background-color: rgb(22, 122, 122);
+    color: rgb(22, 122, 122);
 `;
 
 /**
@@ -59,7 +82,7 @@ const Actions = ({ playerChips = 100, bigBlind = 5 }) => {
     return (
         <Container>
             <RaiseContainer>
-                <RaiseInput value={inputNumber} onChange={handleChange} />
+                <RaiseInput value={inputNumber} type="number" onChange={handleChange} />
                 <RaiseSlider
                     type="range"
                     id="points"
@@ -69,14 +92,14 @@ const Actions = ({ playerChips = 100, bigBlind = 5 }) => {
                     defaultValue={inputNumber}
                     onChange={handleChange}
                 />
-                <RaiseButton text="Raise" />
+                <RaiseButton text="Raise" color="rgb(65,185,65)" hoverColor="rgb(35,240,35)" />
             </RaiseContainer>
 
             <ButtonsContainer>
-                <Button text="Check" />
-                <Button text="Call" />
-                <Button text="All in" />
-                <Button text="Fold" />
+                <Button text="Check" color="rgb(65,185,65)" hoverColor="rgb(35,240,35)" />
+                <Button text="Call" color="rgb(65,185,65)" hoverColor="rgb(35,240,35)" />
+                <Button text="All in" color="rgb(65,65,255)" hoverColor="rgb(45,45,255)" />
+                <FoldButton text="Fold" color="rgb(255,65,65)" hoverColor="rgb(255,35,35)" />
             </ButtonsContainer>
         </Container>
     );

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 
 // Dynamically import svgs as components
-const CardIcon = ({ name, size }) => {
+const CardIcon = ({ name, size = 32 }) => {
     CardIcon.propTypes = {
         name: PropTypes.string.isRequired,
         size: PropTypes.number,
