@@ -23,4 +23,3 @@ urlpatterns = [
     path('user/', include('user.urls')),
     path('', include('frontend.urls')),
 ]
-

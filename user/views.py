@@ -1,5 +1,3 @@
-import pdb
-
 import bcrypt
 from rest_framework import status
 from rest_framework.response import Response
@@ -13,9 +11,6 @@ def hash_pw(password, salt=bcrypt.gensalt(12)):
     if type(salt) == str:
         salt = bytes(salt, encoding='utf-8')
     return {'pw': bcrypt.hashpw(password, salt).decode('utf-8'), 'salt': salt.decode('utf-8')}
-
-# def testCookies():
-#     request.session.set_test_cookie()
 
 
 class CreateUserView(APIView):

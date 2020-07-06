@@ -1,7 +1,5 @@
 from channels.auth import AuthMiddlewareStack
 from channels.routing import ProtocolTypeRouter, URLRouter
-from channels.security.websocket import AllowedHostsOriginValidator
-from django.conf.urls import url
 import gameplay.routing
 
 application = ProtocolTypeRouter({

@@ -1,5 +1,3 @@
-import pdb
-
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import viewsets, permissions, status
@@ -58,7 +56,8 @@ class GameCreateView(APIView):
         # create cards
         deck = Deck()
         for card in deck.set:
-            Card.objects.create(game=game, suit=card.suit, rank=card.rank, value=card.value, image=card.image)
+            Card.objects.create(game=game, suit=card.suit, rank=card.rank,
+                                value=card.value, image=card.image)
 
         res = {'status': 200, 'msg': 'success', 'path': path}
         return Response(res, status=status.HTTP_200_OK)

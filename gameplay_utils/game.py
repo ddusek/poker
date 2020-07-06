@@ -9,7 +9,7 @@ class Bids:
         self.s_blind_turn = 0
         self.s_blind_val = s_blind_val
         self.b_blind_turn = 1
-        self.b_blind_val = self.s_blind_val*2
+        self.b_blind_val = self.s_blind_val * 2
 
 
 class Game:
@@ -19,8 +19,9 @@ class Game:
         self.players = []
         [self.players.append(Player(i, chips)) for i in range(players)]
         self.current_player = 0
-        self.combinations = {1: 'royal flush', 2: 'straight flush', 3: 'four of a kind', 4: 'full house', 5: 'flush',
-                             6: 'straight', 7: 'three of a kind', 8: 'two pairs', 9: 'pair', 10: 'high card'}
+        self.combinations = {1: 'royal flush', 2: 'straight flush', 3: 'four of a kind',
+                             4: 'full house', 5: 'flush', 6: 'straight', 7: 'three of a kind',
+                             8: 'two pairs', 9: 'pair', 10: 'high card'}
         self.bids = Bids(s_blind)
         self.last_raise = 0
         self.biggest_bid = self.bids.b_blind_val
@@ -58,7 +59,8 @@ class Game:
     # blinds, give every player 2 cards, burn 1 card and put on table 3 cards
     def start_game(self):
         self.blinds()
-        [player.hand.append(self.table.deck.give_card()) for player in self.players for _ in range(2)]
+        [player.hand.append(self.table.deck.give_card())
+         for player in self.players for _ in range(2)]
         self.table.burned.append(self.table.deck.give_card())
         [self.table.cards.append(self.table.deck.give_card()) for _ in range(3)]
 
@@ -105,7 +107,8 @@ class Game:
     # true if player have enough chips for call
     def can_call(self):
         for player in self.players:
-            if self.players[self.current_player].chips + self.players[self.current_player].round_bid <= player.round_bid:
+            if self.players[self.current_player].chips +
+            self.players[self.current_player].round_bid <= player.round_bid:
                 self.players[self.current_player].actions.can_call = False
                 return False
         self.players[self.current_player].actions.can_call = True
@@ -117,7 +120,8 @@ class Game:
 
     # action call
     def call(self):
-        self.players[self.current_player].bid(self.biggest_bid-self.players[self.current_player].round_bid)
+        self.players[self.current_player].bid(
+            self.biggest_bid - self.players[self.current_player].round_bid)
 
     # action raise
     def raize(self, value):
@@ -178,7 +182,8 @@ if __name__ == '__main__':
         while not game.round_ended:
             # if player still playing this game
             if game.players[game.current_player].can_act():
-                game.player_turn()  # get player allowed actions and highest combination before he can do action
+                game.player_turn()  # get player allowed actions and highest combination
+                # before he can do action
                 print('test input action: 1 - check, 2 - call 3 - call 4 - all_in')
                 test_action = input()
                 print('test input raise value if raise')
@@ -193,4 +198,3 @@ if __name__ == '__main__':
 
         if game.can_next_game():
             game.next_game()  # init next game and repeat
-

@@ -27,6 +27,7 @@ def create_player(user, game):
                               chips=GameSerializer(game).data['starting_chips'],
                               is_in_game=True)
 
+
 @database_sync_to_async
 def start_game(game):
     if len(Player.objects.filter(game=game, is_in_game=True)) > 1:

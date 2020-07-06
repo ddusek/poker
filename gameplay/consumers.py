@@ -1,4 +1,3 @@
-import json
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
 from gameplay.db_calls import *
 from user.serializers import UserSerializer
