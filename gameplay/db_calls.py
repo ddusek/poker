@@ -19,13 +19,14 @@ def get_game(game_path):
     return Game.objects.filter(path=game_path).first()
 
 
+# Create player if not created yet and return him
 @database_sync_to_async
 def create_player(user, game):
-    if Player.objects.filter(user=user, game=game).first() is None:
-        Player.objects.create(user=user,
-                              game=game,
-                              chips=GameSerializer(game).data['starting_chips'],
-                              is_in_game=True)
+    player = Player.objects.filter(user=user, game=game).first()
+    if player is None:
+        player = Player(user=user, game=game, chips=GameSerializer(game).data['starting_chips'], is_in_game=True)
+        player.save()
+    return player
 
 
 @database_sync_to_async

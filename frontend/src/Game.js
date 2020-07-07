@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import axios from 'axios';
 import InfoBox from './components/forms/InfoBox';
 import GameWindow from './components/GameWindow';
+import PlayerContext from './components/contexts/PlayerContext';
+import GameContext from './components/contexts/GameContext';
 
 const Container = styled.div`
     color: white;
@@ -17,13 +19,21 @@ const GameContainer = styled.div`
  * This component also creates Websocket connections.
  */
 const Game = () => {
-    const [clickedCount, setClickedCount] = useState(0);
-    const ws = useRef(null);
     const getUserUrl = 'http://localhost:8000/user/currentuser/';
-    const [userID, setUserID] = useState('');
+    const getPlayerUrl = 'http://localhost:8000/api/get/player-detail/';
+    const getGameUrl = 'http://localhost:8000/api/get/game-detail/';
+    const gameParameter = window.location.pathname.slice(5).replace('/', '');
+    const ws = useRef(null);
+    const [clickedCount, setClickedCount] = useState(0);
     const [userSet, setUserSet] = useState(false);
+    const [userID, setUserID] = useState('');
     const [startGame, setStartGame] = useState(false);
+    const [playerInfoSet, setPlayerInfoSet] = useState(false);
+    const [playerInfo, setPlayerInfo] = useState({});
+    const [gameInfoSet, setGameInfoSet] = useState(false);
+    const [gameInfo, setGameInfo] = useState({});
 
+    console.log(gameParameter);
     useEffect(() => {
         // get current user from api
         if (!userSet) {
@@ -51,6 +61,48 @@ const Game = () => {
         }
     }, [userID, userSet]);
 
+    useEffect(() => {
+        // get current player from api
+        if (!playerInfoSet) {
+            axios
+                .get(getPlayerUrl)
+                .then((response) => {
+                    if (response.status === 200) {
+                        console.log(response.data);
+                        setUserID(response.data.id);
+                        setPlayerInfoSet(true);
+                        setPlayerInfo(response.data);
+                    } else {
+                        console.log('didnt get player', response.status);
+                    }
+                })
+                .catch((err) => {
+                    console.log(`Error: ${err}`);
+                });
+        }
+    }, [playerInfoSet]);
+
+    useEffect(() => {
+        // get current game from api
+        if (!gameInfoSet) {
+            axios
+                .get(getPlayerUrl)
+                .then((response) => {
+                    if (response.status === 200) {
+                        console.log(response.data);
+                        setUserID(response.data.id);
+                        setGameInfoSet(true);
+                        setGameInfo(response.data);
+                    } else {
+                        console.log('didnt get player', response.status);
+                    }
+                })
+                .catch((err) => {
+                    console.log(`Error: ${err}`);
+                });
+        }
+    }, [gameInfoSet]);
+
     // handle websocket messages
     useEffect(() => {
         if (userSet) {
@@ -71,7 +123,11 @@ const Game = () => {
     if (startGame) {
         return (
             <GameContainer>
-                <GameWindow />
+                <GameContext.Provider value={gameInfo}>
+                    <PlayerContext.Provider value={playerInfo}>
+                        <GameWindow />
+                    </PlayerContext.Provider>
+                </GameContext.Provider>
             </GameContainer>
         );
     }

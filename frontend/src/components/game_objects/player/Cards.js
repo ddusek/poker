@@ -28,22 +28,22 @@ const CardsContainer = styled.div`
 const Cards = () => {
     const [cardFiles, setCardFiles] = useState([]);
     const imagePath = 'cards/';
-    const getUrl = 'http://localhost:8000/api/get/player-detail/';
+    // const getUrl = 'http://localhost:8000/api/get/player-detail/';
     useEffect(() => {
         const getCards = async () => {
-            axios
-                .get(getUrl)
-                .then((response) => {
-                    if (response.status === 200) {
-                        // Get images of player cards.
-                        response.data.forEach((item) => {
-                            setCardFiles((c) => c.concat(imagePath + item.image));
-                        });
-                    }
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
+            // axios
+            //     .get(getUrl)
+            //     .then((response) => {
+            //         if (response.status === 200) {
+            //             // Get images of player cards.
+            //             response.data.forEach((item) => {
+            //                 setCardFiles((c) => c.concat(imagePath + item.image));
+            //             });
+            //         }
+            //     })
+            //     .catch((err) => {
+            //         console.log(err);
+            //     });
         };
         getCards();
     }, []);
