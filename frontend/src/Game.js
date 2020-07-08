@@ -22,7 +22,8 @@ const Game = () => {
     const getUserUrl = 'http://localhost:8000/user/currentuser/';
     const getPlayerUrl = 'http://localhost:8000/api/get/player-detail/';
     const getGameUrl = 'http://localhost:8000/api/get/game-detail/';
-    const gameParameter = window.location.pathname.slice(5).replace('/', '');
+    const gameParameter = window.location.pathname.slice(5).replace(/\//g, '');
+    console.log(gameParameter);
     const ws = useRef(null);
     const [clickedCount, setClickedCount] = useState(0);
     const [userSet, setUserSet] = useState(false);
@@ -33,7 +34,6 @@ const Game = () => {
     const [gameInfoSet, setGameInfoSet] = useState(false);
     const [gameInfo, setGameInfo] = useState({});
 
-    console.log(gameParameter);
     useEffect(() => {
         // get current user from api
         if (!userSet) {
@@ -68,8 +68,6 @@ const Game = () => {
                 .get(getPlayerUrl)
                 .then((response) => {
                     if (response.status === 200) {
-                        console.log(response.data);
-                        setUserID(response.data.id);
                         setPlayerInfoSet(true);
                         setPlayerInfo(response.data);
                     } else {
@@ -86,11 +84,10 @@ const Game = () => {
         // get current game from api
         if (!gameInfoSet) {
             axios
-                .get(getPlayerUrl)
+                .get(`${getGameUrl}?game=${gameParameter}`)
                 .then((response) => {
                     if (response.status === 200) {
                         console.log(response.data);
-                        setUserID(response.data.id);
                         setGameInfoSet(true);
                         setGameInfo(response.data);
                     } else {
@@ -101,7 +98,7 @@ const Game = () => {
                     console.log(`Error: ${err}`);
                 });
         }
-    }, [gameInfoSet]);
+    }, [gameInfoSet, gameParameter]);
 
     // handle websocket messages
     useEffect(() => {

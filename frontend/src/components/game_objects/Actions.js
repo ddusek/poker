@@ -1,6 +1,5 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import styled from 'styled-components';
-import PropTypes from 'prop-types';
 import Button from './ActionButton';
 import PlayerContext from '../contexts/PlayerContext';
 import GameContext from '../contexts/GameContext';
@@ -73,12 +72,15 @@ const FoldButton = styled(Button)`
  * Component containing all player poker actions (call, raise, fold, etc)
  */
 
-const Actions = ({ bigBlind = 5 }) => {
-    Actions.propTypes = {
-        bigBlind: PropTypes.number.isRequired,
-    };
+const Actions = () => {
     // const playerChips2 = useContext(PlayerContext.playerChips);
-    const [inputNumber, setInputNumber] = useState(bigBlind * 2);
+    const [inputNumber, setInputNumber] = useState(0);
+    const player = useContext(PlayerContext);
+    const game = useContext(GameContext);
+
+    useEffect(() => {
+        setInputNumber(game.big_blind);
+    }, [game.big_blind, game.small_blind]);
 
     const handleChange = (event) => {
         if (event.target.type === 'number') {
@@ -86,28 +88,19 @@ const Actions = ({ bigBlind = 5 }) => {
         }
         setInputNumber(event.target.value);
     };
-
     return (
         <Container>
             <RaiseContainer>
-                {(gameInfo) => (
-                    <>
-                        <RaiseInput value={inputNumber} type="number" onChange={handleChange} />
-                        <PlayerContext.Consumer>
-                            {(playerInfo) => (
-                                <RaiseSlider
-                                    type="range"
-                                    id="points"
-                                    name="points"
-                                    min="0"
-                                    max={playerInfo.chips}
-                                    value={inputNumber}
-                                    onChange={handleChange}
-                                />
-                            )}
-                        </PlayerContext.Consumer>
-                    </>
-                )}
+                <RaiseInput value={inputNumber} type="number" onChange={handleChange} />
+                <RaiseSlider
+                    type="range"
+                    id="points"
+                    name="points"
+                    min="0"
+                    max={player.chips}
+                    value={inputNumber}
+                    onChange={handleChange}
+                />
                 <RaiseButton text="Raise" color="rgb(65,185,65)" hoverColor="rgb(35,240,35)" />
             </RaiseContainer>
 

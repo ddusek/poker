@@ -6,13 +6,16 @@ from user.models import User
 class Game(models.Model):
     max_players = models.IntegerField(default=8)
     starting_chips = models.IntegerField(default=200)
+    small_blind = models.IntegerField(default=5)
+    big_blind = models.IntegerField(default=10)
     current_player = models.IntegerField(default=0)
     last_raise = models.IntegerField(default=0)
     biggest_bid = models.IntegerField(default=0)
     all_played = models.BooleanField(default=False)
     game_over = models.BooleanField(default=False)
     round_ended = models.BooleanField(default=False)
-    path = models.SlugField(max_length=20)
+    path = models.CharField(max_length=30)
+    name = models.SlugField(max_length=30)
 
 
 class Player(models.Model):
