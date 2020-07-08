@@ -1,6 +1,6 @@
-from gameplay.combinations import Combinations
-from gameplay.player import Player
-from gameplay.table import Table
+from gameplay_utils.combinations import Combinations
+from gameplay_utils.player import Player
+from gameplay_utils.table import Table
 
 
 # blinds, min bid
@@ -107,8 +107,8 @@ class Game:
     # true if player have enough chips for call
     def can_call(self):
         for player in self.players:
-            if self.players[self.current_player].chips +
-            self.players[self.current_player].round_bid <= player.round_bid:
+            if self.players[self.current_player].chips \
+               + self.players[self.current_player].round_bid <= player.round_bid:
                 self.players[self.current_player].actions.can_call = False
                 return False
         self.players[self.current_player].actions.can_call = True
