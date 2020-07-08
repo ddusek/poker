@@ -20,10 +20,9 @@ const GameContainer = styled.div`
  */
 const Game = () => {
     const getUserUrl = 'http://localhost:8000/user/currentuser/';
-    const getPlayerUrl = 'http://localhost:8000/api/get/player-detail/';
-    const getGameUrl = 'http://localhost:8000/api/get/game-detail/';
+    const getPlayerUrl = 'http://localhost:8000/game/get/player-detail/';
+    const getGameUrl = 'http://localhost:8000/game/get/game-detail/';
     const gameParameter = window.location.pathname.slice(5).replace(/\//g, '');
-    console.log(gameParameter);
     const ws = useRef(null);
     const [clickedCount, setClickedCount] = useState(0);
     const [userSet, setUserSet] = useState(false);

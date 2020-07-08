@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'channels',
 
-    'api',
+    'game',
     'frontend',
     'user',
     'gameplay',

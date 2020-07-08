@@ -10,10 +10,10 @@ WORKDIR /poker
 
 COPY requirements.txt requirements.txt
 COPY manage.py manage.py
-COPY api/ api/
+COPY game/ game/
 COPY frontend/ frontend/
 COPY gameplay/ gameplay/
-COPY gameplay_utils/ gameplay_utils
+COPY gameplay_utils/ gameplay_utils/
 copy poker_app/ poker_app/
 COPY user/ user/
 COPY scripts/ scripts/

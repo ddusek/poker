@@ -2,8 +2,8 @@ import math
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import viewsets, permissions, status
-from api.serializers import *
-from api.utils import make_path
+from game.serializers import *
+from game.utils import make_path
 from gameplay_utils.deck import Deck
 
 
@@ -65,7 +65,7 @@ class GameCreateView(APIView):
         players = int(request.data['body']['players'])
         chips = int(request.data['body']['chips'])
         big_blind = math.ceil(chips / 100)
-        small_blind = math.ceil(big_blind/2)
+        small_blind = math.ceil(big_blind / 2)
         # create game
         game = Game.objects.create(path=path, big_blind=big_blind, small_blind=small_blind,
                                    name=name, max_players=players, starting_chips=chips)

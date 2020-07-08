@@ -28,7 +28,7 @@ const CardsContainer = styled.div`
 const Cards = () => {
     const [cardFiles, setCardFiles] = useState([]);
     const imagePath = 'cards/';
-    // const getUrl = 'http://localhost:8000/api/get/player-detail/';
+    // const getUrl = 'http://localhost:8000/game/get/player-detail/';
     useEffect(() => {
         const getCards = async () => {
             // axios

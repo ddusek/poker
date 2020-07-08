@@ -1,7 +1,6 @@
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
 from gameplay.db_calls import *
 from user.serializers import UserSerializer
-from api.serializers import PlayerDetailSerializer
 
 
 def get_parameter_value(parameters, key):
@@ -39,7 +38,6 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
         else:
             self.data['start_game'] = False
         self.data['user'] = UserSerializer(user).data['id']
-        # self.data['player'] = PlayerDetailSerializer(player).data['id']
         self.data['game'] = GameSerializer(game).data['id']
         self.data['type'] = 'user_connected'
 

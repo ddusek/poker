@@ -1,6 +1,6 @@
 from channels.db import database_sync_to_async
-from api.models import Game, Player
-from api.serializers import GameSerializer
+from game.models import Game, Player
+from game.serializers import GameSerializer
 from user.models import User
 
 
