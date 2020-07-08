@@ -5,6 +5,10 @@ django-cors-headers
 bcrypt
 channels
 channels_redis
+
+# linters
 flake8
 autopep8
 rope
+pylint
+pylint_django
