@@ -1,2 +1,8 @@
 [MASTER]
 load-plugins=pylint_django
+
+[MESSAGES CONTROL]
+disable=wildcard-import,
+        unused-wildcard-import,
+        missing-module-docstring,
+        attribute-defined-outside-init

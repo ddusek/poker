@@ -57,7 +57,7 @@ class GameDetailView(APIView):
 
 class GameCreateView(APIView):
     # init db game objects
-    def post(self, request, format=None):
+    def post(self, request):
         if 'players' not in request.data['body'] or 'chips' not in request.data['body']:
             res = {'status': 400, 'msg': 'didnt receive data'}
             return Response(res, status=status.HTTP_400_BAD_REQUEST)

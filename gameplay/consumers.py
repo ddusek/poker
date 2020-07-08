@@ -43,11 +43,11 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
 
         await self.channel_layer.group_send(self.game_group_name, self.data)
 
-    async def disconnect(self, event):
+    async def disconnect(self, code):
         # Leave game group
         await self.channel_layer.group_discard(self.game_group_name, self.channel_name)
 
-    async def receive_json(self, content, close=False):
+    async def receive_json(self, content, **kwargs):
         # Send message to room group
         await self.channel_layer.group_send(self.game_group_name, content)
 

@@ -17,7 +17,7 @@ class Game:
     def __init__(self, players, s_blind, chips):
         self.table = Table()
         self.players = []
-        [self.players.append(Player(i, chips)) for i in range(players)]
+        self.players = [self.players.append(Player(i, chips)) for i in range(players)]
         self.current_player = 0
         self.combinations = {1: 'royal flush', 2: 'straight flush', 3: 'four of a kind',
                              4: 'full house', 5: 'flush', 6: 'straight', 7: 'three of a kind',
@@ -36,7 +36,7 @@ class Game:
         self.last_raise = 0
         self.biggest_bid = self.bids.b_blind_val
         self.table = Table()
-        [player.next_game() for player in self.players]
+        # [player.next_game() for player in self.players]
         self.bids.s_blind_turn += 1 if self.bids.s_blind_turn < len(self.players) else 0
         self.bids.b_blind_turn += 1 if self.bids.b_blind_turn < len(self.players) else 0
         self.all_played = False
@@ -59,10 +59,10 @@ class Game:
     # blinds, give every player 2 cards, burn 1 card and put on table 3 cards
     def start_game(self):
         self.blinds()
-        [player.hand.append(self.table.deck.give_card())
-         for player in self.players for _ in range(2)]
+        # [player.hand.append(self.table.deck.give_card())
+        #  for player in self.players for _ in range(2)]
         self.table.burned.append(self.table.deck.give_card())
-        [self.table.cards.append(self.table.deck.give_card()) for _ in range(3)]
+        self.table.cards = [self.table.cards.append(self.table.deck.give_card()) for _ in range(3)]
 
     # burn a card and put next one on table
     def next_card(self):
