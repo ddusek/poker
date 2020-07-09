@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import CardIcon from '../utils/svgHelper';
+import HandContext from '../../contexts/HandContext';
 
 const Container = styled.div`
     width: 250px;
@@ -28,25 +29,14 @@ const CardsContainer = styled.div`
 const Cards = () => {
     const [cardFiles, setCardFiles] = useState([]);
     const imagePath = 'cards/';
-    // const getUrl = 'http://localhost:8000/game/get/player-detail/';
+    const getUrl = 'http://localhost:8000/game/get/cards-detail/';
+    const hand = useContext(HandContext);
+
     useEffect(() => {
-        const getCards = async () => {
-            // axios
-            //     .get(getUrl)
-            //     .then((response) => {
-            //         if (response.status === 200) {
-            //             // Get images of player cards.
-            //             response.data.forEach((item) => {
-            //                 setCardFiles((c) => c.concat(imagePath + item.image));
-            //             });
-            //         }
-            //     })
-            //     .catch((err) => {
-            //         console.log(err);
-            //     });
-        };
-        getCards();
-    }, []);
+        hand.forEach((item) => {
+            setCardFiles((c) => c.concat(imagePath + item.image));
+        });
+    }, [hand]);
     // Return cards only if list contains 2 cards.
     return (
         <Container>

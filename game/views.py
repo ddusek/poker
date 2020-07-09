@@ -7,21 +7,6 @@ from game.utils import make_path
 from gameplay_utils.deck import Deck
 
 
-# Get player detail from playerID in session.
-class PlayerDetailView(APIView):
-    """Player detail view.
-    """
-    def get(self, request):
-        """Get player from user in session.
-        """
-        if 'user_id' not in request.session:
-            return Response('user not logged in', status=status.HTTP_401_UNAUTHORIZED)
-        player = Player.objects.filter(user=request.session['user_id']).first()
-        if player is None:
-            return Response('player not found', status=status.HTTP_400_BAD_REQUEST)
-        return Response(PlayerSerializer(player).data, status=status.HTTP_200_OK)
-
-
 class GameDetailView(APIView):
     """Game detail view.
     """
@@ -63,3 +48,48 @@ class GameDetailView(APIView):
 
         res = {'status': 200, 'msg': 'success', 'path': path}
         return Response(res, status=status.HTTP_200_OK)
+
+
+class PlayerDetailView(APIView):
+    """Player detail view.
+    """
+    def get(self, request):
+        """Get player from user in session and save player to session.
+        """
+        if 'user_id' not in request.session:
+            return Response('user not logged in', status=status.HTTP_401_UNAUTHORIZED)
+
+        game_name = request.GET.get('game', '')
+        if game_name == '':
+            return Response('game parameter not found', status=status.HTTP_400_BAD_REQUEST)
+            
+        game = Game.objects.filter(name=game_name).first()
+        if game is None:
+            return Response('game from parameter not found', status=status.HTTP_400_BAD_REQUEST)
+
+        player = Player.objects.filter(user=request.session['user_id'], game=game).first()
+        if player is None:
+            return Response('player not found', status=status.HTTP_400_BAD_REQUEST)
+
+        player_serialized = PlayerSerializer(player).data
+        # save player_id to session
+        request.session[f'{game_name}_player_id'] = player_serialized['id']
+        return Response(player_serialized, status=status.HTTP_200_OK)
+
+
+class CardsDetailView(APIView):
+    """Player cards detail view.
+    """
+    def get(self, request):
+        """Get cards from session by player_id
+        """
+        game_name = request.GET.get('game', '')
+        if game_name == '':
+            return Response('game from parameter not found', status=status.HTTP_400_BAD_REQUEST)
+            
+        if f'{game_name}_player_id' not in request.session:
+            return Response('cant get cards, didnt find player_id in session', status.HTTP_401_UNAUTHORIZED)
+        cards = Card.objects.filter(player=request.session[f'{game_name}_player_id'])
+        if cards is None:
+            return Response('didnt find any cards for player', status.HTTP_400_BAD_REQUEST)
+        return Response(CardSerializer(cards).data, status=status.HTTP_200_OK)

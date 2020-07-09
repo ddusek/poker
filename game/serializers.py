@@ -23,7 +23,6 @@ class CardSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
-    players = serializers.PrimaryKeyRelatedField(many=True, queryset=Player.objects.all())
 
     class Meta:
         model = User
