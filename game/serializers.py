@@ -1,3 +1,4 @@
+# pylint: disable=missing-class-docstring
 from django.contrib.auth.models import User
 from rest_framework import serializers
 from .models import *
@@ -12,7 +13,6 @@ class GameSerializer(serializers.ModelSerializer):
 class PlayerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Player
-        owner = serializers.ReadOnlyField(source='owner.username')
         fields = '__all__'
 
 

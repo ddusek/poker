@@ -1,3 +1,5 @@
+# pylint: disable=missing-class-docstring, missing-function-docstring
+
 from gameplay_utils.combinations import Combinations
 from gameplay_utils.player import Player
 from gameplay_utils.table import Table

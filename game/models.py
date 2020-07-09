@@ -4,6 +4,12 @@ from user.models import User
 
 
 class Game(models.Model):
+    """Game contains game related data.
+    Is is called every time a player needs to know some data from game.
+    For example: size of blinds, if someone raised before him or if round ended.
+
+    Game also contains path and name of a game.
+    """
     max_players = models.IntegerField(default=8)
     starting_chips = models.IntegerField(default=200)
     small_blind = models.IntegerField(default=5)
@@ -19,6 +25,12 @@ class Game(models.Model):
 
 
 class Player(models.Model):
+    """Player contains game related data.
+
+    has information like player's hand, chips, allowed actions.
+
+    related to :model: `game.Game` and :model: `user.User`.
+    """
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
     is_in_game = models.BooleanField(default=False)
@@ -34,6 +46,10 @@ class Player(models.Model):
 
 
 class Card(models.Model):
+    """Information about a specific card and its location.
+
+    related to :model: `game.Game` and :model: `game.Player`.
+    """
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
     player = models.ForeignKey(Player, on_delete=models.CASCADE, null=True, blank=True)
     suit = models.CharField(max_length=10)

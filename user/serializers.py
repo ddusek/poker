@@ -1,3 +1,4 @@
+# pylint: disable=missing-class-docstring
 from rest_framework import serializers
 
 from user.models import User

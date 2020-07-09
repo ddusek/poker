@@ -1,3 +1,4 @@
+# pylint: disable=missing-class-docstring, missing-function-docstring
 class Player:
     def __repr__(self):
         return '(hand: %s\nchips: %s\npot: %s\nround_bid: %s\ncan_act: %s)' % (self.hand, self.chips, self.pot,

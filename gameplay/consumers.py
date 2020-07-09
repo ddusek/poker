@@ -4,13 +4,30 @@ from user.serializers import UserSerializer
 
 
 def get_parameter_value(parameters, key):
+    """Get parameter from query string parameters list by a key.
+
+    :param parameters: list of parameters
+    :param key: key to find in parameter
+    :return: value of key if found
+    """
     found = [par for par in parameters if key in par]
     found = found[0] if len(found) > 0 else None
     return found[found.find('=') + 1:] if found is not None else None
 
 
 class GameConsumer(AsyncJsonWebsocketConsumer):
+    """Gameplay websocket
+
+    All gameplay related stuff that cant be done through http is done here.
+
+    Websocket here is needed because player needs to get data from other players in real-time.
+    """
     async def connect(self):
+        """join game room by url, get stuff from db and create player.
+
+        Saves some data from url and query strings then gets data from database based on that.
+        Create player for current user and game if not created yet.
+        """
         await self.accept()
 
         # make game name from url
@@ -44,19 +61,30 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
         await self.channel_layer.group_send(self.game_group_name, self.data)
 
     async def disconnect(self, code):
+        """disconnect player from room.
+        """
         # Leave game group
         await self.channel_layer.group_discard(self.game_group_name, self.channel_name)
 
     async def receive_json(self, content, **kwargs):
+        """send message to room after its received
+
+        which message type to send is determined by dictionary key `type`.
+
+        :param content: dictionary containing message data
+        """
+
         # Send message to room group
         await self.channel_layer.group_send(self.game_group_name, content)
 
-    # Receive message from room group
     async def chat_message(self, message):
+        """basic chat messsage
+        """
         # Send message to WebSocket
         await self.send_json(content=message)
 
-    # Receive message from room group
     async def user_connected(self, message):
+        """message sent after someone connects
+        """
         # Send message to WebSocket
         await self.send_json(content=message)

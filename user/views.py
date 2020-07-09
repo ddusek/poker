@@ -7,14 +7,24 @@ from user.serializers import UserSerializer, UserSerializerChecker
 
 
 def hash_pw(password, salt=bcrypt.gensalt(12)):
+    """Hash password with bcrypt.
+
+    :param password: password to hash
+    :param salt: salt for hash, defaults to bcrypt.gensalt(12)
+    :return: hashed password
+    """
     password = password.encode('utf-8')
-    if type(salt) == str:
+    if isinstance(salt, str):
         salt = bytes(salt, encoding='utf-8')
     return {'pw': bcrypt.hashpw(password, salt).decode('utf-8'), 'salt': salt.decode('utf-8')}
 
 
 class CreateUserView(APIView):
-    def post(self, request, format=None):
+    """User view for creating user.
+    """
+    def post(self, request):
+        """Create new user from form data.
+        """
         if 'username' not in request.data['body'] or 'password' not in request.data['body']:
             res = {'status': 400, 'msg': 'didnt receive username or password'}
             return Response(res, status=status.HTTP_400_BAD_REQUEST)
@@ -31,8 +41,11 @@ class CreateUserView(APIView):
 
 
 class LoginUserView(APIView):
-    def post(self, request, format=None):
-        print(request.data)
+    """User view for log in.
+    """
+    def post(self, request):
+        """Check if user is authenticated and log in.
+        """
         if 'username' not in request.data['body'] or 'password' not in request.data['body']:
             res = {'status': 401, 'msg': 'didnt receive username or password'}
             return Response(res, status=status.HTTP_401_UNAUTHORIZED)
@@ -51,22 +64,23 @@ class LoginUserView(APIView):
             user_response = UserSerializer(user)
             request.session['user_id'] = user_response.data['id']
 
-            # login only if cookies are enabled
-            if request.session.test_cookie_worked():
-                request.session.delete_test_cookie()
-                res = {'status': 200, 'msg': 'logged in successfully'}
-                return Response(res, status=status.HTTP_200_OK)
-            else:
-                return Response('Please enable cookies and try again.')
+            res = {'status': 200, 'msg': 'logged in successfully'}
+            return Response(res, status=status.HTTP_200_OK)
 
         res = {'status': 401, 'msg': 'wrong username or password'}
         return Response(res, status=status.HTTP_401_UNAUTHORIZED)
 
 
 class UserLoggedInView(APIView):
+    """User view checking if user is logged in.
+
+    :param APIView: [description]
+    :type APIView: [type]
+    """
     def get(self, request):
+        """Check if user is saved in session
+        """
         if 'user_id' not in request.session:
-            request.session.set_test_cookie()
             res = 'user not logged in'
             return Response(res, status=status.HTTP_401_UNAUTHORIZED)
 
@@ -75,7 +89,11 @@ class UserLoggedInView(APIView):
 
 
 class CurrentUserIDView(APIView):
+    """User view for getting userID
+    """
     def get(self, request):
+        """get user_id from session
+        """
         if 'user_id' not in request.session:
             res = {
                 'success': 'false',

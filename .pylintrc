@@ -6,3 +6,8 @@ disable=wildcard-import,
         unused-wildcard-import,
         missing-module-docstring,
         attribute-defined-outside-init
+good-names=id,
+           i
+
+[FORMAT]
+max-line-length=120

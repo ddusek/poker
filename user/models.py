@@ -1,9 +1,17 @@
 from django.db import models
-from django.contrib.auth.backends import ModelBackend
 
 
 class UserManager(models.Manager):
+    """Custom User model manager, containing user creation.
+    """
     def create_user(self, username, password):
+        """Create user if all required parameters are given.
+
+        :param username: username.
+        :param password: password dictionary containing password and salt of user
+        :raises ValueError: if some required data wasn't received
+        :return: User object
+        """
         if not username:
             raise ValueError('username is required')
         if not password:
@@ -24,6 +32,8 @@ class UserManager(models.Manager):
 
 
 class User(models.Model):
+    """Data about registered users are stored here.
+    """
     username = models.CharField(max_length=50, unique=True)
     pw_hash = models.CharField(max_length=500)
     salt = models.CharField(max_length=100)
@@ -36,15 +46,3 @@ class User(models.Model):
 
     def __str__(self):
         return self.username
-
-
-class UserAuthentication(ModelBackend):
-    def authenticate(self, request, **kwargs):
-        username = kwargs['username']
-        password = kwargs['password']
-        try:
-            user = User.objects.get(username=username)
-            if user.check_password(password) is True:
-                return user
-        except user.DoesNotExist:
-            pass

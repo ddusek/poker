@@ -1,3 +1,4 @@
+# pylint: disable=missing-class-docstring, missing-function-docstring
 class Combinations:
     def __init__(self, cards):
         self.cards = cards
