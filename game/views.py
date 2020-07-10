@@ -14,7 +14,6 @@ class GameDetailView(APIView):
         """Get game from query string.
         """
         game_name = request.GET.get('game', '')
-        print(game_name)
         if game_name == '':
             return Response('didnt get parameter "game"', status=status.HTTP_400_BAD_REQUEST)
         game = Game.objects.filter(name=game_name).first()
@@ -86,10 +85,10 @@ class CardsDetailView(APIView):
         game_name = request.GET.get('game', '')
         if game_name == '':
             return Response('game from parameter not found', status=status.HTTP_400_BAD_REQUEST)
-            
+
         if f'{game_name}_player_id' not in request.session:
             return Response('cant get cards, didnt find player_id in session', status.HTTP_401_UNAUTHORIZED)
         cards = Card.objects.filter(player=request.session[f'{game_name}_player_id'])
-        if cards is None:
+        if not cards:
             return Response('didnt find any cards for player', status.HTTP_400_BAD_REQUEST)
-        return Response(CardSerializer(cards).data, status=status.HTTP_200_OK)
+        return Response(CardSerializer(cards, many=True).data, status=status.HTTP_200_OK)
