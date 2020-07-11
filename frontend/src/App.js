@@ -29,31 +29,37 @@ const Container = styled.div`
     text-align: center;
 `;
 
+const DefaultContainer = () => (
+    <Layout>
+        <Menu>
+            <MainNavbar />
+        </Menu>
+        <Container>
+            <Route exact path="/">
+                <Home />
+            </Route>
+            <Route exact path="/newgame">
+                <NewGame />
+            </Route>
+            <Route exact path="/login">
+                <Login />
+            </Route>
+            <Route exact path="/register">
+                <Register />
+            </Route>
+        </Container>
+    </Layout>
+);
+
+const GameContainer = () => <Game />;
+
 function App() {
     return (
         <Router>
             <Layout>
-                <Menu>
-                    <MainNavbar />
-                </Menu>
                 <Switch>
-                    <Container>
-                        <Route exact path="/">
-                            <Home />
-                        </Route>
-                        <Route exact path="/newgame">
-                            <NewGame />
-                        </Route>
-                        <Route exact path="/game/:slug">
-                            <Game />
-                        </Route>
-                        <Route exact path="/login">
-                            <Login />
-                        </Route>
-                        <Route exact path="/register">
-                            <Register />
-                        </Route>
-                    </Container>
+                    <Route exact path="/game/:slug" component={GameContainer} />
+                    <Route component={DefaultContainer} />
                 </Switch>
             </Layout>
         </Router>
