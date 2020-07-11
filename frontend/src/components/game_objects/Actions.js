@@ -6,7 +6,7 @@ import GameContext from '../contexts/GameContext';
 
 const Container = styled.div`
     width: 400px;
-    height: 200px;
+    height: 180px;
     position: fixed;
     bottom: 0;
     right: 0;

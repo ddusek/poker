@@ -1,13 +1,35 @@
-import React from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 const Container = styled.div`
     width: 450px;
-    height: 250px;
+    height: 200px;
     position: fixed;
     bottom: 0px;
     border-style: dotted;
     background-color: rgb(25, 25, 5);
+`;
+
+const Ul = styled.ul`
+    height: 100%;
+    overflow: hidden;
+    overflow-y: scroll;
+    padding: 4px 10px 4px 10px;
+
+    ::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+        background: rgb(45, 45, 65);
+        border-radius: 10px;
+    }
+`;
+
+const Li = styled.li`
+    display: block;
+    text-align: left;
 `;
 
 /**
@@ -15,10 +37,33 @@ const Container = styled.div`
  */
 
 const Logs = () => {
+    const divRef = useRef({ behavior: 'smooth' });
+    // const [data, setData] = useState(['First one']);
+    const [texts, setTexts] = useState(<Li />);
+    // const [number, setNumber] = useState(0);
+    useEffect(() => {
+        const doTest = () => {
+            // setNumber(number + 1);
+            // setData(data.push(number));
+            // setTexts(data.map((d) => <Li key={number}>{d}</Li>));
+            // divRef.current.scrollIntoView({ behavior: 'smooth' });
+        };
+        // const interval = setInterval(() => doTest(), 2000);
+    }, []);
+
+    useEffect(() => {
+        const scrollToBottom = () => {
+            divRef.current.scrollIntoView();
+        };
+        scrollToBottom();
+    }, [texts]);
+
     return (
         <Container>
-            <p />
-            logs
+            <Ul>
+                {texts}
+                <div ref={divRef} />
+            </Ul>
         </Container>
     );
 };

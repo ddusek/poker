@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
-import CardIcon from '../utils/svgHelper';
-import HandContext from '../../contexts/HandContext';
+import CardIcon from './utils/svgHelper';
+import HandContext from '../contexts/HandContext';
 
 const Container = styled.div`
     width: 250px;
