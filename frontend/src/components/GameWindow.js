@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import Actions from './game_objects/Actions';
-import Cards from './game_objects/PlayerCards';
-import Logs from './game_objects/Logs';
-import OpponentCards from './game_objects/OpponentCards';
-import OpponentChips from './game_objects/OpponentChips';
-import OpponentTag from './game_objects/OpponentTag';
-import OpponentAction from './game_objects/OpponentAction';
+import Actions from './game/Actions';
+import Cards from './game/PlayerCards';
+import Logs from './game/Logs';
+import OpponentCards from './game/OpponentCards';
+import OpponentChips from './game/OpponentChips';
+import OpponentTag from './game/OpponentTag';
+import OpponentAction from './game/OpponentAction';
 
 const Container = styled.div`
     color: white;
