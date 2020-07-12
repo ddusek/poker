@@ -51,8 +51,11 @@ const DefaultContainer = () => (
     </Layout>
 );
 
-const GameContainer = () => <Game />;
-
+const GameContainer = () => (
+    <Container>
+        <Game />
+    </Container>
+);
 function App() {
     return (
         <Router>

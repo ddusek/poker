@@ -1,28 +1,26 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
-import PropTypes from 'prop-types';
 import ShowCardsContext from '../contexts/ShowCardsContext';
 
 const Container = styled.div`
     display: ${(props) => props.display};
-    width: 100%;
+    width: 50%;
     height: 60%;
     border-style: dotted;
-    color: green;
+    color: red;
 `;
 
 /**
  * Opponents window component.
  */
 
-const OpponentCards = () => {
-    const display = useContext(ShowCardsContext) ? 'block' : 'none';
-
+const OpponentChipsTotal = () => {
+    const display = useContext(ShowCardsContext) ? 'none' : 'block';
     return (
         <Container display={display}>
-            <p>cards comp</p>
+            <p>chips total comp</p>
         </Container>
     );
 };
 
-export default OpponentCards;
+export default OpponentChipsTotal;
