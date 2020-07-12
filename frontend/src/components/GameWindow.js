@@ -26,8 +26,21 @@ const OpponentsContainer = styled.div`
     left: ${(props) => props.left};
     top: ${(props) => props.top};
     transform: translateX(-50%);
-    height: 150px;
-    width: 200px;
+    height: 200px;
+    width: 250px;
+    border-style: dotted;
+`;
+
+const OpponentChipsContainer = styled.div`
+    position: fixed;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    left: ${(props) => props.left};
+    top: ${(props) => props.top};
+    transform: translateX(-50%);
+    height: 75px;
+    width: 100px;
     border-style: dotted;
 `;
 
@@ -46,6 +59,8 @@ const GameWindow = () => {
                 <OpponentChipsRound />
                 <OpponentAction />
             </OpponentsContainer>
+            <OpponentChipsContainer left="50%" top="25%" />
+
             <OpponentsContainer left="33%" top="5%">
                 <OpponentTag />
                 <OpponentCards />
@@ -53,6 +68,8 @@ const GameWindow = () => {
                 <OpponentChipsRound />
                 <OpponentAction />
             </OpponentsContainer>
+            <OpponentChipsContainer left="36%" top="30%" />
+
             <OpponentsContainer left="67%" top="5%">
                 <OpponentTag />
                 <OpponentCards />
@@ -60,34 +77,43 @@ const GameWindow = () => {
                 <OpponentChipsRound />
                 <OpponentAction />
             </OpponentsContainer>
-            <OpponentsContainer left="16%" top="12%">
+            <OpponentChipsContainer left="64%" top="30%" />
+
+            <OpponentsContainer left="14%" top="22%">
                 <OpponentTag />
                 <OpponentCards />
                 <OpponentChipsTotal />
                 <OpponentChipsRound />
                 <OpponentAction />
             </OpponentsContainer>
-            <OpponentsContainer left="84%" top="12%">
+            <OpponentChipsContainer left="26%" top="40%" />
+
+            <OpponentsContainer left="86%" top="22%">
                 <OpponentTag />
                 <OpponentCards />
                 <OpponentChipsTotal />
                 <OpponentChipsRound />
                 <OpponentAction />
             </OpponentsContainer>
-            <OpponentsContainer left="10%" top="40%">
+            <OpponentChipsContainer left="74%" top="40%" />
+
+            <OpponentsContainer left="10%" top="50%">
                 <OpponentTag />
                 <OpponentCards />
                 <OpponentChipsTotal />
                 <OpponentChipsRound />
                 <OpponentAction />
             </OpponentsContainer>
-            <OpponentsContainer left="90%" top="40%">
+            <OpponentChipsContainer left="22%" top="60%" />
+
+            <OpponentsContainer left="90%" top="50%">
                 <OpponentTag />
                 <OpponentCards />
                 <OpponentChipsTotal />
                 <OpponentChipsRound />
                 <OpponentAction />
             </OpponentsContainer>
+            <OpponentChipsContainer left="78%" top="60%" />
 
             <BottomContainer>
                 <Logs />
