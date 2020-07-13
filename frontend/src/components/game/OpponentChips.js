@@ -4,23 +4,23 @@ import ShowCardsContext from '../contexts/ShowCardsContext';
 
 const Container = styled.div`
     display: ${(props) => props.display};
-    width: 100%;
-    height: 70%;
+    width: 70%;
+    height: 60%;
     border-style: dotted;
-    color: green;
+    color: red;
 `;
 
 /**
  * Opponents window component.
  */
 
-const OpponentChipsRound = () => {
+const OpponentChips = () => {
     const display = useContext(ShowCardsContext) ? 'none' : 'block';
     return (
         <Container display={display}>
-            <p>chips round comp</p>
+            <p>chips svgs</p>
         </Container>
     );
 };
 
-export default OpponentChipsRound;
+export default OpponentChips;
