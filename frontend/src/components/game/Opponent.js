@@ -5,7 +5,7 @@ import OpponentCards from './OpponentCards';
 import OpponentChips from './OpponentChips';
 import OpponentTag from './OpponentTag';
 import OpponentAction from './OpponentAction';
-import OpponentChipsText from './OpponentChipsText';
+import OpponentChipsText from './OpponentPotText';
 
 const Container = styled.div`
     position: fixed;
@@ -15,13 +15,13 @@ const Container = styled.div`
     left: ${(props) => props.left};
     top: ${(props) => props.top};
     transform: translateX(-50%);
-    height: 200px;
+    height: 180px;
     width: 250px;
     border-style: dotted;
 `;
 
-const OpponentContainer = ({ left, top }) => {
-    OpponentContainer.propTypes = {
+const Opponent = ({ left, top }) => {
+    Opponent.propTypes = {
         left: PropTypes.string.isRequired,
         top: PropTypes.string.isRequired,
     };
@@ -36,4 +36,4 @@ const OpponentContainer = ({ left, top }) => {
     );
 };
 
-export default OpponentContainer;
+export default Opponent;

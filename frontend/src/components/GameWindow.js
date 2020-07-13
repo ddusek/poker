@@ -3,10 +3,9 @@ import styled from 'styled-components';
 import Actions from './game/Actions';
 import Cards from './game/PlayerCards';
 import Logs from './game/Logs';
-import OpponentChipsRound from './game/OpponentChipsRound';
-import OpponentChipsRoundText from './game/OpponentChipsRoundText';
-import OpponentContainer from './game/OpponentContainer';
-import OpponentChipsContainer from './game/OpponentChipsContainer';
+import Opponent from './game/Opponent';
+import PotContainer from './game/PotContainer';
+import TableCards from './game/TableCards';
 
 const Container = styled.div`
     color: white;
@@ -25,27 +24,31 @@ const GameWindow = () => {
     const [players, setPlayers] = useState(2);
     return (
         <Container>
-            <OpponentContainer left="50%" top="1%" />
-            <OpponentChipsContainer left="50%" top="25%" />
+            <Opponent left="50%" top="1%" />
+            <PotContainer left="50%" top="22%" />
 
-            <OpponentContainer left="33%" top="5%" />
-            <OpponentChipsContainer left="36%" top="30%" />
+            <Opponent left="33%" top="5%" />
+            <PotContainer left="36%" top="26%" />
 
-            <OpponentContainer left="67%" top="5%" />
-            <OpponentChipsContainer left="64%" top="30%" />
+            <Opponent left="67%" top="5%" />
+            <PotContainer left="64%" top="26%" />
 
-            <OpponentContainer left="14%" top="22%" />
-            <OpponentChipsContainer left="26%" top="40%" />
+            <Opponent left="14%" top="22%" />
+            <PotContainer left="25%" top="35%" />
 
-            <OpponentContainer left="86%" top="22%" />
-            <OpponentChipsContainer left="74%" top="40%" />
+            <Opponent left="86%" top="22%" />
+            <PotContainer left="75%" top="35%" />
 
-            <OpponentContainer left="10%" top="50%" />
-            <OpponentChipsContainer left="22%" top="60%" />
+            <Opponent left="10%" top="50%" />
+            <PotContainer left="22%" top="60%" />
 
-            <OpponentContainer left="90%" top="50%" />
-            <OpponentChipsContainer left="78%" top="60%" />
+            <Opponent left="90%" top="50%" />
+            <PotContainer left="78%" top="60%" />
 
+            <PotContainer left="50%" top="36%" width="250px" />
+            <TableCards />
+
+            <PotContainer left="50%" top="67%" />
             <BottomContainer>
                 <Logs />
                 <Cards />
