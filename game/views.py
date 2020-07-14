@@ -76,6 +76,29 @@ class PlayerDetailView(APIView):
         return Response(player_serialized, status=status.HTTP_200_OK)
 
 
+class PlayerIdsView(APIView):
+    """Player ids view.
+    """
+    def get(self, request):
+        """Get players from given game in query string.
+        """
+        game_name = request.GET.get('game', '')
+        if game_name == '':
+            return Response('game parameter not found', status=status.HTTP_400_BAD_REQUEST)
+            
+        game = Game.objects.filter(name=game_name).first()
+        if game is None:
+            return Response('game from parameter not found', status=status.HTTP_400_BAD_REQUEST)
+
+        players = Player.objects.filter(game=game)
+        if players is None:
+            return Response('players not found', status=status.HTTP_400_BAD_REQUEST)
+
+        players_serialized = PlayerSerializer(players, many=True).data
+        ids = [d['id'] for d in players_serialized]
+        return Response(ids, status=status.HTTP_200_OK)
+
+
 class CardsDetailView(APIView):
     """Player cards detail view.
     """
