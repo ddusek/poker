@@ -17,8 +17,9 @@ const Container = styled.div`
     border-style: dotted;
 `;
 
-const PotContainer = ({ left, top, height = '110px', width = '120px' }) => {
+const PotContainer = ({ playerID, left, top, height = '110px', width = '120px' }) => {
     PotContainer.propTypes = {
+        playerID: PropTypes.number.isRequired,
         left: PropTypes.string.isRequired,
         top: PropTypes.string.isRequired,
         height: PropTypes.string,

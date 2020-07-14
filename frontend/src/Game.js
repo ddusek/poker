@@ -24,18 +24,23 @@ const Game = () => {
     const getGameUrl = 'http://localhost:8000/game/get/game-detail/';
     const getPlayerUrl = 'http://localhost:8000/game/get/player-detail/';
     const getCardsUrl = 'http://localhost:8000/game/get/cards-detail/';
+    const getPlayerIdsUrl = 'http://localhost:8000/game/get/player-ids/';
     const gameName = window.location.pathname.slice(5).replace(/\//g, '');
     const ws = useRef(null);
     const [clickedCount, setClickedCount] = useState(0);
     const [userSet, setUserSet] = useState(false);
     const [userID, setUserID] = useState('');
     const [startGame, setStartGame] = useState(false);
+
+    // Contexts
     const [gameInfoSet, setGameInfoSet] = useState(false);
     const [gameInfo, setGameInfo] = useState({});
     const [playerInfoSet, setPlayerInfoSet] = useState(false);
     const [playerInfo, setPlayerInfo] = useState({});
     const [handInfoSet, setHandInfoSet] = useState(false);
     const [handInfo, setHandInfo] = useState({});
+    const [playerIdsSet, setPlayerIdsSet] = useState(false);
+    const [playerIds, setPlayerIds] = useState(0);
 
     useEffect(() => {
         // get current user from api
@@ -121,6 +126,30 @@ const Game = () => {
         }
     }, [handInfoSet, gameName]);
 
+    // get player id of all players in current game except current player
+    useEffect(() => {
+        if (!playerIdsSet) {
+            axios
+                .get(`${getPlayerIdsUrl}?game=${gameName}`)
+                .then((response) => {
+                    if (response.status === 200) {
+                        setPlayerIdsSet(true);
+
+                        // remove current player from list
+                        const index = response.data.indexOf(playerInfo.id);
+                        response.data.splice(index, 1);
+                        const filledArray = response.data.sort().concat(new Array(8 - response.data.length).fill(0));
+                        setPlayerIds(filledArray);
+                    } else {
+                        console.log('didnt get player ids', response.status);
+                    }
+                })
+                .catch((err) => {
+                    console.log(`Error: ${err}`);
+                });
+        }
+    }, [playerIdsSet, gameName, playerInfo.id, gameInfo.max_players]);
+
     // handle websocket messages
     useEffect(() => {
         if (userSet) {
@@ -137,13 +166,14 @@ const Game = () => {
         const message = JSON.stringify({ message: 'clickedCount', type: 'chat_message' });
         ws.current.send(message);
     };
+    console.log(playerIds);
     if (startGame) {
         return (
             <GameContainer>
                 <GameContext.Provider value={gameInfo}>
                     <PlayerContext.Provider value={playerInfo}>
                         <HandContext.Provider value={handInfo}>
-                            <GameWindow />
+                            <GameWindow playerIds={playerIds} />
                         </HandContext.Provider>
                     </PlayerContext.Provider>
                 </GameContext.Provider>

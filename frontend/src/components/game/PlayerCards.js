@@ -30,7 +30,6 @@ const Cards = () => {
     const hand = useContext(HandContext);
 
     useEffect(() => {
-        console.log(Object.keys(hand).length);
         if (Object.keys(hand).length === 2) {
             hand.forEach((item) => {
                 setCardFiles((c) => c.concat(imagePath + item.image));

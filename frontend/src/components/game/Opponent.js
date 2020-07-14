@@ -20,8 +20,9 @@ const Container = styled.div`
     border-style: dotted;
 `;
 
-const Opponent = ({ left, top }) => {
+const Opponent = ({ playerID, left, top }) => {
     Opponent.propTypes = {
+        playerID: PropTypes.number.isRequired,
         left: PropTypes.string.isRequired,
         top: PropTypes.string.isRequired,
     };
