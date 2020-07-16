@@ -17,9 +17,9 @@ const Container = styled.div`
     border-style: dotted;
 `;
 
-const PotContainer = ({ playerID, left, top, height = '110px', width = '120px' }) => {
+const PotContainer = ({ pot, left, top, height = '110px', width = '120px' }) => {
     PotContainer.propTypes = {
-        playerID: PropTypes.number.isRequired,
+        pot: PropTypes.number.isRequired,
         left: PropTypes.string.isRequired,
         top: PropTypes.string.isRequired,
         height: PropTypes.string,
@@ -31,8 +31,8 @@ const PotContainer = ({ playerID, left, top, height = '110px', width = '120px' }
     };
     return (
         <Container left={left} top={top} height={height} width={width}>
-            <PotChips />
-            <PotText />
+            <PotChips pot={pot} />
+            <PotText pot={pot} />
         </Container>
     );
 };

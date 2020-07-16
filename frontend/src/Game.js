@@ -24,7 +24,7 @@ const Game = () => {
     const getGameUrl = 'http://localhost:8000/game/get/game-detail/';
     const getPlayerUrl = 'http://localhost:8000/game/get/player-detail/';
     const getCardsUrl = 'http://localhost:8000/game/get/cards-detail/';
-    const getPlayerIdsUrl = 'http://localhost:8000/game/get/player-ids/';
+    const getPlayersUrl = 'http://localhost:8000/game/get/players-details/';
     const gameName = window.location.pathname.slice(5).replace(/\//g, '');
     const ws = useRef(null);
     const [clickedCount, setClickedCount] = useState(0);
@@ -39,8 +39,8 @@ const Game = () => {
     const [playerInfo, setPlayerInfo] = useState({});
     const [handInfoSet, setHandInfoSet] = useState(false);
     const [handInfo, setHandInfo] = useState({});
-    const [playerIdsSet, setPlayerIdsSet] = useState(false);
-    const [playerIds, setPlayerIds] = useState(0);
+    const [playersSet, setPlayersSet] = useState(false);
+    const [players, setPlayers] = useState(0);
 
     useEffect(() => {
         // get current user from api
@@ -126,29 +126,63 @@ const Game = () => {
         }
     }, [handInfoSet, gameName]);
 
-    // get player id of all players in current game except current player
+    // get player object of every player in current game except current player
     useEffect(() => {
-        if (!playerIdsSet) {
+        if (!playersSet) {
             axios
-                .get(`${getPlayerIdsUrl}?game=${gameName}`)
+                .get(`${getPlayersUrl}?game=${gameName}`)
                 .then((response) => {
                     if (response.status === 200) {
-                        setPlayerIdsSet(true);
+                        setPlayersSet(true);
 
                         // remove current player from list
-                        const index = response.data.indexOf(playerInfo.id);
-                        response.data.splice(index, 1);
-                        const filledArray = response.data.sort().concat(new Array(8 - response.data.length).fill(0));
-                        setPlayerIds(filledArray);
+                        response.data.some((item) => {
+                            if (item.id === playerInfo.id) {
+                                const index = response.data.indexOf(item);
+                                response.data.splice(index, 1);
+                                return true;
+                            }
+                            return false;
+                        });
+
+                        const compare = (a, b) => {
+                            if (a.id < b.id) {
+                                return -1;
+                            }
+                            if (a.id > b.id) {
+                                return 1;
+                            }
+                            return 0;
+                        };
+
+                        // fill with empty player objects
+                        const filledArray = response.data.sort(compare).concat(
+                            new Array(8 - response.data.length).fill({
+                                id: 0,
+                                user: 0,
+                                chips: 0,
+                                game: 0,
+                                highest_combination: 0,
+                                pot: 0,
+                                round_bid: 0,
+                                can_call: false,
+                                can_check: false,
+                                can_raise: false,
+                                is_all_in: false,
+                                is_folded: false,
+                                is_in_game: false,
+                            })
+                        );
+                        setPlayers(filledArray);
                     } else {
-                        console.log('didnt get player ids', response.status);
+                        console.log('didnt get any player', response.status);
                     }
                 })
                 .catch((err) => {
                     console.log(`Error: ${err}`);
                 });
         }
-    }, [playerIdsSet, gameName, playerInfo.id, gameInfo.max_players]);
+    }, [playersSet, gameName, playerInfo.id, gameInfo.max_players]);
 
     // handle websocket messages
     useEffect(() => {
@@ -166,14 +200,13 @@ const Game = () => {
         const message = JSON.stringify({ message: 'clickedCount', type: 'chat_message' });
         ws.current.send(message);
     };
-    console.log(playerIds);
     if (startGame) {
         return (
             <GameContainer>
                 <GameContext.Provider value={gameInfo}>
                     <PlayerContext.Provider value={playerInfo}>
                         <HandContext.Provider value={handInfo}>
-                            <GameWindow playerIds={playerIds} />
+                            <GameWindow players={players} />
                         </HandContext.Provider>
                     </PlayerContext.Provider>
                 </GameContext.Provider>

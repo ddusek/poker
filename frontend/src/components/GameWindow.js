@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import Actions from './game/Actions';
@@ -22,41 +22,73 @@ const BottomContainer = styled.div`
  * Component containing all components inside gameplay window
  * Should be used in Game Component.
  */
-const GameWindow = ({ playerIds }) => {
+const GameWindow = ({ players }) => {
+    const player = useContext(PlayerContext);
     GameWindow.propTypes = {
-        playerIds: PropTypes.arrayOf(PropTypes.number).isRequired,
+        players: PropTypes.arrayOf(
+            PropTypes.shape({
+                id: PropTypes.number.isRequired,
+                user: PropTypes.number.isRequired,
+                chips: PropTypes.number.isRequired,
+                game: PropTypes.number.isRequired,
+                highest_combination: PropTypes.number.isRequired,
+                pot: PropTypes.number.isRequired,
+                round_bid: PropTypes.number.isRequired,
+                can_call: PropTypes.bool.isRequired,
+                can_check: PropTypes.bool.isRequired,
+                can_raise: PropTypes.bool.isRequired,
+                is_all_in: PropTypes.bool.isRequired,
+                is_folded: PropTypes.bool.isRequired,
+                is_in_game: PropTypes.bool.isRequired,
+            }).isRequired
+        ).isRequired,
     };
+
+    const [actions, setActions] = useState({});
+
+    useEffect(() => {
+        setActions({
+            can_call: player.can_call,
+            can_check: player.can_check,
+            can_raise: player.can_raise,
+            is_all_in: player.is_all_in,
+            is_folded: player.is_folded,
+            is_in_game: player.is_in_game,
+        });
+    }, [player.can_call, player.can_check, player.can_raise, player.is_all_in, player.is_folded, player.is_in_game]);
+
     return (
         <Container>
-            <Opponent playerID={playerIds[0]} left="50%" top="1%" />
-            <PotContainer playerID={playerIds[0]} left="50%" top="22%" />
+            <Opponent player={players[0]} left="50%" top="1%" />
+            <PotContainer pot={players[0].pot} left="50%" top="22%" />
 
-            <Opponent playerID={playerIds[1]} left="33%" top="5%" />
-            <PotContainer playerID={playerIds[1]} left="36%" top="26%" />
+            <Opponent player={players[1]} left="33%" top="5%" />
+            <PotContainer pot={players[1].pot} left="36%" top="26%" />
 
-            <Opponent playerID={playerIds[2]} left="67%" top="5%" />
-            <PotContainer playerID={playerIds[2]} left="64%" top="26%" />
+            <Opponent player={players[2]} left="67%" top="5%" />
+            <PotContainer pot={players[2].pot} left="64%" top="26%" />
 
-            <Opponent playerID={playerIds[3]} left="14%" top="22%" />
-            <PotContainer playerID={playerIds[3]} left="25%" top="35%" />
+            <Opponent player={players[3]} left="14%" top="22%" />
+            <PotContainer pot={players[3].pot} left="25%" top="35%" />
 
-            <Opponent playerID={playerIds[4]} left="86%" top="22%" />
-            <PotContainer playerID={playerIds[4]} left="75%" top="35%" />
+            <Opponent player={players[4]} left="86%" top="22%" />
+            <PotContainer pot={players[4].pot} left="75%" top="35%" />
 
-            <Opponent playerID={playerIds[5]} left="10%" top="50%" />
-            <PotContainer playerID={playerIds[5]} left="22%" top="60%" />
+            <Opponent player={players[5]} left="10%" top="50%" />
+            <PotContainer pot={players[5].pot} left="22%" top="60%" />
 
-            <Opponent playerID={playerIds[6]} left="90%" top="50%" />
-            <PotContainer playerID={playerIds[6]} left="78%" top="60%" />
+            <Opponent player={players[6]} left="90%" top="50%" />
+            <PotContainer pot={players[6].pot} left="78%" top="60%" />
 
-            <PotContainer playerID={useContext(PlayerContext.id)} left="50%" top="36%" width="250px" />
+            {/* table pot */}
+            <PotContainer pot={player.pot} left="50%" top="36%" width="250px" />
             <TableCards />
 
-            <PotContainer playerID={useContext(PlayerContext.id)} left="50%" top="67%" />
+            <PotContainer pot={player.pot} left="50%" top="67%" />
             <BottomContainer>
                 <Logs />
                 <Cards />
-                <Actions />
+                <Actions playerActions={actions} />
             </BottomContainer>
         </Container>
     );

@@ -1,5 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 import Button from './ActionButton';
 import PlayerContext from '../contexts/PlayerContext';
 import GameContext from '../contexts/GameContext';
@@ -72,8 +73,17 @@ const FoldButton = styled(Button)`
  * Component containing all player poker actions (call, raise, fold, etc)
  */
 
-const Actions = () => {
-    // const playerChips2 = useContext(PlayerContext.playerChips);
+const Actions = ({ playerActions }) => {
+    Actions.propTypes = {
+        playerActions: PropTypes.shape({
+            can_call: PropTypes.bool.isRequired,
+            can_check: PropTypes.bool.isRequired,
+            can_raise: PropTypes.bool.isRequired,
+            is_all_in: PropTypes.bool.isRequired,
+            is_folded: PropTypes.bool.isRequired,
+            is_in_game: PropTypes.bool.isRequired,
+        }).isRequired,
+    };
     const [inputNumber, setInputNumber] = useState(0);
     const player = useContext(PlayerContext);
     const game = useContext(GameContext);

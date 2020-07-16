@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 import ShowCardsContext from '../contexts/ShowCardsContext';
 
 const Container = styled.div`
@@ -14,13 +15,12 @@ const Container = styled.div`
  * Opponents window component.
  */
 
-const PotChips = () => {
+const PotChips = ({ pot }) => {
+    PotChips.propTypes = {
+        pot: PropTypes.number.isRequired,
+    };
     const display = useContext(ShowCardsContext) ? 'none' : 'block';
-    return (
-        <Container display={display}>
-            <p>chips pot comp</p>
-        </Container>
-    );
+    return <Container display={display}>{pot}</Container>;
 };
 
 export default PotChips;

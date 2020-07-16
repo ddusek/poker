@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import OpponentCards from './OpponentCards';
@@ -20,19 +20,35 @@ const Container = styled.div`
     border-style: dotted;
 `;
 
-const Opponent = ({ playerID, left, top }) => {
+const Opponent = ({ left, top, player }) => {
     Opponent.propTypes = {
-        playerID: PropTypes.number.isRequired,
         left: PropTypes.string.isRequired,
         top: PropTypes.string.isRequired,
+        player: PropTypes.shape({
+            id: PropTypes.number.isRequired,
+            user: PropTypes.number.isRequired,
+            chips: PropTypes.number.isRequired,
+            game: PropTypes.number.isRequired,
+            highest_combination: PropTypes.number.isRequired,
+            pot: PropTypes.number.isRequired,
+            round_bid: PropTypes.number.isRequired,
+            last_action: PropTypes.string.isRequired,
+            can_call: PropTypes.bool.isRequired,
+            can_check: PropTypes.bool.isRequired,
+            can_raise: PropTypes.bool.isRequired,
+            is_all_in: PropTypes.bool.isRequired,
+            is_folded: PropTypes.bool.isRequired,
+            is_in_game: PropTypes.bool.isRequired,
+        }).isRequired,
     };
+
     return (
         <Container left={left} top={top}>
-            <OpponentTag />
+            <OpponentTag name={player.user} />
             <OpponentCards />
-            <OpponentChipsText />
-            <OpponentChips />
-            <OpponentAction />
+            <OpponentChipsText chips={player.chips} />
+            <OpponentChips chips={player.chips} />
+            <OpponentAction action={player.last_action} />
         </Container>
     );
 };
