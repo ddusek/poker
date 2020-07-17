@@ -17,9 +17,11 @@ class Game(models.Model):
     current_player = models.IntegerField(default=0)
     last_raise = models.IntegerField(default=0)
     biggest_bid = models.IntegerField(default=0)
+    rounds_played = models.IntegerField(default=0)
     all_played = models.BooleanField(default=False)
     game_over = models.BooleanField(default=False)
     round_ended = models.BooleanField(default=False)
+    game_initialized = models.BooleanField(default=False)
     path = models.CharField(max_length=30)
     name = models.SlugField(max_length=30)
 

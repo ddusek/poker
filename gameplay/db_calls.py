@@ -57,6 +57,19 @@ def disconnect_player(player_id):
         player.save()
 
 
+def init_game(game, players):
+    """Init game so the game can start properly.
+
+    :param game: game to init
+    :param players: players in the game
+    """
+    game_object = Game.objects.filter(id=game.id).first()
+    first_player = min(player.id for player in players)
+    game_object.current_player = first_player
+    game_object.game_initialized = True
+    game_object.save()
+
+
 @database_sync_to_async
 def start_game(game):
     """Start game if enough players joined the game
@@ -64,6 +77,12 @@ def start_game(game):
     :param game: Game object
     :return: true or false
     """
-    if len(Player.objects.filter(game=game, is_in_game=True)) > 1:
+    players = Player.objects.filter(game=game, is_in_game=True)
+    if len(players) > 1:
+        if not game.game_initialized:
+            # Init game here so no more db request or method returns are needed
+            init_game(game, players)
         return True
     return False
+
+

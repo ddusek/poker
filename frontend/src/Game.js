@@ -202,6 +202,7 @@ const Game = () => {
         getPlayers();
         console.log('got players');
     }, [playersSet, gameName, playerInfo.id, gameInfo.max_players, playerInfo, playerInfoSet]);
+
     // handle websocket messages
     useEffect(() => {
         if (userSet) {

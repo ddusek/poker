@@ -32,10 +32,7 @@ const Login = () => {
     if (auth) {
         return (
             <Container>
-                <InfoBox
-                    text="You are already logged in. You can log out with button below."
-                    buttonText="Log out"
-                />
+                <InfoBox text="You are already logged in. You can log out with button below." buttonText="Log out" />
             </Container>
         );
     }
