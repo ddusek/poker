@@ -41,7 +41,20 @@ def create_player(user, game):
     if player is None:
         player = Player(user=user, game=game, chips=GameSerializer(game).data['starting_chips'], is_in_game=True)
         player.save()
-    return player
+    else:
+        player.is_in_game = True
+        player.save()
+    return player.id
+
+
+@database_sync_to_async
+def disconnect_player(player_id):
+    """set player is_in_game to false
+    """
+    player = Player.objects.filter(id=player_id).first()
+    if player is not None:
+        player.is_in_game = False
+        player.save()
 
 
 @database_sync_to_async

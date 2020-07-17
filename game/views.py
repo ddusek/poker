@@ -90,7 +90,7 @@ class PlayersDetailsView(APIView):
         if game is None:
             return Response('game from parameter not found', status=status.HTTP_400_BAD_REQUEST)
 
-        players = Player.objects.filter(game=game)
+        players = Player.objects.filter(game=game, is_in_game=True)
         if players is None:
             return Response('players not found', status=status.HTTP_400_BAD_REQUEST)
 

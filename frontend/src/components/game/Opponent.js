@@ -41,7 +41,6 @@ const Opponent = ({ left, top, player }) => {
             is_in_game: PropTypes.bool.isRequired,
         }).isRequired,
     };
-
     return (
         <Container left={left} top={top}>
             <OpponentTag name={player.user} />

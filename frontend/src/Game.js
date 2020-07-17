@@ -26,11 +26,16 @@ const Game = () => {
     const getCardsUrl = 'http://localhost:8000/game/get/cards-detail/';
     const getPlayersUrl = 'http://localhost:8000/game/get/players-details/';
     const gameName = window.location.pathname.slice(5).replace(/\//g, '');
+
     const ws = useRef(null);
+
     const [clickedCount, setClickedCount] = useState(0);
     const [userSet, setUserSet] = useState(false);
     const [userID, setUserID] = useState('');
-    const [startGame, setStartGame] = useState(false);
+    const [startGame, setStartGame] = useState();
+    const [playersSet, setPlayersSet] = useState(false);
+    const [players, setPlayers] = useState();
+    const [playerCreated, setPlayerCreated] = useState(false);
 
     // Contexts
     const [gameInfoSet, setGameInfoSet] = useState(false);
@@ -39,159 +44,181 @@ const Game = () => {
     const [playerInfo, setPlayerInfo] = useState({});
     const [handInfoSet, setHandInfoSet] = useState(false);
     const [handInfo, setHandInfo] = useState({});
-    const [playersSet, setPlayersSet] = useState(false);
-    const [players, setPlayers] = useState(0);
 
     useEffect(() => {
         // get current user from api
-        if (!userSet) {
-            axios
-                .get(getUserUrl)
-                .then((response) => {
-                    if (response.status === 200) {
-                        setUserID(response.data.user_id);
-                        setUserSet(true);
-                    } else {
-                        console.log('didnt get user', response.status);
-                    }
-                })
-                .catch((err) => {
-                    console.log(`Error: ${err}`);
-                });
-            // set websocket
-        } else {
-            ws.current = new WebSocket(
-                `ws://127.0.0.1:8000/ws${window.location.pathname}?user=${userID}&game=${window.location.pathname}`
-            );
-            ws.current.onopen = () => console.log('ws opened');
-            ws.current.onclose = () => console.log('ws closed');
-        }
+        const getUser = async () => {
+            if (!userSet) {
+                axios
+                    .get(getUserUrl)
+                    .then((response) => {
+                        if (response.status === 200) {
+                            setUserID(response.data.user_id);
+                            setUserSet(true);
+                        } else {
+                            console.log('didnt get user', response.status);
+                        }
+                    })
+                    .catch((err) => {
+                        console.log(`Error: ${err}`);
+                    });
+                // set websocket
+            } else {
+                ws.current = new WebSocket(
+                    `ws://127.0.0.1:8000/ws${window.location.pathname}?user=${userID}&game=${window.location.pathname}`
+                );
+                ws.current.onopen = () => console.log('ws opened');
+                ws.current.onclose = () => console.log('ws closed');
+            }
+        };
+        getUser();
     }, [userID, userSet]);
 
     useEffect(() => {
         // get current game from api
-        if (!gameInfoSet) {
-            axios
-                .get(`${getGameUrl}?game=${gameName}`)
-                .then((response) => {
-                    if (response.status === 200) {
-                        console.log(response.data);
-                        setGameInfoSet(true);
-                        setGameInfo(response.data);
-                    } else {
-                        console.log('didnt get player', response.status);
-                    }
-                })
-                .catch((err) => {
-                    console.log(`Error: ${err}`);
-                });
-        }
+        const getGame = async () => {
+            if (!gameInfoSet) {
+                axios
+                    .get(`${getGameUrl}?game=${gameName}`)
+                    .then((response) => {
+                        if (response.status === 200) {
+                            setGameInfoSet(true);
+                            setGameInfo(response.data);
+                        } else {
+                            console.log('didnt get player', response.status);
+                        }
+                    })
+                    .catch((err) => {
+                        console.log(`Error: ${err}`);
+                    });
+            }
+        };
+        getGame();
     }, [gameInfoSet, gameName]);
 
     useEffect(() => {
         // get current player from api
-        if (!playerInfoSet) {
-            axios
-                .get(`${getPlayerUrl}?game=${gameName}`)
-                .then((response) => {
-                    if (response.status === 200) {
-                        setPlayerInfoSet(true);
-                        setPlayerInfo(response.data);
-                    } else {
-                        console.log('didnt get player', response.status);
-                    }
-                })
-                .catch((err) => {
-                    console.log(`Error: ${err}`);
-                });
-        }
-    }, [playerInfoSet, gameName]);
+        const getPlayer = async () => {
+            if (!playerInfoSet && playerCreated) {
+                axios
+                    .get(`${getPlayerUrl}?game=${gameName}`)
+                    .then((response) => {
+                        if (response.status === 200) {
+                            setPlayerInfoSet(true);
+                            setPlayerInfo(response.data);
+                        } else {
+                            console.log('didnt get player', response.status);
+                        }
+                    })
+                    .catch((err) => {
+                        console.log(`Error: ${err}`);
+                    });
+            }
+        };
+        getPlayer();
+    }, [playerInfoSet, gameName, playerCreated]);
 
     useEffect(() => {
         // get current player's cards from api
-        if (!handInfoSet) {
-            axios
-                .get(`${getCardsUrl}?game=${gameName}`)
-                .then((response) => {
-                    if (response.status === 200) {
-                        setHandInfoSet(true);
-                        setHandInfo(response.data);
-                    } else {
-                        console.log('didnt get cards', response.status);
-                    }
-                })
-                .catch((err) => {
-                    console.log(`Error: ${err}`);
-                });
-        }
-    }, [handInfoSet, gameName]);
+        const getHand = async () => {
+            if (!handInfoSet && playerInfoSet) {
+                axios
+                    .get(`${getCardsUrl}?game=${gameName}`)
+                    .then((response) => {
+                        if (response.status === 200) {
+                            setHandInfoSet(true);
+                            setHandInfo(response.data);
+                        } else {
+                            console.log('didnt get cards', response.status);
+                        }
+                    })
+                    .catch((err) => {
+                        console.log(`Error: ${err}`);
+                    });
+            }
+        };
+        getHand();
+    }, [handInfoSet, gameName, playerInfoSet]);
 
     // get player object of every player in current game except current player
     useEffect(() => {
-        if (!playersSet) {
-            axios
-                .get(`${getPlayersUrl}?game=${gameName}`)
-                .then((response) => {
-                    if (response.status === 200) {
-                        setPlayersSet(true);
+        const getPlayers = async () => {
+            if (!playersSet && playerInfoSet) {
+                axios
+                    .get(`${getPlayersUrl}?game=${gameName}`)
+                    .then((response) => {
+                        if (response.status === 200) {
+                            setPlayersSet(true);
 
-                        // remove current player from list
-                        response.data.some((item) => {
-                            if (item.id === playerInfo.id) {
-                                const index = response.data.indexOf(item);
-                                response.data.splice(index, 1);
-                                return true;
-                            }
-                            return false;
-                        });
+                            // remove current player from list
+                            response.data.some((item) => {
+                                if (item.id === playerInfo.id) {
+                                    const index = response.data.indexOf(item);
+                                    response.data.splice(index, 1);
+                                    return true;
+                                }
+                                return false;
+                            });
 
-                        const compare = (a, b) => {
-                            if (a.id < b.id) {
-                                return -1;
-                            }
-                            if (a.id > b.id) {
-                                return 1;
-                            }
-                            return 0;
-                        };
+                            const compare = (a, b) => {
+                                if (a.id < b.id) {
+                                    return -1;
+                                }
+                                if (a.id > b.id) {
+                                    return 1;
+                                }
+                                return 0;
+                            };
 
-                        // fill with empty player objects
-                        const filledArray = response.data.sort(compare).concat(
-                            new Array(8 - response.data.length).fill({
-                                id: 0,
-                                user: 0,
-                                chips: 0,
-                                game: 0,
-                                highest_combination: 0,
-                                pot: 0,
-                                round_bid: 0,
-                                can_call: false,
-                                can_check: false,
-                                can_raise: false,
-                                is_all_in: false,
-                                is_folded: false,
-                                is_in_game: false,
-                            })
-                        );
-                        setPlayers(filledArray);
-                    } else {
-                        console.log('didnt get any player', response.status);
-                    }
-                })
-                .catch((err) => {
-                    console.log(`Error: ${err}`);
-                });
-        }
-    }, [playersSet, gameName, playerInfo.id, gameInfo.max_players]);
-
+                            // fill with empty player objects
+                            const filledArray = response.data.sort(compare).concat(
+                                new Array(8 - response.data.length).fill({
+                                    id: 0,
+                                    user: 0,
+                                    chips: 0,
+                                    game: 0,
+                                    highest_combination: 0,
+                                    pot: 0,
+                                    round_bid: 0,
+                                    can_call: false,
+                                    can_check: false,
+                                    can_raise: false,
+                                    is_all_in: false,
+                                    is_folded: false,
+                                    is_in_game: false,
+                                })
+                            );
+                            console.log(filledArray);
+                            setPlayers(filledArray);
+                        } else {
+                            console.log('didnt get any player', response.status);
+                        }
+                    })
+                    .catch((err) => {
+                        console.log(`Error: ${err}`);
+                    });
+            }
+        };
+        getPlayers();
+        console.log('got players');
+    }, [playersSet, gameName, playerInfo.id, gameInfo.max_players, playerInfo, playerInfoSet]);
     // handle websocket messages
     useEffect(() => {
         if (userSet) {
+            if (!ws.current) return;
+
             ws.current.onmessage = (e) => {
                 const data = JSON.parse(e.data);
                 setClickedCount(clickedCount + 1);
+                if (data.type === 'player_connected') {
+                    setPlayerCreated(true);
+                    setPlayersSet(false);
+                    setStartGame(data.start_game);
+                }
+                if (data.type === 'player_disconnected') {
+                    setPlayersSet(false);
+                }
                 console.log(e);
-                setStartGame(data.start_game);
             };
         }
     }, [clickedCount, userSet]);
@@ -200,6 +227,13 @@ const Game = () => {
         const message = JSON.stringify({ message: 'clickedCount', type: 'chat_message' });
         ws.current.send(message);
     };
+    if (startGame === undefined || !playerInfoSet) {
+        return (
+            <GameContainer>
+                <p>loading</p>
+            </GameContainer>
+        );
+    }
     if (startGame) {
         return (
             <GameContainer>

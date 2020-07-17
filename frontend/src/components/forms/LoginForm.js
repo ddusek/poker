@@ -21,7 +21,7 @@ const LoginForm = () => {
         history.push('/register');
     };
 
-    const onSubmit = (values) => {
+    const onSubmit = async (values) => {
         axios
             .post(postUrl, {
                 body: values,

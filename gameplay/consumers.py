@@ -47,8 +47,9 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
         user = await get_user(get_parameter_value(self.query_string, 'user'))
         game = await get_game(get_parameter_value(self.query_string, 'game'))
 
-        # create player from user on connect if he is not created for this specific game yet
-        await create_player(user, game)
+        # create player from user if he is not created for this specific game yet.
+        # if he is, set is_in_game to true
+        self.player_id = await create_player(user, game)
         self.data = {}
         if await start_game(game):
             self.data['start_game'] = True
@@ -56,13 +57,21 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
             self.data['start_game'] = False
         self.data['user'] = UserSerializer(user).data['id']
         self.data['game'] = GameSerializer(game).data['id']
-        self.data['type'] = 'user_connected'
+        self.data['type'] = 'player_connected'
 
         await self.channel_layer.group_send(self.game_group_name, self.data)
 
     async def disconnect(self, code):
         """disconnect player from room.
+
+        set player is_in_game to false
         """
+        await disconnect_player(self.player_id)
+        self.data = {
+            "type": 'player_disconnected'
+        }
+        await self.channel_layer.group_send(self.game_group_name, self.data)
+
         # Leave game group
         await self.channel_layer.group_discard(self.game_group_name, self.channel_name)
 
@@ -83,8 +92,13 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
         # Send message to WebSocket
         await self.send_json(content=message)
 
-    async def user_connected(self, message):
+    async def player_connected(self, message):
         """message sent after someone connects
         """
         # Send message to WebSocket
+        await self.send_json(content=message)
+
+    async def player_disconnected(self, message):
+        """message sent after someone disconnects
+        """
         await self.send_json(content=message)

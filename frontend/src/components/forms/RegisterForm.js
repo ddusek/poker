@@ -35,7 +35,7 @@ const RegisterForm = () => {
         history.push('/login');
     };
 
-    const onSubmit = (values) => {
+    const onSubmit = async (values) => {
         if (values.password !== values.password_repeat) {
             setError(true);
             setErrorMessage('password does not match');

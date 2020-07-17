@@ -16,7 +16,8 @@ const GameForm = () => {
     const [ErrorMessage, setErrorMessage] = useState('');
     const history = useHistory();
     const postUrl = 'http://localhost:8000/game/post/game/';
-    const onSubmit = (values) => {
+
+    const onSubmit = async (values) => {
         console.log(values);
         axios
             .post(postUrl, {
