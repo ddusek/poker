@@ -18,14 +18,12 @@ const GameForm = () => {
     const postUrl = 'http://localhost:8000/game/post/game/';
 
     const onSubmit = async (values) => {
-        console.log(values);
         axios
             .post(postUrl, {
                 body: values,
             })
             .then((response) => {
                 if (response.status === 200) {
-                    console.log('game created');
                     history.push(`${response.data.path}/`);
                 }
             })

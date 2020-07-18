@@ -53,6 +53,8 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
         self.data = {}
         if await start_game(game):
             self.data['start_game'] = True
+
+            await init_round(game)
         else:
             self.data['start_game'] = False
         self.data['user'] = UserSerializer(user).data['id']
@@ -64,9 +66,9 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
     async def disconnect(self, code):
         """disconnect player from room.
 
-        set player is_in_game to false
+        set player is_in_game to false and adjust in_game_order for other players.
         """
-        await disconnect_player(self.player_id)
+        await disconnect_player(self.player_id, self.game_name)
         self.data = {
             "type": 'player_disconnected'
         }

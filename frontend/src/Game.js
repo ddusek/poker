@@ -188,7 +188,6 @@ const Game = () => {
                                     is_in_game: false,
                                 })
                             );
-                            console.log(filledArray);
                             setPlayers(filledArray);
                         } else {
                             console.log('didnt get any player', response.status);

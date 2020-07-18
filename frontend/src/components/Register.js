@@ -19,7 +19,6 @@ const Container = styled.div`
 const Register = () => {
     const [auth, setAuth] = useState(false);
     useEffect(() => {
-        console.log('register');
         const isAuthenticated = async () => {
             const getUrl = 'http://localhost:8000/user/isloggedin/';
             axios

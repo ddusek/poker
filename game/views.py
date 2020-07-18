@@ -85,7 +85,7 @@ class PlayersDetailsView(APIView):
         game_name = request.GET.get('game', '')
         if game_name == '':
             return Response('game parameter not found', status=status.HTTP_400_BAD_REQUEST)
-            
+
         game = Game.objects.filter(name=game_name).first()
         if game is None:
             return Response('game from parameter not found', status=status.HTTP_400_BAD_REQUEST)

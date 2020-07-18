@@ -9,7 +9,6 @@ import CreateGame from './components/CreateGame';
 const NewGame = () => {
     const [auth, setAuth] = useState(false);
     useEffect(() => {
-        console.log('new_game');
         const isAuthenticated = async () => {
             const getUrl = 'http://localhost:8000/user/isloggedin/';
             axios

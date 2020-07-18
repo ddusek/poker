@@ -2,6 +2,7 @@ from channels.db import database_sync_to_async
 from game.models import Game, Player
 from game.serializers import GameSerializer
 from user.models import User
+from .utils import *
 
 
 @database_sync_to_async
@@ -33,41 +34,39 @@ def get_game(game_path):
 def create_player(user, game):
     """Create and return player.
 
+    only return player if he is already created
     :param user: user who will be related to player
     :param game: game what will be related to player
-    :return: Player object (even if he was already created)
+    :return: Player object
     """
-    player = Player.objects.filter(user=user, game=game).first()
+    players = Player.objects.filter(game=game).order_by('in_game_order')
+    player = players.filter(user=user).first()
     if player is None:
         player = Player(user=user, game=game, chips=GameSerializer(game).data['starting_chips'], is_in_game=True)
-        player.save()
     else:
         player.is_in_game = True
-        player.save()
+
+    # set player in_game_order
+    if len(players) < 1:
+        player.in_game_order = 1
+    else:
+        player.in_game_order = players.reverse()[0].in_game_order + 1
+
+    player.save()
     return player.id
 
 
 @database_sync_to_async
-def disconnect_player(player_id):
-    """set player is_in_game to false
+def disconnect_player(player_id, game_name):
+    """set player is_in_game to false and adjust other players order
     """
-    player = Player.objects.filter(id=player_id).first()
+    game = Game.objects.filter(name=game_name).first()
+    players = Player.objects.filter(game=game)
+    player = players.filter(id=player_id).first()
     if player is not None:
+        adjust_orders(player, players)
         player.is_in_game = False
         player.save()
-
-
-def init_game(game, players):
-    """Init game so the game can start properly.
-
-    :param game: game to init
-    :param players: players in the game
-    """
-    game_object = Game.objects.filter(id=game.id).first()
-    first_player = min(player.id for player in players)
-    game_object.current_player = first_player
-    game_object.game_initialized = True
-    game_object.save()
 
 
 @database_sync_to_async
@@ -86,3 +85,6 @@ def start_game(game):
     return False
 
 
+@database_sync_to_async
+def init_round(game):
+    pass
