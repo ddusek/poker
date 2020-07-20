@@ -31,7 +31,7 @@ const Opponent = ({ left, top, player }) => {
             game: PropTypes.number.isRequired,
             highest_combination: PropTypes.number.isRequired,
             pot: PropTypes.number.isRequired,
-            round_bid: PropTypes.number.isRequired,
+            round_bet: PropTypes.number.isRequired,
             last_action: PropTypes.string.isRequired,
             can_call: PropTypes.bool.isRequired,
             can_check: PropTypes.bool.isRequired,

@@ -179,7 +179,7 @@ const Game = () => {
                                     game: 0,
                                     highest_combination: 0,
                                     pot: 0,
-                                    round_bid: 0,
+                                    round_bet: 0,
                                     can_call: false,
                                     can_check: false,
                                     can_raise: false,

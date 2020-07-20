@@ -26,7 +26,7 @@ class Game:
                              8: 'two pairs', 9: 'pair', 10: 'high card'}
         self.bids = Bids(s_blind)
         self.last_raise = 0
-        self.biggest_bid = self.bids.b_blind_val
+        self.biggest_bet = self.bids.b_blind_val
 
         self.all_played = False
         self.game_over = False
@@ -36,7 +36,7 @@ class Game:
     # next game init
     def next_game(self):
         self.last_raise = 0
-        self.biggest_bid = self.bids.b_blind_val
+        self.biggest_bet = self.bids.b_blind_val
         self.table = Table()
         # [player.next_game() for player in self.players]
         self.bids.s_blind_turn += 1 if self.bids.s_blind_turn < len(self.players) else 0
@@ -48,7 +48,7 @@ class Game:
     # next round init
     def next_round(self):
         self.last_raise = 0
-        self.biggest_bid = self.bids.b_blind_val
+        self.biggest_bet = self.bids.b_blind_val
         self.all_played = False
         self.round_ended = False
         self.played = 0
@@ -123,18 +123,18 @@ class Game:
     # action call
     def call(self):
         self.players[self.current_player].bid(
-            self.biggest_bid - self.players[self.current_player].round_bid)
+            self.biggest_bet - self.players[self.current_player].round_bid)
 
     # action raise
     def raize(self, value):
         self.players[self.current_player].bid(value)
-        self.biggest_bid = self.players[self.current_player].round_bid
+        self.biggest_bet = self.players[self.current_player].round_bid
 
     # action all_in
     def all_in(self):
         self.players[self.current_player].bid(self.players[self.current_player].chips)
-        if self.biggest_bid < self.players[self.current_player].round_bid:
-            self.biggest_bid = self.players[self.current_player].round_bid
+        if self.biggest_bet < self.players[self.current_player].round_bid:
+            self.biggest_bet = self.players[self.current_player].round_bid
         self.players[self.current_player].is_all_in = True
 
     # action fold

@@ -46,15 +46,16 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
         # get user and game from database by id from query strings
         user = await get_user(get_parameter_value(self.query_string, 'user'))
         game = await get_game(get_parameter_value(self.query_string, 'game'))
+        players = Player.objects.filter(game=game, is_in_game=True)
 
         # create player from user if he is not created for this specific game yet.
         # if he is, set is_in_game to true
-        self.player_id = await create_player(user, game)
+        self.player_id = await create_player(user, game, players)
         self.data = {}
-        if await start_game(game):
+        if await init_game(game, players):
+            await start_first_round(game, players)
             self.data['start_game'] = True
 
-            await init_round(game)
         else:
             self.data['start_game'] = False
         self.data['user'] = UserSerializer(user).data['id']

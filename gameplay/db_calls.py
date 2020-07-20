@@ -3,6 +3,7 @@ from game.models import Game, Player
 from game.serializers import GameSerializer
 from user.models import User
 from .utils import *
+from .actions import *
 
 
 @database_sync_to_async
@@ -31,7 +32,7 @@ def get_game(game_path):
 
 
 @database_sync_to_async
-def create_player(user, game):
+def create_player(user, game, players):
     """Create and return player.
 
     only return player if he is already created
@@ -39,7 +40,7 @@ def create_player(user, game):
     :param game: game what will be related to player
     :return: Player object
     """
-    players = Player.objects.filter(game=game).order_by('in_game_order')
+    players = players.order_by('in_game_order')
     player = players.filter(user=user).first()
     if player is None:
         player = Player(user=user, game=game, chips=GameSerializer(game).data['starting_chips'], is_in_game=True)
@@ -70,21 +71,21 @@ def disconnect_player(player_id, game_name):
 
 
 @database_sync_to_async
-def start_game(game):
-    """Start game if enough players joined the game
+def init_game(game, players):
+    """Init game if enough players joined the game
 
-    :param game: Game object
     :return: true or false
     """
-    players = Player.objects.filter(game=game, is_in_game=True)
     if len(players) > 1:
         if not game.game_initialized:
-            # Init game here so no more db request or method returns are needed
-            init_game(game, players)
+            # Init game table
+            init_game_model(game, players)
         return True
     return False
 
 
 @database_sync_to_async
-def init_round(game):
-    pass
+def start_first_round(game, players):
+    """start first round of a game
+    """
+    set_blinds(game, players)

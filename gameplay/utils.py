@@ -1,8 +1,8 @@
-from game.models import Game
 from django.db.models import F
+from game.models import Game
 
 
-def init_game(game, players):
+def init_game_model(game, players):
     """Init game so the game can start properly.
 
     :param game: game to init
@@ -11,17 +11,17 @@ def init_game(game, players):
     if len(players) < 2:
         # dont init game if there is lesser than 2 players
         return
-    players = sorted(players, key=lambda i: i.id)
+    players = sorted(players, key=lambda i: i.in_game_order)
     game_object = Game.objects.filter(id=game.id).first()
-    # game_object.current_player = players[1].id
-    # game_object.big_blind_player = players[1] if len(players) > 2 else players[0]
-    # game_object.small_blind_player = players[2] if len(players) > 2 else players[1]
-    # game_object.game_initialized = True
-    # game_object.save()
+    game_object.big_blind_player = players[-1].id
+    game_object.small_blind_player = players[0].id
+    game_object.current_player = players[0].id
+    game_object.game_initialized = True
+    game_object.save()
 
 
 def adjust_orders(removed_player, players):
-    """odjus orders of players according to removed_player
+    """adjust orders of players according to removed_player
 
     :param removed_player: player to remove from order
     :param players: players to adjust

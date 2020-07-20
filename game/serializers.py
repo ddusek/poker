@@ -34,4 +34,4 @@ class PlayerDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Player
         fields = ['id', 'chips', 'highest_combination', 'pot', 'is_folded', 'is_all_in',
-                  'round_bid', 'can_check', 'can_raise', 'can_call']
+                  'round_bet', 'can_check', 'can_raise', 'can_call']

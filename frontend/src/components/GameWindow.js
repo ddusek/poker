@@ -33,7 +33,7 @@ const GameWindow = ({ players }) => {
                 game: PropTypes.number.isRequired,
                 highest_combination: PropTypes.number.isRequired,
                 pot: PropTypes.number.isRequired,
-                round_bid: PropTypes.number.isRequired,
+                round_bet: PropTypes.number.isRequired,
                 can_call: PropTypes.bool.isRequired,
                 can_check: PropTypes.bool.isRequired,
                 can_raise: PropTypes.bool.isRequired,
