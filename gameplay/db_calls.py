@@ -41,6 +41,7 @@ def create_player(user, game, players):
     :return: Player object
     """
     players = players.order_by('in_game_order')
+
     player = players.filter(user=user).first()
     if player is None:
         player = Player(user=user, game=game, chips=GameSerializer(game).data['starting_chips'], is_in_game=True)
@@ -67,7 +68,7 @@ def disconnect_player(player_id, game_name):
     if player is not None:
         adjust_orders(player, players)
         player.is_in_game = False
-        player.save()
+        player.update()
 
 
 @database_sync_to_async
