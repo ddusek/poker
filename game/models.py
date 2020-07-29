@@ -26,6 +26,7 @@ class Game(models.Model):
     game_over = models.BooleanField(default=False)
     round_ended = models.BooleanField(default=False)
     game_initialized = models.BooleanField(default=False)
+    game_in_progress = models.BooleanField(default=False)
     path = models.CharField(max_length=30)
     name = models.SlugField(max_length=30)
 

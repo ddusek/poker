@@ -7,7 +7,6 @@ def set_blinds(game, players):
     """
     bb_player = players.filter(id=game.big_blind_player).first()
     sb_player = players.filter(id=game.small_blind_player).first()
-
     bb_player = bet(bb_player, game.big_blind)
     sb_player = bet(sb_player, game.small_blind)
 
@@ -22,7 +21,6 @@ def bet(player, value):
 
     :return: updated player object
     """
-    print(player.chips)
     if value < player.chips:
         player.chips -= value
         player.round_bet += value
