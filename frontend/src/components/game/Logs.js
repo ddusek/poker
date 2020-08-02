@@ -6,8 +6,8 @@ const Container = styled.div`
     height: 200px;
     position: fixed;
     bottom: 0px;
-    border-style: dotted;
     background-color: rgb(25, 25, 5);
+    border-radius: 0 10px 0 0;
 `;
 
 const Ul = styled.ul`

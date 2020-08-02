@@ -6,6 +6,7 @@ import GameWindow from './components/GameWindow';
 import PlayerContext from './components/contexts/PlayerContext';
 import GameContext from './components/contexts/GameContext';
 import HandContext from './components/contexts/HandContext';
+import MyTurnContext from './components/contexts/MyTurnContext';
 
 const Container = styled.div`
     color: white;
@@ -36,6 +37,7 @@ const Game = () => {
     const [playersSet, setPlayersSet] = useState(false);
     const [players, setPlayers] = useState();
     const [playerCreated, setPlayerCreated] = useState(false);
+    const [isMyTurn, setIsMyTurn] = useState(false);
 
     // Contexts
     const [gameInfoSet, setGameInfoSet] = useState(false);
@@ -202,6 +204,15 @@ const Game = () => {
         console.log('got players');
     }, [playersSet, gameName, playerInfo.id, gameInfo.max_players, playerInfo, playerInfoSet]);
 
+    // Check if its player's turn
+    useEffect(() => {
+        if (playerInfo.id === gameInfo.current_player) {
+            setIsMyTurn(true);
+        } else {
+            setIsMyTurn(false);
+        }
+    }, [gameInfo.current_player, playerInfo.id]);
+
     // handle websocket messages
     useEffect(() => {
         if (userSet) {
@@ -240,7 +251,9 @@ const Game = () => {
                 <GameContext.Provider value={gameInfo}>
                     <PlayerContext.Provider value={playerInfo}>
                         <HandContext.Provider value={handInfo}>
-                            <GameWindow players={players} />
+                            <MyTurnContext.Provider value={playerInfo.id === gameInfo.current_player}>
+                                <GameWindow players={players} />
+                            </MyTurnContext.Provider>
                         </HandContext.Provider>
                     </PlayerContext.Provider>
                 </GameContext.Provider>

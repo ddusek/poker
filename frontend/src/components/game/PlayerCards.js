@@ -10,7 +10,8 @@ const Container = styled.div`
     left: 50%;
     bottom: 0px;
     transform: translate(-50%);
-    border-style: dotted;
+    background-color: rgb(25, 25, 55);
+    border-radius: 10px 10px 0 0;
 `;
 
 const CardsContainer = styled.div`

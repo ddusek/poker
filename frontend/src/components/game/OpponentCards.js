@@ -1,6 +1,5 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
-import PropTypes from 'prop-types';
 import ShowCardsContext from '../contexts/ShowCardsContext';
 
 const Container = styled.div`

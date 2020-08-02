@@ -1,7 +1,3 @@
-from channels.db import database_sync_to_async
-
-
-@database_sync_to_async
 def set_blinds(game, players):
     """set players blinds and save them.
     """

@@ -22,6 +22,7 @@ class Game(models.Model):
     last_raise = models.IntegerField(default=0)
     biggest_bet = models.IntegerField(default=0)
     rounds_played = models.IntegerField(default=0)
+    pot = models.IntegerField(default=0)
     all_played = models.BooleanField(default=False)
     game_over = models.BooleanField(default=False)
     round_ended = models.BooleanField(default=False)
@@ -40,6 +41,7 @@ class Player(models.Model):
     """
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
+    name = models.CharField(max_length=50)
     last_action = models.CharField(max_length=20, blank=True)
     last_raise = models.IntegerField(default=0)
     in_game_order = models.IntegerField(default=0)

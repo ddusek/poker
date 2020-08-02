@@ -8,6 +8,7 @@ import Opponent from './game/Opponent';
 import PotContainer from './game/PotContainer';
 import TableCards from './game/TableCards';
 import PlayerContext from './contexts/PlayerContext';
+import GameContext from './contexts/GameContext';
 
 const Container = styled.div`
     color: white;
@@ -60,31 +61,31 @@ const GameWindow = ({ players }) => {
         return (
             <Container>
                 <Opponent player={players[0]} left="50%" top="1%" />
-                <PotContainer pot={players[0].pot} left="50%" top="22%" />
+                <PotContainer pot={players[0].round_bet} left="50%" top="22%" />
 
                 <Opponent player={players[1]} left="33%" top="5%" />
-                <PotContainer pot={players[1].pot} left="36%" top="26%" />
+                <PotContainer pot={players[1].round_bet} left="36%" top="26%" />
 
                 <Opponent player={players[2]} left="67%" top="5%" />
-                <PotContainer pot={players[2].pot} left="64%" top="26%" />
+                <PotContainer pot={players[2].round_bet} left="64%" top="26%" />
 
                 <Opponent player={players[3]} left="14%" top="22%" />
-                <PotContainer pot={players[3].pot} left="25%" top="35%" />
+                <PotContainer pot={players[3].round_bet} left="25%" top="35%" />
 
                 <Opponent player={players[4]} left="86%" top="22%" />
-                <PotContainer pot={players[4].pot} left="75%" top="35%" />
+                <PotContainer pot={players[4].round_bet} left="75%" top="35%" />
 
                 <Opponent player={players[5]} left="10%" top="50%" />
-                <PotContainer pot={players[5].pot} left="22%" top="60%" />
+                <PotContainer pot={players[5].round_bet} left="22%" top="60%" />
 
                 <Opponent player={players[6]} left="90%" top="50%" />
-                <PotContainer pot={players[6].pot} left="78%" top="60%" />
+                <PotContainer pot={players[6].round_bet} left="78%" top="60%" />
 
                 {/* table pot */}
-                <PotContainer pot={player.pot} left="50%" top="36%" width="250px" />
+                <PotContainer pot={GameContext.pot} left="50%" top="36%" width="250px" />
                 <TableCards />
 
-                <PotContainer pot={player.pot} left="50%" top="67%" />
+                <PotContainer pot={player.round_bet} left="50%" top="67%" />
                 <BottomContainer>
                     <Logs />
                     <Cards />

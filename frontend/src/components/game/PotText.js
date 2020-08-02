@@ -7,8 +7,6 @@ const Container = styled.div`
     display: ${(props) => props.display};
     width: 100%;
     height: 30%;
-    border-style: dotted;
-    color: purple;
 `;
 
 /**

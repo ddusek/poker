@@ -7,7 +7,6 @@ const Container = styled.div`
     display: ${(props) => props.display};
     width: 100%;
     height: 70%;
-    border-style: dotted;
     color: green;
 `;
 
@@ -20,7 +19,7 @@ const PotChips = ({ pot }) => {
         pot: PropTypes.number.isRequired,
     };
     const display = useContext(ShowCardsContext) ? 'none' : 'block';
-    return <Container display={display}>{pot}</Container>;
+    return <Container display={display}>{pot} chips image here</Container>;
 };
 
 export default PotChips;

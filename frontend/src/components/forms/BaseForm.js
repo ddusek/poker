@@ -71,24 +71,14 @@ const Header = styled.div`
     hr {
         border: 0;
         height: 1px;
-        background-image: linear-gradient(
-            to right,
-            rgba(0, 0, 0, 0),
-            rgba(152, 152, 152, 0.75),
-            rgba(0, 0, 0, 0)
-        );
+        background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(152, 152, 152, 0.75), rgba(0, 0, 0, 0));
     }
 `;
 
 const Hr = styled.hr`
     border: 0;
     height: 1px;
-    background-image: linear-gradient(
-        to right,
-        rgba(0, 0, 0, 0),
-        rgba(152, 152, 152, 0.75),
-        rgba(0, 0, 0, 0)
-    );
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(152, 152, 152, 0.75), rgba(0, 0, 0, 0));
 `;
 
 const Error = styled.div`

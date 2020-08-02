@@ -12,7 +12,8 @@ const Container = styled.div`
     transform: translateX(-50%);
     height: 150px;
     width: 500px;
-    border-style: dotted;
+    border-radius: 10px;
+    background-color: rgb(45, 45, 45);
     color: blue;
 `;
 

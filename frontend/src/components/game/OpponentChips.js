@@ -7,7 +7,6 @@ const Container = styled.div`
     display: ${(props) => props.display};
     width: 70%;
     height: 60%;
-    border-style: dotted;
     color: red;
 `;
 
@@ -20,7 +19,7 @@ const OpponentChips = ({ chips }) => {
         chips: PropTypes.number.isRequired,
     };
     const display = useContext(ShowCardsContext) ? 'none' : 'block';
-    return <Container display={display}>{chips}</Container>;
+    return <Container display={display}>{chips} chips image here</Container>;
 };
 
 export default OpponentChips;

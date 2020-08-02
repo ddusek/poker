@@ -12,9 +12,10 @@ const Container = styled.div`
     left: ${(props) => props.left};
     top: ${(props) => props.top};
     transform: translateX(-50%);
+    border-radius: 15px;
+    background-color: rgb(55, 55, 55);
     height: ${(props) => props.height};
     width: ${(props) => props.width};
-    border-style: dotted;
 `;
 
 const PotContainer = ({ pot, left, top, height = '110px', width = '120px' }) => {

@@ -17,7 +17,8 @@ const Container = styled.div`
     transform: translateX(-50%);
     height: 180px;
     width: 250px;
-    border-style: dotted;
+    background-color: rgb(25, 25, 45);
+    border-radius: 10px;
 `;
 
 const Opponent = ({ left, top, player }) => {
@@ -27,6 +28,7 @@ const Opponent = ({ left, top, player }) => {
         player: PropTypes.shape({
             id: PropTypes.number.isRequired,
             user: PropTypes.number.isRequired,
+            name: PropTypes.string.isRequired,
             chips: PropTypes.number.isRequired,
             game: PropTypes.number.isRequired,
             highest_combination: PropTypes.number.isRequired,
@@ -43,7 +45,7 @@ const Opponent = ({ left, top, player }) => {
     };
     return (
         <Container left={left} top={top}>
-            <OpponentTag name={player.user} />
+            <OpponentTag name={player.name} />
             <OpponentCards />
             <OpponentChipsText chips={player.chips} />
             <OpponentChips chips={player.chips} />

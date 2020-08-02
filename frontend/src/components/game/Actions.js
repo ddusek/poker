@@ -4,8 +4,10 @@ import PropTypes from 'prop-types';
 import Button from './ActionButton';
 import PlayerContext from '../contexts/PlayerContext';
 import GameContext from '../contexts/GameContext';
+import MyTurnContext from '../contexts/MyTurnContext';
 
 const Container = styled.div`
+    pointer-events: ${(props) => props.disabled};
     width: 400px;
     height: 180px;
     position: fixed;
@@ -13,6 +15,7 @@ const Container = styled.div`
     right: 0;
     display: grid;
     background-color: rgb(25, 25, 35);
+    filter: ${(props) => (props.disabled === 'none' ? 'brightness(50%)' : '')};
 `;
 
 const ButtonsContainer = styled.div`
@@ -87,6 +90,7 @@ const Actions = ({ playerActions }) => {
     const [inputNumber, setInputNumber] = useState(0);
     const player = useContext(PlayerContext);
     const game = useContext(GameContext);
+    const myTurn = useContext(MyTurnContext);
 
     useEffect(() => {
         setInputNumber(game.big_blind);
@@ -99,7 +103,7 @@ const Actions = ({ playerActions }) => {
         setInputNumber(event.target.value);
     };
     return (
-        <Container>
+        <Container disabled={myTurn ? 'all' : 'none'}>
             <RaiseContainer>
                 <RaiseInput value={inputNumber} type="number" onChange={handleChange} />
                 <RaiseSlider

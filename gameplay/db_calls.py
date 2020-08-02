@@ -44,7 +44,8 @@ def create_player(user, game, players):
     print(players)
     player = players.filter(user=user).first()
     if player is None:
-        player = Player(user=user, game=game, chips=GameSerializer(game).data['starting_chips'], is_in_game=True)
+        player = Player(user=user, name=user.username, game=game, chips=GameSerializer(game).data['starting_chips'],
+                        is_in_game=True)
     else:
         player.is_in_game = True
 
