@@ -1,6 +1,9 @@
 from django.db import models
-
 from user.models import User
+
+
+class GameManager(models.Manager):
+    pass
 
 
 class Game(models.Model):
@@ -30,6 +33,8 @@ class Game(models.Model):
     game_in_progress = models.BooleanField(default=False)
     path = models.CharField(max_length=30)
     name = models.SlugField(max_length=30)
+
+    objects = GameManager()
 
 
 class Player(models.Model):
@@ -67,6 +72,7 @@ class Card(models.Model):
     suit = models.CharField(max_length=10)
     rank = models.CharField(max_length=2)
     value = models.IntegerField()
+    order = models.IntegerField(default=0)
     image = models.CharField(max_length=20)
     location = models.CharField(default='DECK', max_length=6)
 

@@ -1,8 +1,7 @@
-from django.db.models import F
 from game.models import Game
 
 
-def init_game_model(game, players):
+def init_game(game, players):
     """Init game so the game can start properly.
 
     :param game: game to init
@@ -18,14 +17,3 @@ def init_game_model(game, players):
     game_object.current_player = players[0].id
     game_object.game_initialized = True
     game_object.save()
-
-
-def adjust_orders(removed_player, players):
-    """adjust orders of players according to removed_player
-
-    :param removed_player: player to remove from order
-    :param players: players to adjust
-    """
-    players.filter(in_game_order__gte=removed_player.in_game_order).update(in_game_order=F('in_game_order') - 1)
-    removed_player.in_game_order = 0
-    removed_player.save()

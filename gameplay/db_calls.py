@@ -1,9 +1,8 @@
 from channels.db import database_sync_to_async
+from game import player_helper, card_helper, game_helper
 from game.models import Game, Player
 from game.serializers import GameSerializer
 from user.models import User
-from .utils import *
-from .actions import *
 
 
 @database_sync_to_async
@@ -67,7 +66,7 @@ def disconnect_player(player_id, game_name):
     players = Player.objects.filter(game=game)
     player = players.filter(id=player_id).first()
     if player is not None:
-        adjust_orders(player, players)
+        player_helper.adjust_orders(player, players)
         player.is_in_game = False
         player.save()
 
@@ -81,7 +80,10 @@ def init_game(game, players):
     if len(players) > 1:
         if not game.game_initialized:
             # Init game table
-            init_game_model(game, players)
+            game_helper.init_game(game, players)
+            card_helper.init_cards(game)
+
+            player_helper.deal_cards(game, players)
         return True
     return False
 
@@ -90,6 +92,6 @@ def init_game(game, players):
 def start_first_round(game, players):
     """start first round of a game
     """
-    set_blinds(game, players)
+    player_helper.set_blinds(game, players)
     game.game_in_progress = True
     game.save()

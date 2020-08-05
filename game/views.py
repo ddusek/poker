@@ -4,7 +4,6 @@ from rest_framework.views import APIView
 from rest_framework import status
 from game.serializers import *
 from game.utils import make_path
-from gameplay_utils.deck import Deck
 
 
 class GameDetailView(APIView):
@@ -36,14 +35,8 @@ class GameDetailView(APIView):
         big_blind = math.ceil(chips / 100)
         small_blind = math.ceil(big_blind / 2)
         # create game
-        game = Game.objects.create(path=path, big_blind=big_blind, small_blind=small_blind,
-                                   name=name, max_players=players, starting_chips=chips)
-
-        # create cards
-        deck = Deck()
-        for card in deck.set:
-            Card.objects.create(game=game, suit=card.suit, rank=card.rank,
-                                value=card.value, image=card.image)
+        Game.objects.create(path=path, big_blind=big_blind, small_blind=small_blind,
+                            name=name, max_players=players, starting_chips=chips)
 
         res = {'status': 200, 'msg': 'success', 'path': path}
         return Response(res, status=status.HTTP_200_OK)
