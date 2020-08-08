@@ -16,14 +16,14 @@ def get_parameter_value(parameters, key):
 
 
 class GameConsumer(AsyncJsonWebsocketConsumer):
-    """Gameplay websocket
+    """Gameplay websocket.
 
     All gameplay related stuff that cant be done through http is done here.
 
     Websocket here is needed because player needs to get data from other players in real-time.
     """
     async def connect(self):
-        """join game room by url, get stuff from db and create player.
+        """Join game room by url, get stuff from db and create player.
 
         Saves some data from url and query strings then gets data from database based on that.
         Create player for current user and game if not created yet.
@@ -46,16 +46,23 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
         # get user and game from database by id from query strings
         user = await get_user(get_parameter_value(self.query_string, 'user'))
         game = await get_game(get_parameter_value(self.query_string, 'game'))
-        players_in_game = Player.objects.filter(game=game, is_in_game=True)
-        players_all = Player.objects.filter(game=game)
 
+        players_all = await get_players(game)
         # create player from user if he is not created for this specific game yet.
         # if he is, set is_in_game to true
         self.player_id = await create_player(user, game, players_all)
+
+        # get players currently in game
+        players_in_game = await  get_players(game, True)
+
+        # create data object for websocket message
         self.data = {}
         if await init_game(game, players_in_game):
             if not game.game_in_progress:
+                game = await get_game_by_id(game.id)
                 await start_first_round(game, players_in_game)
+                cards_message = {'type': 'player_cards_change'}
+                await self.channel_layer.group_send(self.game_group_name, cards_message)
             self.data['start_game'] = True
 
         else:
@@ -67,7 +74,7 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
         await self.channel_layer.group_send(self.game_group_name, self.data)
 
     async def disconnect(self, code):
-        """disconnect player from room.
+        """Disconnect player from room.
 
         set player is_in_game to false and adjust in_game_order for other players.
         """
@@ -81,7 +88,7 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
         await self.channel_layer.group_discard(self.game_group_name, self.channel_name)
 
     async def receive_json(self, content, **kwargs):
-        """send message to room after its received
+        """Send message to room after its received.
 
         which message type to send is determined by dictionary key `type`.
 
@@ -92,18 +99,23 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
         await self.channel_layer.group_send(self.game_group_name, content)
 
     async def chat_message(self, message):
-        """basic chat messsage
+        """Basic chat messsage.
         """
         # Send message to WebSocket
         await self.send_json(content=message)
 
     async def player_connected(self, message):
-        """message sent after someone connects
+        """Message sent after someone connects.
         """
         # Send message to WebSocket
         await self.send_json(content=message)
 
     async def player_disconnected(self, message):
-        """message sent after someone disconnects
+        """Message sent after someone disconnects.
+        """
+        await self.send_json(content=message)
+
+    async def player_cards_change(self, message):
+        """Message sent after cards in player hands change.
         """
         await self.send_json(content=message)

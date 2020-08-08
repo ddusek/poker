@@ -31,6 +31,13 @@ def get_game(game_path):
 
 
 @database_sync_to_async
+def get_game_by_id(game_id):
+    """Get a game by its id.
+    """
+    return Game.objects.filter(id=game_id).first()
+
+
+@database_sync_to_async
 def create_player(user, game, players):
     """Create and return player.
 
@@ -40,7 +47,6 @@ def create_player(user, game, players):
     :return: Player object
     """
     players = players.order_by('in_game_order')
-    print(players)
     player = players.filter(user=user).first()
     if player is None:
         player = Player(user=user, name=user.username, game=game, chips=GameSerializer(game).data['starting_chips'],
@@ -83,7 +89,7 @@ def init_game(game, players):
             game_helper.init_game(game, players)
             card_helper.init_cards(game)
 
-            player_helper.deal_cards(game, players)
+            card_helper.deal_cards(game, players)
         return True
     return False
 
@@ -95,3 +101,15 @@ def start_first_round(game, players):
     player_helper.set_blinds(game, players)
     game.game_in_progress = True
     game.save()
+
+
+@database_sync_to_async
+def get_players(game, in_game_only=False):
+    """Get players for a game.
+
+    :param game: game in which to find players
+    :param in_game_only: filter only player currently in game, defaults to False
+    """
+    if in_game_only:
+        return Player.objects.filter(game=game, is_in_game=True)
+    return Player.objects.filter(game=game)

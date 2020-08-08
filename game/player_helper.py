@@ -1,5 +1,4 @@
 from django.db.models import F
-from game.models import Card
 
 
 def adjust_orders(removed_player, players):
@@ -11,22 +10,6 @@ def adjust_orders(removed_player, players):
     players.filter(in_game_order__gte=removed_player.in_game_order).update(in_game_order=F('in_game_order') - 1)
     removed_player.in_game_order = 0
     removed_player.save()
-
-
-def deal_cards(game, players):
-    """Deal cards to every player in game.
-    """
-    cards = iter(Card.objects.get_cards(game, len(players) * 2))
-    for _ in range(2):
-        for player in players:
-            try:
-                card = next(cards)
-                card.location = 'HAND'
-                card.player = player
-                card.save()
-            except StopIteration:
-                print('error: too many iterations in cards dealing')
-                break
 
 
 def set_blinds(game, players):

@@ -1,6 +1,7 @@
 import random
 from game.models import Card
 from gameplay_utils.deck import Deck
+from . import utils
 
 
 def create_deck(game):
@@ -29,12 +30,32 @@ def shuffle(game):
         cards[i].save()
 
 
-def get_cards(game, limit):
+def _get_cards(game, limit):
     """Get first N cards from DECK.
 
     :return: queryset of cards
     """
     return Card.objects.filter(game=game, location='DECK').order_by('order')[:limit]
+
+
+def _deal_cards_for_player(player, cards):
+    """Deal list of cards cards for player.
+    """
+    for card in cards:
+        card.player = player
+        card.location = 'HAND'
+        card.save()
+
+
+def deal_cards(game, players):
+    """Deal 2 cards for N players.
+
+    :param players: player objects
+    """
+    # get chunks of 2 cards for every player
+    cards = utils.chunks(_get_cards(game, (len(players) * 2) + 1), 2)
+    for player in players:
+        _deal_cards_for_player(player, next(cards))
 
 
 def init_cards(game):

@@ -22,3 +22,9 @@ def make_path(_prefix, model=None, slug_length=7):
         if model.objects.filter(path=path).exists():
             make_path(_prefix, model, slug_length)
     return path, name
+
+
+def chunks(lst, n):
+    """Yield successive n-sized chunks from lst."""
+    for i in range(0, len(lst), n):
+        yield lst[i:i + n]

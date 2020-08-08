@@ -54,7 +54,7 @@ class PlayerDetailView(APIView):
         game_name = request.GET.get('game', '')
         if game_name == '':
             return Response('game parameter not found', status=status.HTTP_400_BAD_REQUEST)
-            
+
         game = Game.objects.filter(name=game_name).first()
         if game is None:
             return Response('game from parameter not found', status=status.HTTP_400_BAD_REQUEST)
@@ -104,6 +104,7 @@ class CardsDetailView(APIView):
         if f'{game_name}_player_id' not in request.session:
             return Response('cant get cards, didnt find player_id in session', status.HTTP_401_UNAUTHORIZED)
         cards = Card.objects.filter(player=request.session[f'{game_name}_player_id'])
+
         if not cards:
             return Response('didnt find any cards for player', status.HTTP_400_BAD_REQUEST)
         return Response(CardSerializer(cards, many=True).data, status=status.HTTP_200_OK)

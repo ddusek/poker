@@ -229,6 +229,9 @@ const Game = () => {
                 if (data.type === 'player_disconnected') {
                     setPlayersSet(false);
                 }
+                if (data.type === 'player_cards_change') {
+                    setHandInfoSet(false);
+                }
                 console.log(e);
             };
         }
