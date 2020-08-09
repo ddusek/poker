@@ -48,6 +48,7 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
         game = await get_game(get_parameter_value(self.query_string, 'game'))
 
         players_all = await get_players(game)
+
         # create player from user if he is not created for this specific game yet.
         # if he is, set is_in_game to true
         self.player_id = await create_player(user, game, players_all)
@@ -55,23 +56,23 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
         # get players currently in game
         players_in_game = await  get_players(game, True)
 
-        # create data object for websocket message
-        self.data = {}
+        # create connect_data object for websocket message
+        self.connect_data = {}
         if await init_game(game, players_in_game):
             if not game.game_in_progress:
                 game = await get_game_by_id(game.id)
                 await start_first_round(game, players_in_game)
-                cards_message = {'type': 'player_cards_change'}
-                await self.channel_layer.group_send(self.game_group_name, cards_message)
-            self.data['start_game'] = True
+
+            self.connect_data['start_game'] = True
 
         else:
-            self.data['start_game'] = False
-        self.data['user'] = UserSerializer(user).data['id']
-        self.data['game'] = GameSerializer(game).data['id']
-        self.data['type'] = 'player_connected'
+            self.connect_data['start_game'] = False
 
-        await self.channel_layer.group_send(self.game_group_name, self.data)
+        self.connect_data['user'] = UserSerializer(user).data['id']
+        self.connect_data['game'] = GameSerializer(game).data['id']
+        self.connect_data['type'] = 'player_connected'
+
+        await self.channel_layer.group_send(self.game_group_name, self.connect_data)
 
     async def disconnect(self, code):
         """Disconnect player from room.
@@ -98,12 +99,6 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
         # Send message to room group
         await self.channel_layer.group_send(self.game_group_name, content)
 
-    async def chat_message(self, message):
-        """Basic chat messsage.
-        """
-        # Send message to WebSocket
-        await self.send_json(content=message)
-
     async def player_connected(self, message):
         """Message sent after someone connects.
         """
@@ -112,10 +107,5 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
 
     async def player_disconnected(self, message):
         """Message sent after someone disconnects.
-        """
-        await self.send_json(content=message)
-
-    async def player_cards_change(self, message):
-        """Message sent after cards in player hands change.
         """
         await self.send_json(content=message)

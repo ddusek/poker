@@ -201,7 +201,6 @@ const Game = () => {
             }
         };
         getPlayers();
-        console.log('got players');
     }, [playersSet, gameName, playerInfo.id, gameInfo.max_players, playerInfo, playerInfoSet]);
 
     // Check if its player's turn
@@ -225,12 +224,10 @@ const Game = () => {
                     setPlayerCreated(true);
                     setPlayersSet(false);
                     setStartGame(data.start_game);
+                    setPlayerInfoSet(false);
                 }
                 if (data.type === 'player_disconnected') {
                     setPlayersSet(false);
-                }
-                if (data.type === 'player_cards_change') {
-                    setHandInfoSet(false);
                 }
                 console.log(e);
             };

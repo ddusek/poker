@@ -38,6 +38,7 @@ const Cards = () => {
         }
     }, [hand]);
     // Return cards only if list contains 2 cards.
+    console.log('cards component', cardFiles);
     return (
         <Container>
             {cardFiles.length === 2 ? (
