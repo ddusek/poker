@@ -115,14 +115,20 @@ const Actions = ({ playerActions }) => {
                     value={inputNumber}
                     onChange={handleChange}
                 />
-                <RaiseButton text="Raise" color="rgb(65,185,65)" hoverColor="rgb(35,240,35)" />
+                <RaiseButton
+                    action="raise"
+                    text="Raise"
+                    actionValue={inputNumber}
+                    color="rgb(65,185,65)"
+                    hoverColor="rgb(35,240,35)"
+                />
             </RaiseContainer>
 
             <ButtonsContainer>
-                <Button text="Check" color="rgb(65,185,65)" hoverColor="rgb(35,240,35)" />
-                <Button text="Call" color="rgb(65,185,65)" hoverColor="rgb(35,240,35)" />
-                <Button text="All in" color="rgb(65,65,255)" hoverColor="rgb(45,45,255)" />
-                <FoldButton text="Fold" color="rgb(255,65,65)" hoverColor="rgb(255,35,35)" />
+                <Button action="check" text="Check" color="rgb(65,185,65)" hoverColor="rgb(35,240,35)" />
+                <Button action="call" text="Call" color="rgb(65,185,65)" hoverColor="rgb(35,240,35)" />
+                <Button action="all_in" text="All in" color="rgb(65,65,255)" hoverColor="rgb(45,45,255)" />
+                <FoldButton action="fold" text="Fold" color="rgb(255,65,65)" hoverColor="rgb(255,35,35)" />
             </ButtonsContainer>
         </Container>
     );

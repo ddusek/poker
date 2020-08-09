@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import axios from 'axios';
 
 /**
  * Button component used in actions.
@@ -22,19 +23,47 @@ const Container = styled.button`
     }
 `;
 
-const Button = ({ text, color = 'rgb(125,125,155)', hoverColor = 'rgb(155,155,155)' }) => {
+const Button = ({ action, text, actionValue = 0, color = 'rgb(125,125,155)', hoverColor = 'rgb(155,155,155)' }) => {
+    axios.defaults.xsrfCookieName = 'csrftoken';
+    axios.defaults.xsrfHeaderName = 'X-CSRFTOKEN';
+    const postUrl = `http://localhost:8000/game/post/player/${action}/`;
+
+    // Get name of the game from url.
+    const gameName = window.location.pathname.slice(5).replace(/\//g, '');
+
     Button.propTypes = {
+        action: PropTypes.string.isRequired,
         text: PropTypes.string.isRequired,
+        actionValue: PropTypes.number,
         color: PropTypes.string,
         hoverColor: PropTypes.string,
     };
     Button.defaultProps = {
+        actionValue: 0,
         color: 'rgb(125,125,155)',
         hoverColor: 'rgb(155,155,155)',
     };
+    const onClick = async () => {
+        const data = { game: gameName, value: actionValue };
+        console.log(actionValue);
+        axios
+            .post(postUrl, {
+                body: data,
+            })
+            .then((response) => {
+                if (response.status === 200) {
+                    console.log('success', response);
+                } else {
+                    console.log('error', response.status);
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
 
     return (
-        <Container color={color} hoverColor={hoverColor}>
+        <Container color={color} hoverColor={hoverColor} onClick={onClick}>
             {text}
         </Container>
     );

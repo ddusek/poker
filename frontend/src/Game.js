@@ -26,6 +26,8 @@ const Game = () => {
     const getPlayerUrl = 'http://localhost:8000/game/get/player-detail/';
     const getCardsUrl = 'http://localhost:8000/game/get/cards-detail/';
     const getPlayersUrl = 'http://localhost:8000/game/get/players-details/';
+
+    // Get name of the game from url.
     const gameName = window.location.pathname.slice(5).replace(/\//g, '');
 
     const ws = useRef(null);
