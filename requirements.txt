@@ -6,6 +6,9 @@ bcrypt
 channels
 channels_redis
 
+# debugger
+ptvsd==4.3.2
+
 # linters
 flake8
 autopep8

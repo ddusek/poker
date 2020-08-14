@@ -26,6 +26,7 @@ services:
             - ./:/poker/
         ports:
             - 8000:8000
+            - 8300:8300
         depends_on:
           - redis
     react:
