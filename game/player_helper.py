@@ -47,10 +47,11 @@ def _raise(player, value):
     :return: updated player object
     """
     upd_player = bet(player, value)
-    game = Game.objects.filter(id=upd_player.game).first()
-    game = game_helper.new_bet(game, value, upd_player.pot)
+    game = Game.objects.filter(id=upd_player.game.id).first()
+    game = game_helper.new_bet(game, value, upd_player.round_bet)
     game = game_helper.next_player(game)
     game.save()
+    player.save()
 
 
 def call(game, player):

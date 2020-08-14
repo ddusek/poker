@@ -111,8 +111,7 @@ class PlayerRaiseView(APIView):
         player = Player.objects.filter(id=player_id).first()
         if player is None:
             return Response('player not found', status=status.HTTP_400_BAD_REQUEST)
-        player = player_helper.bet(player, chips)
-        player.save()
+        player_helper._raise(player, chips)
         return Response('raised successfully', status=status.HTTP_200_OK)
 
 

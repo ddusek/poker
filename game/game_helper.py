@@ -27,9 +27,9 @@ def next_player(game):
     players = Player.objects.filter(game=game, is_in_game=True).order_by('in_game_order')
     current_player = players.filter(id=game.current_player)
     if game.current_player >= game.players_connected:
-        game.current_player = players[0]
+        game.current_player = players[0].id
     else:
-        game.current_player = players.index([p for p in players if p.in_game_order > current_player.in_game_order][0])
+        game.current_player = players.index([p for p in players if p.in_game_order > current_player.in_game_order][0].id)
         if game.current_player is None:
             print('error, new current player with higher in_game_order not found')
             return None
