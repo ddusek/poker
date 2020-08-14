@@ -109,9 +109,33 @@ class PlayerRaiseView(APIView):
             return Response('chips was None or 0', status=status.HTTP_400_BAD_REQUEST)
 
         player = Player.objects.filter(id=player_id).first()
+        if player is None:
+            return Response('player not found', status=status.HTTP_400_BAD_REQUEST)
         player = player_helper.bet(player, chips)
         player.save()
         return Response('raised successfully', status=status.HTTP_200_OK)
+
+
+class PlayerCallView(APIView):
+    """Call action view.
+    """
+    def post(self, request):
+        """Call highest raise in game.
+        """
+        game_name = request.data['body']['game']
+        if game_name == '':
+            return Response('didnt get game_name', status=status.HTTP_400_BAD_REQUEST)
+        player_id = request.session[f'{game_name}_player_id']
+        if player_id is None:
+            return Response('didnt get player_id', status=status.HTTP_400_BAD_REQUEST)
+        game = Game.objects.filter(name=game_name).first()
+        if game is None:
+            return Response('game not found', status=status.HTTP_400_BAD_REQUEST)
+        player = Player.objects.filter(id=player_id).first()
+        if player is None:
+            return Response('player not found', status=status.HTTP_400_BAD_REQUEST)
+        player_helper.call(game, player)
+        return Response('call action success', status=status.HTTP_200_OK)
 
 
 class CardsDetailView(APIView):

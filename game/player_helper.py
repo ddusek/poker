@@ -1,4 +1,6 @@
 from django.db.models import F
+from game.models import Game
+from . import game_helper
 
 
 def adjust_orders(removed_player, players):
@@ -36,6 +38,31 @@ def bet(player, value):
         player.round_bet += value
         return player
     return all_in(player)
+
+
+def _raise(player, value):
+    """raise given amount of chips.
+
+    unlike function `bet`, also set current player to next one.
+    :return: updated player object
+    """
+    upd_player = bet(player, value)
+    game = Game.objects.filter(id=upd_player.game).first()
+    game = game_helper.new_bet(game, value, upd_player.pot)
+    game = game_helper.next_player(game)
+    game.save()
+
+
+def call(game, player):
+    """call highest bet in game.
+
+    :return: updated player object
+    """
+    call_val = player.round_bet - game.biggest_bet
+    player = bet(player, call_val)
+    game = game_helper.new_bet(game, call_val, player.pot)
+    game = game_helper.next_player(game)
+    game.save()
 
 
 def all_in(player):
