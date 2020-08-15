@@ -7,6 +7,7 @@ import PlayerContext from './components/contexts/PlayerContext';
 import GameContext from './components/contexts/GameContext';
 import HandContext from './components/contexts/HandContext';
 import MyTurnContext from './components/contexts/MyTurnContext';
+import WebsocketContext from './components/contexts/WebsocketContext';
 
 const Container = styled.div`
     color: white;
@@ -48,6 +49,7 @@ const Game = () => {
     const [playerInfo, setPlayerInfo] = useState({});
     const [handInfoSet, setHandInfoSet] = useState(false);
     const [handInfo, setHandInfo] = useState({});
+    const [websocketInfo, setWebsocketInfo] = useState({});
 
     useEffect(() => {
         // get current user from api
@@ -73,6 +75,7 @@ const Game = () => {
                 );
                 ws.current.onopen = () => console.log('ws opened');
                 ws.current.onclose = () => console.log('ws closed');
+                setWebsocketInfo(ws);
             }
         };
         getUser();
@@ -222,12 +225,22 @@ const Game = () => {
             ws.current.onmessage = (e) => {
                 const data = JSON.parse(e.data);
                 setClickedCount(clickedCount + 1);
+
+                // when player does some action
+                if (data.type === 'player_action') {
+                    setPlayersSet(false);
+                    setPlayerInfoSet(false);
+                }
+
+                // when player connects
                 if (data.type === 'player_connected') {
                     setPlayerCreated(true);
                     setPlayersSet(false);
                     setStartGame(data.start_game);
                     setPlayerInfoSet(false);
                 }
+
+                // when player disconnects
                 if (data.type === 'player_disconnected') {
                     setPlayersSet(false);
                 }
@@ -240,7 +253,7 @@ const Game = () => {
         const message = JSON.stringify({ message: 'clickedCount', type: 'chat_message' });
         ws.current.send(message);
     };
-    if (startGame === undefined || !playerInfoSet) {
+    if (startGame === undefined) {
         return (
             <GameContainer>
                 <p>loading</p>
@@ -254,7 +267,9 @@ const Game = () => {
                     <PlayerContext.Provider value={playerInfo}>
                         <HandContext.Provider value={handInfo}>
                             <MyTurnContext.Provider value={playerInfo.id === gameInfo.current_player}>
-                                <GameWindow players={players} />
+                                <WebsocketContext.Provider value={websocketInfo}>
+                                    <GameWindow players={players} />
+                                </WebsocketContext.Provider>
                             </MyTurnContext.Provider>
                         </HandContext.Provider>
                     </PlayerContext.Provider>

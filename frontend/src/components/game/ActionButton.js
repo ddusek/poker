@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import axios from 'axios';
+import WebsocketContext from '../contexts/WebsocketContext';
 
 /**
  * Button component used in actions.
@@ -24,13 +25,6 @@ const Container = styled.button`
 `;
 
 const Button = ({ action, text, actionValue = 0, color = 'rgb(125,125,155)', hoverColor = 'rgb(155,155,155)' }) => {
-    axios.defaults.xsrfCookieName = 'csrftoken';
-    axios.defaults.xsrfHeaderName = 'X-CSRFTOKEN';
-    const postUrl = `http://localhost:8000/game/post/player/${action}/`;
-
-    // Get name of the game from url.
-    const gameName = window.location.pathname.slice(5).replace(/\//g, '');
-
     Button.propTypes = {
         action: PropTypes.string.isRequired,
         text: PropTypes.string.isRequired,
@@ -43,6 +37,16 @@ const Button = ({ action, text, actionValue = 0, color = 'rgb(125,125,155)', hov
         color: 'rgb(125,125,155)',
         hoverColor: 'rgb(155,155,155)',
     };
+
+    axios.defaults.xsrfCookieName = 'csrftoken';
+    axios.defaults.xsrfHeaderName = 'X-CSRFTOKEN';
+    const postUrl = `http://localhost:8000/game/post/player/${action}/`;
+
+    // Get name of the game from url.
+    const gameName = window.location.pathname.slice(5).replace(/\//g, '');
+
+    const ws = useContext(WebsocketContext);
+
     const onClick = async () => {
         const data = { game: gameName, value: actionValue };
         console.log(actionValue);
@@ -53,6 +57,8 @@ const Button = ({ action, text, actionValue = 0, color = 'rgb(125,125,155)', hov
             .then((response) => {
                 if (response.status === 200) {
                     console.log('success', response);
+                    const message = JSON.stringify({ message: 'action called', type: `player_action` });
+                    ws.current.send(message);
                 } else {
                     console.log('error', response.status);
                 }

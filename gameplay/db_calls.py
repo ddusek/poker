@@ -60,6 +60,10 @@ def create_player(user, game, players):
     else:
         player.in_game_order = players.reverse()[0].in_game_order + 1
 
+    # update number of connected players
+    game.players_connected = len(players)
+    game.save()
+
     player.save()
     return player.id
 
@@ -74,7 +78,14 @@ def disconnect_player(player_id, game_name):
     if player is not None:
         player_helper.adjust_orders(player, players)
         player.is_in_game = False
+
+        # update number of connected players
+        game.players_connected -= 1
+        game.save()
+
         player.save()
+    else:
+        print('warn, player not found')
 
 
 @database_sync_to_async

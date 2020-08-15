@@ -58,6 +58,8 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
 
         # create connect_data object for websocket message
         self.connect_data = {}
+
+        # create game if its not created yet
         if await init_game(game, players_in_game):
             if not game.game_in_progress:
                 game = await get_game_by_id(game.id)
@@ -107,5 +109,10 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
 
     async def player_disconnected(self, message):
         """Message sent after someone disconnects.
+        """
+        await self.send_json(content=message)
+
+    async def player_action(self, message):
+        """Message sent after player do some action.
         """
         await self.send_json(content=message)

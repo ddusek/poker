@@ -4,7 +4,7 @@ from . import game_helper
 
 
 def adjust_orders(removed_player, players):
-    """adjust orders of players according to removed_player
+    """Adjust orders of players according to disconnected player.
 
     :param removed_player: player to remove from order
     :param players: players to adjust
@@ -15,7 +15,7 @@ def adjust_orders(removed_player, players):
 
 
 def set_blinds(game, players):
-    """set players blinds and save them.
+    """Set players blinds and save them.
     """
     bb_player = players.filter(id=game.big_blind_player).first()
     sb_player = players.filter(id=game.small_blind_player).first()
@@ -41,7 +41,7 @@ def bet(player, value):
 
 
 def _raise(player, value):
-    """raise given amount of chips.
+    """Raise given amount of chips.
 
     unlike function `bet`, also set current player to next one.
     :return: updated player object
@@ -55,7 +55,7 @@ def _raise(player, value):
 
 
 def call(game, player):
-    """call highest bet in game.
+    """Call highest bet in game.
 
     :return: updated player object
     """

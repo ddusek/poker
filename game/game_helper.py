@@ -21,6 +21,10 @@ def init_game(game, players):
 
 
 def next_player(game):
+    """Set current player to the next one.
+
+    :return: updated game object
+    """
     if game is None:
         print('error, game not found')
         return None
@@ -29,7 +33,8 @@ def next_player(game):
     if game.current_player >= game.players_connected:
         game.current_player = players[0].id
     else:
-        game.current_player = players.index([p for p in players if p.in_game_order > current_player.in_game_order][0].id)
+        game.current_player = players.index([p for p in players if p.in_game_order > current_player.in_game_order][0]
+                                            .id)
         if game.current_player is None:
             print('error, new current player with higher in_game_order not found')
             return None
@@ -41,7 +46,6 @@ def new_bet(game, value, biggest_bet):
 
     :return: updated game
     """
-    print(game.pot, value)
     game.pot += value
     if game.last_raise < value:
         game.last_raise = value
