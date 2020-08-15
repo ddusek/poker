@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
+import axios from 'axios';
 import styled from 'styled-components';
 import CardIcon from './utils/svgHelper';
-import HandContext from '../contexts/HandContext';
+import PlayerContext from '../contexts/PlayerContext';
 
 const Container = styled.div`
     width: 250px;
@@ -26,18 +27,55 @@ const CardsContainer = styled.div`
  */
 
 const Cards = () => {
+    const getCardsUrl = 'http://localhost:8000/game/get/cards-detail/';
+
+    const gameName = window.location.pathname.slice(5).replace(/\//g, '');
+
     const [cardFiles, setCardFiles] = useState([]);
     const imagePath = 'cards/';
-    const hand = useContext(HandContext);
+    const player = useContext(PlayerContext);
+    const [handInfoSet, setHandInfoSet] = useState(false);
+    const [handInfo, setHandInfo] = useState({});
 
     useEffect(() => {
-        if (Object.keys(hand).length === 2) {
-            hand.forEach((item) => {
-                setCardFiles((c) => c.concat(imagePath + item.image));
-            });
+        if (handInfo !== undefined) {
+            if (Object.keys(handInfo).length === 2) {
+                handInfo.forEach((item) => {
+                    setCardFiles((c) => c.concat(imagePath + item.image));
+                });
+            }
         }
-    }, [hand]);
+    }, [handInfo]);
+
+    useEffect(() => {
+        // get current player's cards from api
+        const getHand = async () => {
+            if (!handInfoSet && player) {
+                axios
+                    .get(`${getCardsUrl}?game=${gameName}`)
+                    .then((response) => {
+                        if (response.status === 200) {
+                            setHandInfoSet(true);
+                            setHandInfo(response.data);
+                        } else {
+                            console.log('didnt get cards', response.status);
+                        }
+                    })
+                    .catch((err) => {
+                        console.log(`Error: ${err}`);
+                    });
+            }
+        };
+        getHand();
+    }, [handInfoSet, gameName, player]);
     // Return cards only if list contains 2 cards.
+    if (!handInfoSet || player === undefined) {
+        return (
+            <Container>
+                <p>loading cards</p>
+            </Container>
+        );
+    }
     return (
         <Container>
             {cardFiles.length === 2 ? (

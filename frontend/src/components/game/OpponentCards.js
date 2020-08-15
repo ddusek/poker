@@ -11,7 +11,7 @@ const Container = styled.div`
 `;
 
 /**
- * Opponents window component.
+ * Opponents cards component.
  */
 
 const OpponentCards = () => {

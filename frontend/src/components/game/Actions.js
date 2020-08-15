@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import Button from './ActionButton';
 import PlayerContext from '../contexts/PlayerContext';
 import GameContext from '../contexts/GameContext';
-import MyTurnContext from '../contexts/MyTurnContext';
 
 const Container = styled.div`
     pointer-events: ${(props) => props.disabled};
@@ -90,11 +89,20 @@ const Actions = ({ playerActions }) => {
     const [inputNumber, setInputNumber] = useState(0);
     const player = useContext(PlayerContext);
     const game = useContext(GameContext);
-    const myTurn = useContext(MyTurnContext);
+    const [isMyTurn, setIsMyTurn] = useState(false);
 
     useEffect(() => {
         setInputNumber(game.big_blind);
     }, [game.big_blind, game.small_blind]);
+
+    // Check if its player's turn
+    useEffect(() => {
+        if (player.id === game.current_player) {
+            setIsMyTurn(true);
+        } else {
+            setIsMyTurn(false);
+        }
+    }, [game.current_player, player.id]);
 
     const handleChange = (event) => {
         if (event.target.type === 'number') {
@@ -103,7 +111,7 @@ const Actions = ({ playerActions }) => {
         setInputNumber(event.target.value);
     };
     return (
-        <Container disabled={myTurn ? 'all' : 'none'}>
+        <Container disabled={isMyTurn ? 'all' : 'none'}>
             <RaiseContainer>
                 <RaiseInput value={inputNumber} type="number" onChange={handleChange} />
                 <RaiseSlider
@@ -116,6 +124,7 @@ const Actions = ({ playerActions }) => {
                     onChange={handleChange}
                 />
                 <RaiseButton
+                    setIsMyTurn={setIsMyTurn}
                     action="raise"
                     text="Raise"
                     actionValue={inputNumber}
@@ -125,10 +134,34 @@ const Actions = ({ playerActions }) => {
             </RaiseContainer>
 
             <ButtonsContainer>
-                <Button action="check" text="Check" color="rgb(65,185,65)" hoverColor="rgb(35,240,35)" />
-                <Button action="call" text="Call" color="rgb(65,185,65)" hoverColor="rgb(35,240,35)" />
-                <Button action="all_in" text="All in" color="rgb(65,65,255)" hoverColor="rgb(45,45,255)" />
-                <FoldButton action="fold" text="Fold" color="rgb(255,65,65)" hoverColor="rgb(255,35,35)" />
+                <Button
+                    setIsMyTurn={setIsMyTurn}
+                    action="check"
+                    text="Check"
+                    color="rgb(65,185,65)"
+                    hoverColor="rgb(35,240,35)"
+                />
+                <Button
+                    setIsMyTurn={setIsMyTurn}
+                    action="call"
+                    text="Call"
+                    color="rgb(65,185,65)"
+                    hoverColor="rgb(35,240,35)"
+                />
+                <Button
+                    setIsMyTurn={setIsMyTurn}
+                    action="all_in"
+                    text="All in"
+                    color="rgb(65,65,255)"
+                    hoverColor="rgb(45,45,255)"
+                />
+                <FoldButton
+                    setIsMyTurn={setIsMyTurn}
+                    action="fold"
+                    text="Fold"
+                    color="rgb(255,65,65)"
+                    hoverColor="rgb(255,35,35)"
+                />
             </ButtonsContainer>
         </Container>
     );

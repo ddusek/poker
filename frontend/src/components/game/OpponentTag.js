@@ -17,7 +17,7 @@ const Container = styled.div`
 `;
 
 /**
- * Opponents window component.
+ * Opponents tag component.
  */
 
 const OpponentTag = ({ name }) => {

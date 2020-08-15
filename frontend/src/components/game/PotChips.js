@@ -11,7 +11,7 @@ const Container = styled.div`
 `;
 
 /**
- * Opponents window component.
+ * Pot chips component.
  */
 
 const PotChips = ({ pot }) => {

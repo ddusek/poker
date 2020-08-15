@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import axios from 'axios';
@@ -24,8 +24,16 @@ const Container = styled.button`
     }
 `;
 
-const Button = ({ action, text, actionValue = 0, color = 'rgb(125,125,155)', hoverColor = 'rgb(155,155,155)' }) => {
+const Button = ({
+    setIsMyTurn,
+    action,
+    text,
+    actionValue = 0,
+    color = 'rgb(125,125,155)',
+    hoverColor = 'rgb(155,155,155)',
+}) => {
     Button.propTypes = {
+        setIsMyTurn: PropTypes.func.isRequired,
         action: PropTypes.string.isRequired,
         text: PropTypes.string.isRequired,
         actionValue: PropTypes.number,
@@ -57,6 +65,7 @@ const Button = ({ action, text, actionValue = 0, color = 'rgb(125,125,155)', hov
             .then((response) => {
                 if (response.status === 200) {
                     console.log('success', response);
+                    setIsMyTurn(false);
                     const message = JSON.stringify({ message: 'action called', type: `player_action` });
                     ws.current.send(message);
                 } else {

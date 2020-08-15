@@ -9,7 +9,7 @@ const Container = styled.div`
 `;
 
 /**
- * Opponents window component.
+ * Opponents last action component.
  */
 
 const OpponentAction = ({ action }) => {

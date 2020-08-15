@@ -5,8 +5,6 @@ import InfoBox from './components/forms/InfoBox';
 import GameWindow from './components/GameWindow';
 import PlayerContext from './components/contexts/PlayerContext';
 import GameContext from './components/contexts/GameContext';
-import HandContext from './components/contexts/HandContext';
-import MyTurnContext from './components/contexts/MyTurnContext';
 import WebsocketContext from './components/contexts/WebsocketContext';
 
 const Container = styled.div`
@@ -25,7 +23,6 @@ const Game = () => {
     const getUserUrl = 'http://localhost:8000/user/currentuser/';
     const getGameUrl = 'http://localhost:8000/game/get/game-detail/';
     const getPlayerUrl = 'http://localhost:8000/game/get/player-detail/';
-    const getCardsUrl = 'http://localhost:8000/game/get/cards-detail/';
     const getPlayersUrl = 'http://localhost:8000/game/get/players-details/';
 
     // Get name of the game from url.
@@ -40,15 +37,13 @@ const Game = () => {
     const [playersSet, setPlayersSet] = useState(false);
     const [players, setPlayers] = useState();
     const [playerCreated, setPlayerCreated] = useState(false);
-    const [isMyTurn, setIsMyTurn] = useState(false);
 
     // Contexts
     const [gameInfoSet, setGameInfoSet] = useState(false);
     const [gameInfo, setGameInfo] = useState({});
     const [playerInfoSet, setPlayerInfoSet] = useState(false);
     const [playerInfo, setPlayerInfo] = useState({});
-    const [handInfoSet, setHandInfoSet] = useState(false);
-    const [handInfo, setHandInfo] = useState({});
+
     const [websocketInfo, setWebsocketInfo] = useState({});
 
     useEffect(() => {
@@ -125,28 +120,6 @@ const Game = () => {
         getPlayer();
     }, [playerInfoSet, gameName, playerCreated]);
 
-    useEffect(() => {
-        // get current player's cards from api
-        const getHand = async () => {
-            if (!handInfoSet && playerInfoSet) {
-                axios
-                    .get(`${getCardsUrl}?game=${gameName}`)
-                    .then((response) => {
-                        if (response.status === 200) {
-                            setHandInfoSet(true);
-                            setHandInfo(response.data);
-                        } else {
-                            console.log('didnt get cards', response.status);
-                        }
-                    })
-                    .catch((err) => {
-                        console.log(`Error: ${err}`);
-                    });
-            }
-        };
-        getHand();
-    }, [handInfoSet, gameName, playerInfoSet]);
-
     // get player object of every player in current game except current player
     useEffect(() => {
         const getPlayers = async () => {
@@ -208,15 +181,6 @@ const Game = () => {
         getPlayers();
     }, [playersSet, gameName, playerInfo.id, gameInfo.max_players, playerInfo, playerInfoSet]);
 
-    // Check if its player's turn
-    useEffect(() => {
-        if (playerInfo.id === gameInfo.current_player) {
-            setIsMyTurn(true);
-        } else {
-            setIsMyTurn(false);
-        }
-    }, [gameInfo.current_player, playerInfo.id]);
-
     // handle websocket messages
     useEffect(() => {
         if (userSet) {
@@ -265,13 +229,9 @@ const Game = () => {
             <GameContainer>
                 <GameContext.Provider value={gameInfo}>
                     <PlayerContext.Provider value={playerInfo}>
-                        <HandContext.Provider value={handInfo}>
-                            <MyTurnContext.Provider value={playerInfo.id === gameInfo.current_player}>
-                                <WebsocketContext.Provider value={websocketInfo}>
-                                    <GameWindow players={players} />
-                                </WebsocketContext.Provider>
-                            </MyTurnContext.Provider>
-                        </HandContext.Provider>
+                        <WebsocketContext.Provider value={websocketInfo}>
+                            <GameWindow players={players} />
+                        </WebsocketContext.Provider>
                     </PlayerContext.Provider>
                 </GameContext.Provider>
             </GameContainer>
