@@ -19,7 +19,7 @@ def get_user(user_id):
 
 @database_sync_to_async
 def get_game(game_path):
-    """Get game from database by game_path
+    """Get game from database by game_path.
 
     :param game_path: game path to find game by
     :return: Game object if found
@@ -28,6 +28,18 @@ def get_game(game_path):
         return 'no slug received'
     game_path = game_path[0:-1] if game_path[-1] == '/' else game_path
     return Game.objects.filter(path=game_path).first()
+
+
+@database_sync_to_async
+def get_game_by_name(name):
+    """Get game from database by its name.
+
+    :param game_path: game path to find game by
+    :return: Game object if found
+    """
+    if name is None:
+        return 'no name received'
+    return Game.objects.filter(name=name).first()
 
 
 @database_sync_to_async
@@ -124,3 +136,13 @@ def get_players(game, in_game_only=False):
     if in_game_only:
         return Player.objects.filter(game=game, is_in_game=True)
     return Player.objects.filter(game=game)
+
+
+@database_sync_to_async
+def get_current_player(game_name):
+    """Get current player id from a game.
+    """
+    game = Game.objects.filter(name=game_name).first()
+    if game is not None:
+        return game.current_player
+    return 0

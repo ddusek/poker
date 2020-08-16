@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import Button from './ActionButton';
 import PlayerContext from '../contexts/PlayerContext';
 import GameContext from '../contexts/GameContext';
+import WebsocketContext from '../contexts/WebsocketContext';
 
 const Container = styled.div`
     pointer-events: ${(props) => props.disabled};
@@ -87,22 +88,14 @@ const Actions = ({ playerActions }) => {
         }).isRequired,
     };
     const [inputNumber, setInputNumber] = useState(0);
+    const ws = useContext(WebsocketContext);
     const player = useContext(PlayerContext);
     const game = useContext(GameContext);
-    const [isMyTurn, setIsMyTurn] = useState(false);
+    const [isMyTurn, setIsMyTurn] = useState(player.id === game.current_player);
 
     useEffect(() => {
         setInputNumber(game.big_blind);
     }, [game.big_blind, game.small_blind]);
-
-    // Check if its player's turn
-    useEffect(() => {
-        if (player.id === game.current_player) {
-            setIsMyTurn(true);
-        } else {
-            setIsMyTurn(false);
-        }
-    }, [game.current_player, player.id]);
 
     const handleChange = (event) => {
         if (event.target.type === 'number') {
@@ -110,6 +103,19 @@ const Actions = ({ playerActions }) => {
         }
         setInputNumber(event.target.value);
     };
+
+    // handle websocket messages
+    useEffect(() => {
+        if (!ws.current) return;
+
+        ws.current.onmessage = (e) => {
+            const data = JSON.parse(e.data);
+            // when player does some action
+            if (data.type === 'player_action') {
+                setIsMyTurn(player.id === data.current_player);
+            }
+        };
+    }, [ws, player.id, game.current_player]);
     return (
         <Container disabled={isMyTurn ? 'all' : 'none'}>
             <RaiseContainer>

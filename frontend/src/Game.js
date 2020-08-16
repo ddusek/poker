@@ -30,7 +30,6 @@ const Game = () => {
 
     const ws = useRef(null);
 
-    const [clickedCount, setClickedCount] = useState(0);
     const [userSet, setUserSet] = useState(false);
     const [userID, setUserID] = useState('');
     const [startGame, setStartGame] = useState();
@@ -188,12 +187,12 @@ const Game = () => {
 
             ws.current.onmessage = (e) => {
                 const data = JSON.parse(e.data);
-                setClickedCount(clickedCount + 1);
 
                 // when player does some action
                 if (data.type === 'player_action') {
                     setPlayersSet(false);
                     setPlayerInfoSet(false);
+                    setGameInfoSet(false);
                 }
 
                 // when player connects
@@ -211,12 +210,7 @@ const Game = () => {
                 console.log(e);
             };
         }
-    }, [clickedCount, userSet]);
-    // just for testing websocket printing numbers
-    const clicked = (e) => {
-        const message = JSON.stringify({ message: 'clickedCount', type: 'chat_message' });
-        ws.current.send(message);
-    };
+    }, [userSet]);
     if (startGame === undefined) {
         return (
             <GameContainer>
@@ -244,10 +238,6 @@ const Game = () => {
                 text="at least 2 players are needed to start the game"
                 buttonText="start now"
             />
-            <button type="button" id="mybutton" onClick={clicked}>
-                asd
-            </button>
-            <p>clicked: {clickedCount}</p>
         </Container>
     );
 };

@@ -1,3 +1,4 @@
+from channels.db import database_sync_to_async
 from game.models import Game
 from game.models import Player
 
@@ -20,6 +21,7 @@ def init_game(game, players):
     updated_game.save()
 
 
+@database_sync_to_async
 def next_player(game):
     """Set current player to the next one.
 
@@ -27,18 +29,18 @@ def next_player(game):
     """
     if game is None:
         print('error, game not found')
-        return None
+        return
     players = Player.objects.filter(game=game, is_in_game=True).order_by('in_game_order')
-    current_player = players.filter(id=game.current_player)
-    if game.current_player >= game.players_connected:
-        game.current_player = players[0].id
+    current_player = players.filter(id=game.current_player).first()
+    if game.current_player >= players.last().id:
+        game.current_player = players.first().id
     else:
-        game.current_player = players.index([p for p in players if p.in_game_order > current_player.in_game_order][0]
-                                            .id)
+        game.current_player = players.filter(id=[p for p in players if p.in_game_order
+                                                 > current_player.in_game_order][0].id).first().id
         if game.current_player is None:
             print('error, new current player with higher in_game_order not found')
-            return None
-    return game
+            return
+    game.save()
 
 
 def new_bet(game, value, biggest_bet):

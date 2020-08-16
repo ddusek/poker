@@ -115,4 +115,7 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
     async def player_action(self, message):
         """Message sent after player do some action.
         """
+        game = await get_game_by_name(self.game_name)
+        await game_helper.next_player(game)
+        message['current_player'] = await get_current_player(self.game_name)
         await self.send_json(content=message)
