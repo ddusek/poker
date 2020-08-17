@@ -105,8 +105,8 @@ const Game = () => {
                     .get(`${getPlayerUrl}?game=${gameName}`)
                     .then((response) => {
                         if (response.status === 200) {
-                            setPlayerInfoSet(true);
                             setPlayerInfo(response.data);
+                            setPlayerInfoSet(true);
                         } else {
                             console.log('didnt get player', response.status);
                         }
@@ -190,6 +190,7 @@ const Game = () => {
 
                 // when player does some action
                 if (data.type === 'player_action') {
+                    console.log(`yyyyyyy${data.type}`);
                     setPlayersSet(false);
                     setPlayerInfoSet(false);
                     setGameInfoSet(false);
@@ -211,6 +212,15 @@ const Game = () => {
             };
         }
     }, [userSet]);
+
+    useEffect(() => {
+        if (startGame && gameInfo.current_player === 0) {
+            setGameInfoSet(false);
+        }
+    }, [startGame, gameInfo]);
+
+    console.log(playerInfoSet);
+
     if (startGame === undefined) {
         return (
             <GameContainer>

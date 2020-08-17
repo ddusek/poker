@@ -88,7 +88,6 @@ const Actions = ({ playerActions }) => {
         }).isRequired,
     };
     const [inputNumber, setInputNumber] = useState(0);
-    const ws = useContext(WebsocketContext);
     const player = useContext(PlayerContext);
     const game = useContext(GameContext);
     const [isMyTurn, setIsMyTurn] = useState(player.id === game.current_player);
@@ -104,18 +103,11 @@ const Actions = ({ playerActions }) => {
         setInputNumber(event.target.value);
     };
 
-    // handle websocket messages
+    // refresh current player when game starts
     useEffect(() => {
-        if (!ws.current) return;
+        setIsMyTurn(player.id === game.current_player);
+    }, [game.current_player, player.id]);
 
-        ws.current.onmessage = (e) => {
-            const data = JSON.parse(e.data);
-            // when player does some action
-            if (data.type === 'player_action') {
-                setIsMyTurn(player.id === data.current_player);
-            }
-        };
-    }, [ws, player.id, game.current_player]);
     return (
         <Container disabled={isMyTurn ? 'all' : 'none'}>
             <RaiseContainer>

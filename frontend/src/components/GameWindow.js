@@ -57,6 +57,7 @@ const GameWindow = ({ players }) => {
             is_in_game: player.is_in_game,
         });
     }, [player.can_call, player.can_check, player.can_raise, player.is_all_in, player.is_folded, player.is_in_game]);
+
     if (players !== undefined) {
         return (
             <Container>
