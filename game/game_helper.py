@@ -33,7 +33,8 @@ def next_player(game):
     players = Player.objects.filter(game=game, is_in_game=True).order_by('in_game_order')
     current_player = players.filter(id=game.current_player).first()
     if game.current_player >= players.last().id:
-        game.current_player = players.first().id
+        # Current player is sometimes same as the first one, so choose second one insted if that happens
+        game.current_player = players[1].id if players.first().id == game.current_player else players.first().id
     else:
         game.current_player = players.filter(id=[p for p in players if p.in_game_order
                                                  > current_player.in_game_order][0].id).first().id
