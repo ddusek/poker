@@ -54,7 +54,7 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
         self.player_id = await create_player(user, game, players_all)
 
         # get players currently in game
-        players_in_game = await  get_players(game, True)
+        players_in_game = await get_players(game, True)
 
         # create connect_data object for websocket message
         self.connect_data = {}

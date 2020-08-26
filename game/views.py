@@ -111,11 +111,80 @@ class PlayerRaiseView(APIView):
         player = Player.objects.filter(id=player_id).first()
         if player is None:
             return Response('player not found', status=status.HTTP_400_BAD_REQUEST)
-        player_helper._raise(player, chips)
+        player_helper.raize(player, chips)
         return Response('raised successfully', status=status.HTTP_200_OK)
 
 
 class PlayerCallView(APIView):
+    """Raise action view.
+    """
+    def post(self, request):
+        """Raise given number of chips from request.
+        """
+        game_name = request.data['body']['game']
+        if game_name == '':
+            return Response('didnt get game_name', status=status.HTTP_400_BAD_REQUEST)
+        player_id = request.session[f'{game_name}_player_id']
+        if player_id is None:
+            return Response('didnt get player_id', status=status.HTTP_400_BAD_REQUEST)
+        chips = int(request.data['body']['value'])
+        if chips == 0 or chips is None:
+            return Response('chips was None or 0', status=status.HTTP_400_BAD_REQUEST)
+
+        player = Player.objects.filter(id=player_id).first()
+        if player is None:
+            return Response('player not found', status=status.HTTP_400_BAD_REQUEST)
+        player_helper.call(player, chips)
+        return Response('raised successfully', status=status.HTTP_200_OK)
+
+
+class PlayerCheckView(APIView):
+    """Raise action view.
+    """
+    def post(self, request):
+        """Raise given number of chips from request.
+        """
+        game_name = request.data['body']['game']
+        if game_name == '':
+            return Response('didnt get game_name', status=status.HTTP_400_BAD_REQUEST)
+        player_id = request.session[f'{game_name}_player_id']
+        if player_id is None:
+            return Response('didnt get player_id', status=status.HTTP_400_BAD_REQUEST)
+        chips = int(request.data['body']['value'])
+        if chips == 0 or chips is None:
+            return Response('chips was None or 0', status=status.HTTP_400_BAD_REQUEST)
+
+        player = Player.objects.filter(id=player_id).first()
+        if player is None:
+            return Response('player not found', status=status.HTTP_400_BAD_REQUEST)
+        player_helper.check(player, chips)
+        return Response('raised successfully', status=status.HTTP_200_OK)
+
+
+class PlayerAllInView(APIView):
+    """Raise action view.
+    """
+    def post(self, request):
+        """Raise given number of chips from request.
+        """
+        game_name = request.data['body']['game']
+        if game_name == '':
+            return Response('didnt get game_name', status=status.HTTP_400_BAD_REQUEST)
+        player_id = request.session[f'{game_name}_player_id']
+        if player_id is None:
+            return Response('didnt get player_id', status=status.HTTP_400_BAD_REQUEST)
+        chips = int(request.data['body']['value'])
+        if chips == 0 or chips is None:
+            return Response('chips was None or 0', status=status.HTTP_400_BAD_REQUEST)
+
+        player = Player.objects.filter(id=player_id).first()
+        if player is None:
+            return Response('player not found', status=status.HTTP_400_BAD_REQUEST)
+        player_helper.all_in(player, chips)
+        return Response('raised successfully', status=status.HTTP_200_OK)
+
+
+class PlayerFoldView(APIView):
     """Call action view.
     """
     def post(self, request):
@@ -133,8 +202,31 @@ class PlayerCallView(APIView):
         player = Player.objects.filter(id=player_id).first()
         if player is None:
             return Response('player not found', status=status.HTTP_400_BAD_REQUEST)
-        player_helper.call(game, player)
+        player_helper.fold(player)
         return Response('call action success', status=status.HTTP_200_OK)
+
+
+class PlayerActionsView(APIView):
+    """Player allowed actions.
+    """
+    def get(self, request):
+        """Get player allowed actions.
+        """
+        game_name = request.GET.get('game', '')
+        if game_name == '':
+            return Response('didnt get game_name', status=status.HTTP_400_BAD_REQUEST)
+        player_id = request.session[f'{game_name}_player_id']
+        if player_id is None:
+            return Response('didnt get player_id', status=status.HTTP_400_BAD_REQUEST)
+        game = Game.objects.filter(name=game_name).first()
+        if game is None:
+            return Response('game not found', status=status.HTTP_400_BAD_REQUEST)
+        player = Player.objects.filter(id=player_id).first()
+        if player is None:
+            return Response('player not found', status=status.HTTP_400_BAD_REQUEST)
+        player = player_helper.set_allowed_actions(game, player)
+        player.save()
+        return Response(PlayerSerializer(player).data, status=status.HTTP_200_OK)
 
 
 class CardsDetailView(APIView):

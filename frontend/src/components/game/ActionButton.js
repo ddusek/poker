@@ -27,6 +27,7 @@ const Container = styled.button`
 const Button = ({
     setIsMyTurn,
     action,
+    isEnabled,
     text,
     actionValue = 0,
     color = 'rgb(125,125,155)',
@@ -35,6 +36,7 @@ const Button = ({
     Button.propTypes = {
         setIsMyTurn: PropTypes.func.isRequired,
         action: PropTypes.string.isRequired,
+        isEnabled: PropTypes.bool.isRequired,
         text: PropTypes.string.isRequired,
         actionValue: PropTypes.number,
         color: PropTypes.string,
@@ -57,7 +59,6 @@ const Button = ({
 
     const onClick = async () => {
         const data = { game: gameName, value: actionValue };
-        console.log(actionValue);
         axios
             .post(postUrl, {
                 body: data,
@@ -78,7 +79,7 @@ const Button = ({
     };
 
     return (
-        <Container color={color} hoverColor={hoverColor} onClick={onClick}>
+        <Container color={color} hoverColor={hoverColor} onClick={onClick} disabled={!isEnabled}>
             {text}
         </Container>
     );

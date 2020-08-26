@@ -24,6 +24,7 @@ const Game = () => {
     const getGameUrl = 'http://localhost:8000/game/get/game-detail/';
     const getPlayerUrl = 'http://localhost:8000/game/get/player-detail/';
     const getPlayersUrl = 'http://localhost:8000/game/get/players-details/';
+    const getActionsUrl = 'http://localhost:8000/game/get/player-actions/';
 
     // Get name of the game from url.
     const gameName = window.location.pathname.slice(5).replace(/\//g, '');
@@ -180,6 +181,34 @@ const Game = () => {
         getPlayers();
     }, [playersSet, gameName, playerInfo.id, gameInfo.max_players, playerInfo, playerInfoSet]);
 
+    useEffect(() => {
+        axios
+            .get(`${getActionsUrl}?game=${gameName}`)
+            .then((response) => {
+                if (response.status === 200) {
+                    playerInfo.can_call = response.data.can_call;
+                    playerInfo.can_raise = response.data.can_raise;
+                    playerInfo.can_check = response.data.can_check;
+                    playerInfo.is_all_in = response.data.is_all_in;
+                    playerInfo.is_folded = response.data.is_folded;
+                    console.log(response.data);
+                } else {
+                    console.log('didnt get player', response.status);
+                }
+            })
+            .catch((err) => {
+                console.log(`Error: ${err}`);
+            });
+    }, [
+        playerInfo.can_call,
+        playerInfo.can_raise,
+        playerInfo.can_check,
+        playerInfo.is_all_in,
+        playerInfo.is_folded,
+        playerInfo,
+        gameName,
+    ]);
+
     // handle websocket messages
     useEffect(() => {
         if (userSet) {
@@ -218,8 +247,6 @@ const Game = () => {
             setGameInfoSet(false);
         }
     }, [startGame, gameInfo]);
-
-    console.log(playerInfoSet);
 
     if (startGame === undefined) {
         return (

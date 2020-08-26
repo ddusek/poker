@@ -1,10 +1,10 @@
 import React, { useState, useContext, useEffect } from 'react';
+import axios from 'axios';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import Button from './ActionButton';
 import PlayerContext from '../contexts/PlayerContext';
 import GameContext from '../contexts/GameContext';
-import WebsocketContext from '../contexts/WebsocketContext';
 
 const Container = styled.div`
     pointer-events: ${(props) => props.disabled};
@@ -87,10 +87,18 @@ const Actions = ({ playerActions }) => {
             is_in_game: PropTypes.bool.isRequired,
         }).isRequired,
     };
+    const getActionsUrl = 'http://localhost:8000/game/get/player-actions/';
+    const gameName = window.location.pathname.slice(5).replace(/\//g, '');
+
     const [inputNumber, setInputNumber] = useState(0);
     const player = useContext(PlayerContext);
     const game = useContext(GameContext);
     const [isMyTurn, setIsMyTurn] = useState(player.id === game.current_player);
+    const [canCall, setCanCall] = useState(false);
+    const [canRaise, setCanRaise] = useState(false);
+    const [canCheck, setCanCheck] = useState(false);
+    const [canAllIn, setCanAllIn] = useState(false);
+    const [canFold, setCanFold] = useState(false);
 
     useEffect(() => {
         setInputNumber(game.big_blind);
@@ -102,6 +110,25 @@ const Actions = ({ playerActions }) => {
         }
         setInputNumber(event.target.value);
     };
+
+    useEffect(() => {
+        axios
+            .get(`${getActionsUrl}?game=${gameName}`)
+            .then((response) => {
+                if (response.status === 200) {
+                    setCanCall(player.can_call);
+                    setCanRaise(player.can_raise);
+                    setCanCheck(player.can_check);
+                    setCanAllIn(!player.is_all_in);
+                    setCanFold(!player.is_folded);
+                } else {
+                    console.log('didnt get player', response.status);
+                }
+            })
+            .catch((err) => {
+                console.log(`Error: ${err}`);
+            });
+    }, [player, gameName, game]);
 
     // refresh current player when game starts
     useEffect(() => {
@@ -124,6 +151,7 @@ const Actions = ({ playerActions }) => {
                 <RaiseButton
                     setIsMyTurn={setIsMyTurn}
                     action="raise"
+                    isEnabled={canRaise}
                     text="Raise"
                     actionValue={inputNumber}
                     color="rgb(65,185,65)"
@@ -135,6 +163,7 @@ const Actions = ({ playerActions }) => {
                 <Button
                     setIsMyTurn={setIsMyTurn}
                     action="check"
+                    isEnabled={canCheck}
                     text="Check"
                     color="rgb(65,185,65)"
                     hoverColor="rgb(35,240,35)"
@@ -142,6 +171,7 @@ const Actions = ({ playerActions }) => {
                 <Button
                     setIsMyTurn={setIsMyTurn}
                     action="call"
+                    isEnabled={canCall}
                     text="Call"
                     color="rgb(65,185,65)"
                     hoverColor="rgb(35,240,35)"
@@ -149,6 +179,7 @@ const Actions = ({ playerActions }) => {
                 <Button
                     setIsMyTurn={setIsMyTurn}
                     action="all_in"
+                    isEnabled={canAllIn}
                     text="All in"
                     color="rgb(65,65,255)"
                     hoverColor="rgb(45,45,255)"
@@ -156,6 +187,7 @@ const Actions = ({ playerActions }) => {
                 <FoldButton
                     setIsMyTurn={setIsMyTurn}
                     action="fold"
+                    isEnabled={canFold}
                     text="Fold"
                     color="rgb(255,65,65)"
                     hoverColor="rgb(255,35,35)"

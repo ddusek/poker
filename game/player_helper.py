@@ -37,44 +37,57 @@ def bet(player, value):
         player.chips -= value
         player.round_bet += value
         return player
-    return all_in(player)
-
-
-def _raise(player, value):
-    """Raise given amount of chips.
-
-    unlike function `bet`, also set current player to next one.
-    :return: updated player object
-    """
-    upd_player = bet(player, value)
-    game = Game.objects.filter(id=upd_player.game.id).first()
-    game = game_helper.new_bet(game, value, upd_player.round_bet)
-    # game = game_helper.next_player(game)
-    # game.save()
-    player.save()
-
-
-def call(game, player):
-    """Call highest bet in game.
-
-    :return: updated player object
-    """
-    call_val = player.round_bet - game.biggest_bet
-    player = bet(player, call_val)
-    game = game_helper.new_bet(game, call_val, player.pot)
-    game = game_helper.next_player(game)
-    game.save()
-
-
-def all_in(player):
-    """Bet all in.
-
-    :return: updated player object
-    """
     player.round_bet = player.chips
     player.chips = 0
     player.is_all_in = True
     return player
+
+
+def raize(player, value):
+    """Raise given amount of chips.
+    """
+    player = bet(player, value)
+    game = Game.objects.filter(id=player.game.id).first()
+    game = game_helper.new_bet(game, value, player.round_bet)
+    player.save()
+    game.save()
+
+
+def call(game, player):
+    """Call highest bet in game.
+    """
+    call_val = player.round_bet - game.biggest_bet
+    player = bet(player, call_val)
+    game = game_helper.new_bet(game, call_val, player.pot)
+    player.save()
+    game.save()
+
+
+def all_in(game, player):
+    """Bet all in.
+    """
+    player.round_bet += player.chips
+    game = game_helper.new_bet(game, player.chips, player.pot)
+    player.chips = 0
+    player.is_all_in = True
+    player.save()
+    game.save()
+
+ 
+def check(game, player):
+    """Check action.
+    """
+    return
+
+
+def fold(player):
+    """Fold action.
+
+    :param player: [description]
+    :type player: [type]
+    """
+    player.is_in_game = False
+    player.save()
 
 
 def set_allowed_actions(game, player):
@@ -85,8 +98,8 @@ def set_allowed_actions(game, player):
     player.can_check = can_check(game, player)
     player.can_call = can_call(game, player)
     player.can_raise = can_raise(game, player)
-    player.can_fold = True
-    player.can_all_in = True
+    player.can_fold = player.is_in_game
+    player.can_all_in = player.is_in_game
     return player
 
 
