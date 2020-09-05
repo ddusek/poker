@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from rest_framework import status
 from game.serializers import *
 from game.utils import make_path
-from . import player_helper
+from . import player_helper, game_helper
 
 
 class GameDetailView(APIView):
@@ -112,6 +112,8 @@ class PlayerRaiseView(APIView):
         if player is None:
             return Response('player not found', status=status.HTTP_400_BAD_REQUEST)
         player_helper.raize(player, chips)
+        game_helper.check_next_round(game_name)
+
         return Response('raised successfully', status=status.HTTP_200_OK)
 
 
@@ -135,6 +137,8 @@ class PlayerCallView(APIView):
         if player is None:
             return Response('player not found', status=status.HTTP_400_BAD_REQUEST)
         player_helper.call(player, chips)
+        game_helper.check_next_round(game_name)
+
         return Response('raised successfully', status=status.HTTP_200_OK)
 
 
@@ -157,7 +161,9 @@ class PlayerCheckView(APIView):
         player = Player.objects.filter(id=player_id).first()
         if player is None:
             return Response('player not found', status=status.HTTP_400_BAD_REQUEST)
-        player_helper.check(player, chips)
+        player_helper.check()
+        game_helper.check_next_round(game_name)
+
         return Response('raised successfully', status=status.HTTP_200_OK)
 
 
@@ -181,6 +187,8 @@ class PlayerAllInView(APIView):
         if player is None:
             return Response('player not found', status=status.HTTP_400_BAD_REQUEST)
         player_helper.all_in(player, chips)
+        game_helper.check_next_round(game_name)
+
         return Response('raised successfully', status=status.HTTP_200_OK)
 
 
@@ -203,6 +211,8 @@ class PlayerFoldView(APIView):
         if player is None:
             return Response('player not found', status=status.HTTP_400_BAD_REQUEST)
         player_helper.fold(player)
+        game_helper.check_next_round(game_name)
+
         return Response('call action success', status=status.HTTP_200_OK)
 
 

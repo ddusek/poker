@@ -77,7 +77,6 @@ const Button = ({
                 console.log(err);
             });
     };
-
     return (
         <Container color={color} hoverColor={hoverColor} onClick={onClick} disabled={!isEnabled}>
             {text}

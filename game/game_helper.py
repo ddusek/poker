@@ -44,6 +44,21 @@ def next_player(game):
     game.save()
 
 
+def check_next_round(game_name):
+    """Check if next round should start, if yes Start it.
+    """
+    game = Game.objects.filter(name=game_name).first()
+    if not game.all_played:
+        if game.small_blind_player == game.current_player:
+            game.all_played = True
+    if game.all_played:
+        players = Player.objects.filter(game=game)
+        game = bets_are_same(game, players)
+        if game.round_ended:
+            game = start_next_round(game, players)
+        game.save()
+
+
 def new_bet(game, value, biggest_bet):
     """Add bet to the game.
 
@@ -54,4 +69,39 @@ def new_bet(game, value, biggest_bet):
         game.last_raise = value
     if game.biggest_bet < biggest_bet:
         game.biggest_bet = biggest_bet
+    return game
+
+
+def bets_are_same(game, players):
+    """Check if some players needs to call a bet.
+
+    :return: bool
+    """
+    players = players.filter(is_folded=False, is_all_in=False, is_in_game=True)
+    biggest_bet = max([p.round_bet for p in players])
+    for player in players:
+        if player.round_bet < biggest_bet:
+            return game
+    game.round_ended = True
+    return game
+
+
+def start_next_round(game, players):
+    """Start next round of the game.
+
+    :return: game object
+    """
+    pot = sum([p.round_bet for p in players])
+    game.pot += pot
+    game.current_player = game.big_blind_player
+    game.last_raise = 0
+    game.biggest_bet = 0
+    game.rounds_played += 1
+    game.round_ended = False
+    game.all_played = False
+
+    for player in players:
+        player.pot += player.round_bet
+        player.round_bet = 0
+        player.save()
     return game

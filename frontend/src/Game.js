@@ -118,7 +118,7 @@ const Game = () => {
             }
         };
         getPlayer();
-    }, [playerInfoSet, gameName, playerCreated]);
+    }, [playerInfoSet, gameName, playerCreated, playersSet]);
 
     // get player object of every player in current game except current player
     useEffect(() => {
@@ -219,7 +219,6 @@ const Game = () => {
 
                 // when player does some action
                 if (data.type === 'player_action') {
-                    console.log(`yyyyyyy${data.type}`);
                     setPlayersSet(false);
                     setPlayerInfoSet(false);
                     setGameInfoSet(false);

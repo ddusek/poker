@@ -25,6 +25,7 @@ const BottomContainer = styled.div`
  */
 const GameWindow = ({ players }) => {
     const player = useContext(PlayerContext);
+    const game = useContext(GameContext);
     GameWindow.propTypes = {
         players: PropTypes.arrayOf(
             PropTypes.shape({
@@ -83,7 +84,7 @@ const GameWindow = ({ players }) => {
                 <PotContainer pot={players[6].round_bet} left="78%" top="60%" />
 
                 {/* table pot */}
-                <PotContainer pot={GameContext.pot} left="50%" top="36%" width="250px" />
+                <PotContainer pot={game.pot} left="50%" top="36%" width="250px" />
                 <TableCards />
 
                 <PotContainer pot={player.round_bet} left="50%" top="67%" />

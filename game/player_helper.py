@@ -48,7 +48,7 @@ def raize(player, value):
     """
     player = bet(player, value)
     game = Game.objects.filter(id=player.game.id).first()
-    game = game_helper.new_bet(game, value, player.round_bet)
+    # game = game_helper.new_bet(game, value, player.round_bet)
     player.save()
     game.save()
 
@@ -58,7 +58,7 @@ def call(game, player):
     """
     call_val = player.round_bet - game.biggest_bet
     player = bet(player, call_val)
-    game = game_helper.new_bet(game, call_val, player.pot)
+    # game = game_helper.new_bet(game, call_val, player.pot)
     player.save()
     game.save()
 
@@ -67,14 +67,14 @@ def all_in(game, player):
     """Bet all in.
     """
     player.round_bet += player.chips
-    game = game_helper.new_bet(game, player.chips, player.pot)
+    # game = game_helper.new_bet(game, player.chips, player.pot)
     player.chips = 0
     player.is_all_in = True
     player.save()
     game.save()
 
- 
-def check(game, player):
+
+def check():
     """Check action.
     """
     return
