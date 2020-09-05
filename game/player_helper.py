@@ -132,3 +132,10 @@ def can_raise(game, player):
     if (game.biggest_bet + game.last_raise - player.pot) <= player.chips:
         return True
     return False
+
+
+def reset_round_bets(players):
+    for player in players:
+        player.pot += player.round_bet
+        player.round_bet = 0
+        player.save()
