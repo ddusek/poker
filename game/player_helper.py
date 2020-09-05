@@ -1,6 +1,6 @@
 from django.db.models import F
 from game.models import Game
-from . import game_helper
+# from . import game_helper
 
 
 def adjust_orders(removed_player, players):

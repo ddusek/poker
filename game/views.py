@@ -256,3 +256,24 @@ class CardsDetailView(APIView):
         if not cards:
             return Response('didnt find any cards for player', status.HTTP_400_BAD_REQUEST)
         return Response(CardSerializer(cards, many=True).data, status=status.HTTP_200_OK)
+
+
+class TableCardsDetailView(APIView):
+    """Table cards detail view.
+    """
+    def get(self, request):
+        """Get table cards from game.
+        """
+        game_name = request.GET.get('game', '')
+        if game_name == '':
+            return Response('game from parameter not found', status=status.HTTP_400_BAD_REQUEST)
+
+        game = Game.objects.filter(name=game_name).first()
+        if game is None:
+            return Response('game not found', status=status.HTTP_400_BAD_REQUEST)
+
+        cards = Card.objects.filter(game=game, location='TABLE')
+
+        if not cards:
+            return Response('didnt find any cards for player', status.HTTP_400_BAD_REQUEST)
+        return Response(CardSerializer(cards, many=True).data, status=status.HTTP_200_OK)

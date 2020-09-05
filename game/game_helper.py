@@ -1,6 +1,7 @@
 from channels.db import database_sync_to_async
 from game.models import Game
 from game.models import Player
+from . import card_helper
 
 
 def init_game(game, players):
@@ -49,7 +50,7 @@ def check_next_round(game_name):
     """
     game = Game.objects.filter(name=game_name).first()
     if not game.all_played:
-        if game.small_blind_player == game.current_player:
+        if game.big_blind_player == game.current_player:
             game.all_played = True
     if game.all_played:
         players = Player.objects.filter(game=game)
@@ -99,6 +100,8 @@ def start_next_round(game, players):
     game.rounds_played += 1
     game.round_ended = False
     game.all_played = False
+
+    card_helper.deal_cards_table(game, 3 if game.rounds_played == 1 else 1)
 
     for player in players:
         player.pot += player.round_bet

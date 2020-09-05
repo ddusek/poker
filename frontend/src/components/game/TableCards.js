@@ -1,5 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
+import CardIcon from './utils/svgHelper';
 import GameContext from '../contexts/GameContext';
 
 const Container = styled.div`
@@ -17,22 +19,78 @@ const Container = styled.div`
     color: blue;
 `;
 
+const CardsContainer = styled.div`
+    width: 100%;
+    height: 100%;
+    display: flex;
+`;
+
 const TableCards = () => {
     const [cardFiles, setCardFiles] = useState([]);
-    const imagePath = './cards/';
+    const imagePath = 'cards/';
     const game = useContext(GameContext);
+    const getCardsUrl = 'http://localhost:8000/game/get/table-cards-detail/';
+    const gameName = window.location.pathname.slice(5).replace(/\//g, '');
+    const [cardsInfoSet, setCardsInfoSet] = useState(false);
+    const [cardsInfo, setCardsInfo] = useState({});
+    const [round, setRound] = useState(0);
 
-    // useEffect(() => {
-    //     console.log(Object.keys(hand).length);
-    //     if (Object.keys(hand).length === 2) {
-    //         hand.forEach((item) => {
-    //             setCardFiles((c) => c.concat(imagePath + item.image));
-    //         });
-    //     }
-    // }, [hand]);
+    useEffect(() => {
+        console.log(Object.keys(cardsInfo).length);
+        if (Object.keys(cardsInfo).length > 0) {
+            cardsInfo.forEach((item) => {
+                if (!cardFiles.includes(imagePath + item.image)) {
+                    setCardFiles((c) => c.concat(imagePath + item.image));
+                }
+            });
+        }
+    }, [cardsInfo, cardFiles]);
+
+    useEffect(() => {
+        // get current player's cards from api
+        const getTableCards = async () => {
+            if (!cardsInfoSet) {
+                axios
+                    .get(`${getCardsUrl}?game=${gameName}`)
+                    .then((response) => {
+                        if (response.status === 200) {
+                            setCardsInfoSet(true);
+                            setCardsInfo(response.data);
+                            setRound(game.rounds_played);
+                        } else {
+                            console.log('didnt get cards', response.status);
+                        }
+                    })
+                    .catch((err) => {
+                        console.log(`Error: ${err}`);
+                    });
+            }
+        };
+        getTableCards();
+    }, [gameName, game, cardsInfoSet]);
+
+    // refresh cards if next round started
+    useEffect(() => {
+        if (game.rounds_played !== round) {
+            setRound(game.rounds_played);
+            setCardsInfoSet(false);
+        }
+    }, [game.rounds_played, round]);
+
+    if (game === undefined || !cardsInfoSet) {
+        return (
+            <Container>
+                <p>table cards</p>
+            </Container>
+        );
+    }
     return (
         <Container>
-            <p>table cards</p>
+            <CardsContainer>
+                {cardFiles.map((card) => {
+                    return <CardIcon name={card} size="100" />;
+                })}
+            </CardsContainer>
         </Container>
     );
 };

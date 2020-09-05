@@ -64,3 +64,10 @@ def init_cards(game):
     _delete_deck(game)
     _create_deck(game)
     _shuffle(game)
+
+
+def deal_cards_table(game, n):
+    cards = _get_cards(game, n)
+    for card in cards:
+        card.location = 'TABLE'
+        card.save()
