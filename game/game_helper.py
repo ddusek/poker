@@ -1,4 +1,5 @@
 from channels.db import database_sync_to_async
+from gameplay_utils import combinations, deck
 from game.models import Game
 from game.models import Player
 from . import card_helper, player_helper
@@ -46,10 +47,13 @@ def prepare_next_game(game, players):
     game.big_blind_player = bbp.id
     game.small_blind_player = sbp.id
     game.current_player = sbp.id
-    game.rounds_played = 0
     game.biggest_bet = game.big_blind
-    game.round_ended = False
     game.last_raise = game.big_blind
+    game.pot = 0
+    game.rounds_played = 0
+    game.round_ended = False
+    game.game_over = False
+    game.all_played = False
 
     updated_players = Player.objects.filter(game=game, is_in_game=True)
     player_helper.set_blinds(game, updated_players)
@@ -69,6 +73,11 @@ def next_player(game):
     if game is None:
         print('error, game not found')
         return
+    if game.round_ended:
+        game.round_ended = False
+        game.save()
+        return
+
     players = Player.objects.filter(game=game, is_in_game=True).order_by('in_game_order')
     current_player = players.filter(id=game.current_player).first()
     if game.current_player >= players.last().id:
@@ -96,6 +105,7 @@ def check_next_round(game_name):
         if game.round_ended:
             game = start_next_round(game, players)
         if game.game_over:
+            give_rewards(game, players)
             prepare_next_game(game, players)
         game.save()
 
@@ -143,9 +153,41 @@ def start_next_round(game, players):
     game.biggest_bet = 0
     game.current_player = game.small_blind_player
     game.rounds_played += 1
-    game.round_ended = False
     game.all_played = False
 
     card_helper.deal_cards_table(game, 3 if game.rounds_played == 1 else 1)
 
     return game
+
+
+def give_rewards(game, players):
+    """Give game chips to the winner.
+    """
+    player_hands = []
+    for player in players:
+        player_hands.append({'player': player, 'cards': card_helper.get_player_cards(player)})
+
+    winner = find_winner(player_hands)
+    winner['player'].chips += game.pot
+    game.pot = 0
+    winner['player'].save()
+    game.save()
+
+
+def find_winner(player_hands):
+    """Find player who has the best hand.
+    """
+    player_combinations = []
+    for p_hand in player_hands:
+        cards = []
+        for card in p_hand['cards']:
+            rank = deck.Rank(card.rank, card.value)
+            cards.append(deck.Card(card.suit, rank))
+        combination = combinations.Combinations(cards).highest_combination()
+        player_combinations.append({'player': p_hand['player'], 'combination': combination})
+    player_combinations = sorted(player_combinations, key=lambda k: k['combination'])
+    # same_top_hands = [p_comb for p_comb in player_combinations
+    #                   if p_comb['combination'] == player_combinations[0]['combination']]
+    # if player_combinations[0]['combination']:
+    #  TODO check highest cards/split rewards
+    return player_combinations[0]

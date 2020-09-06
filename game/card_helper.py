@@ -67,7 +67,17 @@ def init_cards(game):
 
 
 def deal_cards_table(game, n):
+    """Deal N cards on the table.
+    """
     cards = _get_cards(game, n)
     for card in cards:
         card.location = 'TABLE'
         card.save()
+
+
+def get_player_cards(player):
+    """Get cards of a player.
+
+    :return: cards
+    """
+    return Card.objects.filter(player=player)
