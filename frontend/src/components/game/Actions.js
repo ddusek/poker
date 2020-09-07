@@ -134,7 +134,6 @@ const Actions = ({ playerActions }) => {
     useEffect(() => {
         setIsMyTurn(player.id === game.current_player);
     }, [game.current_player, player.id]);
-    console.log(game.current_player);
     return (
         <Container disabled={isMyTurn ? 'all' : 'none'}>
             <RaiseContainer>

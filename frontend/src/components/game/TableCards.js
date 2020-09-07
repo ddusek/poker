@@ -36,17 +36,6 @@ const TableCards = () => {
     const [round, setRound] = useState(0);
 
     useEffect(() => {
-        console.log(Object.keys(cardsInfo).length);
-        if (Object.keys(cardsInfo).length > 0) {
-            cardsInfo.forEach((item) => {
-                if (!cardFiles.includes(imagePath + item.image)) {
-                    setCardFiles((c) => c.concat(imagePath + item.image));
-                }
-            });
-        }
-    }, [cardsInfo, cardFiles]);
-
-    useEffect(() => {
         // get current player's cards from api
         const getTableCards = async () => {
             if (!cardsInfoSet) {
@@ -57,7 +46,7 @@ const TableCards = () => {
                             setCardsInfoSet(true);
                             setCardsInfo(response.data);
                             setRound(game.rounds_played);
-                        } else {
+                        } else if (response.status !== 204) {
                             console.log('didnt get cards', response.status);
                         }
                     })
@@ -76,6 +65,16 @@ const TableCards = () => {
             setCardsInfoSet(false);
         }
     }, [game.rounds_played, round]);
+
+    useEffect(() => {
+        if (Object.keys(cardsInfo).length > 0) {
+            cardsInfo.forEach((item) => {
+                if (!cardFiles.includes(imagePath + item.image)) {
+                    setCardFiles((c) => c.concat(imagePath + item.image));
+                }
+            });
+        }
+    }, [cardsInfo, cardFiles, game.rounds_played]);
 
     if (game === undefined || !cardsInfoSet) {
         return (

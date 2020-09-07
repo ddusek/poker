@@ -275,5 +275,5 @@ class TableCardsDetailView(APIView):
         cards = Card.objects.filter(game=game, location='TABLE')
 
         if not cards:
-            return Response('didnt find any cards for player', status.HTTP_400_BAD_REQUEST)
+            return Response('didnt find any cards in game', status.HTTP_204_NO_CONTENT)
         return Response(CardSerializer(cards, many=True).data, status=status.HTTP_200_OK)

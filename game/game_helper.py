@@ -167,27 +167,35 @@ def give_rewards(game, players):
     for player in players:
         player_hands.append({'player': player, 'cards': card_helper.get_player_cards(player)})
 
-    winner = find_winner(player_hands)
+    winner = find_winner(game, player_hands)
     winner['player'].chips += game.pot
     game.pot = 0
     winner['player'].save()
     game.save()
 
 
-def find_winner(player_hands):
+def find_winner(game, player_hands):
     """Find player who has the best hand.
     """
     player_combinations = []
+    table_cards = card_helper.get_table_cards(game)
     for p_hand in player_hands:
         cards = []
-        for card in p_hand['cards']:
+        for card in p_hand['cards'] | table_cards:
             rank = deck.Rank(card.rank, card.value)
             cards.append(deck.Card(card.suit, rank))
         combination = combinations.Combinations(cards).highest_combination()
         player_combinations.append({'player': p_hand['player'], 'combination': combination})
     player_combinations = sorted(player_combinations, key=lambda k: k['combination'])
-    # same_top_hands = [p_comb for p_comb in player_combinations
-    #                   if p_comb['combination'] == player_combinations[0]['combination']]
-    # if player_combinations[0]['combination']:
-    #  TODO check highest cards/split rewards
+    same_top_hands = [p_comb for p_comb in player_combinations
+                      if p_comb['combination'] == player_combinations[0]['combination']]
+    if len(same_top_hands) > 1:
+        # TODO Find top 5 cards values
+        find_split_winners(player_combinations)
     return player_combinations[0]
+
+
+def find_split_winners(player_combinations):
+    """If more players have same combination, split chips to everyone.
+    """
+    pass

@@ -81,3 +81,9 @@ def get_player_cards(player):
     :return: cards
     """
     return Card.objects.filter(player=player)
+
+
+def get_table_cards(game):
+    """Get all cards on the table.
+    """
+    return Card.objects.filter(game=game, location='TABLE')
